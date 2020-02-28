@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,14 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+.App {
+  background-image: url(./images/wood.jpg);
+  background-size: contain;
+  max-width: 100%;
+  max-height: 100%;
+  width: 3840px;
+  height: 750px;
+  position: relative;
 }
