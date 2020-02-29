@@ -37,7 +37,7 @@
   }
 } */
 
-.App {
+/* .App {
   background-image: url(./images/wood.jpg);
   background-size: contain;
   max-width: 100%;
@@ -45,17 +45,22 @@
   width: 3840px;
   height: 750px;
   position: relative;
+} */
+.App {
+  height: 100vh;
+  display: flex;
+  color: white;
 }
-
 .App__Aside {
   width: 50%;
-  background-color: #66dac7;
+  /* background-color: #66dac7; */
+  background-image: url(./images/wood.jpg);
 }
 
 .App__Form {
   width: 50%;
   /* background-color: #2e4158; */
-  background-image: url(./images/scroll.jpg);
+  background-image: url(./images/parchment.jpg);
   padding: 25px 40px;
   overflow: auto;
 }
