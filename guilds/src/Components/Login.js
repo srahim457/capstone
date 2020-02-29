@@ -16,6 +16,9 @@ class Login extends Component {
   handleChange(e) {
     let target = e.target;
     let name = target.name;
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   }
 
   handleSubmit(e) {

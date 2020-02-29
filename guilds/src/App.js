@@ -36,6 +36,9 @@ class App extends Component {
         <div className='App'>
           <div className='App__Aside'>
             <img src={guildlogo} alt=''></img>
+            <h4 className='caption'>
+              Join to connect and trade within your campus
+            </h4>
           </div>
           <div className='App__Form'>
             <div className='PageSwitcher'>
