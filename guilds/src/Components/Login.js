@@ -36,7 +36,7 @@ class Login extends Component {
           >
             <div className='FormField'>
               <label className='FormField__Label' htmlFor='email'>
-                E-Mail Address
+                <strong>E-Mail Address</strong>
               </label>
               <input
                 type='email'
@@ -51,7 +51,7 @@ class Login extends Component {
 
             <div className='FormField'>
               <label className='FormField__Label' htmlFor='password'>
-                Password
+                <strong>Password</strong>
               </label>
               <input
                 type='password'
@@ -67,7 +67,7 @@ class Login extends Component {
             <div className='FormField'>
               <button className='FormField__Button mr-20'>Sign In</button>{' '}
               <Link to='/' className='FormField__Link'>
-                Create an account
+                <strong>Create an account</strong>
               </Link>
             </div>
           </form>

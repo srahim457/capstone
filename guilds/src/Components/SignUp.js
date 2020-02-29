@@ -31,7 +31,7 @@ class SignUp extends Component {
         <form onSubmit={this.handleSubmit} className='FormFields'>
           <div className='FormField'>
             <label className='FormField__Label' htmlFor='name'>
-              Full Name
+              <strong>Full Name</strong>
             </label>
             <input
               type='text'
@@ -45,7 +45,7 @@ class SignUp extends Component {
           </div>
           <div className='FormField'>
             <label className='FormField__Label' htmlFor='password'>
-              Password
+              <strong>Password</strong>
             </label>
             <input
               type='password'
@@ -59,13 +59,13 @@ class SignUp extends Component {
           </div>
           <div className='FormField'>
             <label className='FormField__Label' htmlFor='email'>
-              E-Mail Address
+              <strong>E-Mail Address</strong>
             </label>
             <input
               type='email'
               id='email'
               className='FormField__Input'
-              placeholder='Enter your email'
+              placeholder='Enter your campus email'
               name='email'
               value={this.state.email}
               onChange={this.handleChange}
