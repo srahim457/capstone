@@ -11,6 +11,7 @@ import Navigation from './components/Navigation';
 import Login from './components/Login';
 import Signup from './components/SignUp';
 import './App.css';
+import guildlogo from './images/guildslogo.png';
 
 // function App() {
 //   return (
@@ -33,7 +34,9 @@ class App extends Component {
     return (
       <Router basename='/react-auth-ui/'>
         <div className='App'>
-          <div className='App__Aside'></div>
+          <div className='App__Aside'>
+            <img src={guildlogo} alt=''></img>
+          </div>
           <div className='App__Form'>
             <div className='PageSwitcher'>
               <NavLink
