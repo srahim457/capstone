@@ -8,7 +8,8 @@ class SignUp extends Component {
     this.state = {
       email: '',
       password: '',
-      name: ''
+      firstname: '',
+      lastname: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -34,14 +35,28 @@ class SignUp extends Component {
         <form onSubmit={this.handleSubmit} className='FormFields'>
           <div className='FormField'>
             <label className='FormField__Label' htmlFor='name'>
-              <strong>Full Name</strong>
+              <strong>First Name</strong>
             </label>
             <input
               type='text'
               id='name'
               className='FormField__Input'
-              placeholder='Enter your full name'
-              name='name'
+              placeholder='Enter your first name'
+              name='firstname'
+              value={this.state.name}
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className='FormField'>
+            <label className='FormField__Label' htmlFor='name'>
+              <strong>Last Name</strong>
+            </label>
+            <input
+              type='text'
+              id='name'
+              className='FormField__Input'
+              placeholder='Enter your last name'
+              name='lastname'
               value={this.state.name}
               onChange={this.handleChange}
             />
