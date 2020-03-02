@@ -39,7 +39,7 @@ class SignUp extends Component {
             </label>
             <input
               type='text'
-              id='name'
+              id='firstname'
               className='FormField__Input'
               placeholder='Enter your first name'
               name='firstname'
@@ -53,7 +53,7 @@ class SignUp extends Component {
             </label>
             <input
               type='text'
-              id='name'
+              id='lastname'
               className='FormField__Input'
               placeholder='Enter your last name'
               name='lastname'
