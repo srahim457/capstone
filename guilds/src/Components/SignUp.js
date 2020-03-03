@@ -26,7 +26,7 @@ class SignUp extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    axios.post('http://localhost:4000/users/', signUp)
+    axios.post('http://localhost:4000/users/', SignUp)
     .then(res => console.log(res.data));
     console.log('The form was submitted with the following data:');
     console.log(this.state);
