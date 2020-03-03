@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class SignUp extends Component {
   constructor() {
     super();
 
     this.state = {
-      email: '',
-      password: '',
-      firstname: '',
-      lastname: ''
+      EMAIL: '',
+      PASSWORD: '',
+      FIRST_NAME: '',
+      LAST_NAME: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -25,6 +26,8 @@ class SignUp extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
+    axios.post('http://localhost:4000/users/', signUp)
+    .then(res => console.log(res.data));
     console.log('The form was submitted with the following data:');
     console.log(this.state);
   }
