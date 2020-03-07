@@ -7,13 +7,15 @@ class SignUp extends Component {
     super();
 
     this.state = {
-      EMAIL: '',
-      PASSWORD: '',
-      FIRST_NAME: '',
-      LAST_NAME: ''
+      email: '',
+      password: '',
+      firstname: '',
+      lastname: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleChange(e) {
@@ -23,11 +25,28 @@ class SignUp extends Component {
       [e.target.name]: e.target.value
     });
   }
+  handleChange(e) {
+    let target = e.target;
+    let name = target.name;
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+  handleEmailChange(e) {
+    this.setState({
+      email : e.target.value
+    });
+  }
+  handlePasswordChange(e) {
+    this.setState({
+      password : e.target.value
+    });
+  }
   handleSubmit(e) {
     e.preventDefault();
 
     axios
-      .post('http://localhost:4000/users/', SignUp)
+      .post('http://localhost:4000/users  ', this.state)
       .then(res => console.log(res.data));
     console.log('The form was submitted with the following data:');
     console.log(this.state);
@@ -76,7 +95,7 @@ class SignUp extends Component {
               placeholder='Enter your password'
               name='password'
               value={this.state.password}
-              onChange={this.handleChange}
+              onChange={this.handlePasswordChange}
             />
           </div>
           <div className='FormField'>
@@ -90,7 +109,7 @@ class SignUp extends Component {
               placeholder='Enter your campus email'
               name='email'
               value={this.state.email}
-              onChange={this.handleChange}
+              onChange={this.handleEmailChange}
             />
           </div>
 

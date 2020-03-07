@@ -1,5 +1,6 @@
 'use strict';
 var sql = require('./db.js');
+var bcrypt = require('bcryptjs')
 
 //User object constructor
 var User = function(user){
