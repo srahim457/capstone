@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import Profile from './Components/Profile';
 import * as serviceWorker from './serviceWorker';
+import MarketPlace from './Components/MarketPlace';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

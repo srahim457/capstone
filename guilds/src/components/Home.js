@@ -1,10 +1,73 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter,
+  HashRouter as Router,
+  Route,
+  Link,
+  NavLink,
+  Switch
+} from 'react-router-dom';
+
+import Login from './Login';
+import Signup from './SignUp';
+import guildlogo from '../images/guildslogo.png';
+import '../Home.css';
 
 class Home extends Component {
   render() {
     return (
       <div>
-        <h1>This is the home component</h1>
+        <Router basename='react-auth-ui'>
+          <div className='App'>
+            <div className='App__Aside'>
+              <img src={guildlogo} alt=''></img>
+              <h4 className='caption'>
+                Join to connect and trade within your campus
+              </h4>
+            </div>
+            <div className='App__Form'>
+              <div className='PageSwitcher'>
+                <NavLink
+                  to='/sign-in'
+                  activeClassName='PageSwitcher__Item--Active'
+                  className='PageSwitcher__Item'
+                >
+                  Sign In
+                </NavLink>
+                <NavLink
+                  exact
+                  to='/'
+                  activeClassName='PageSwitcher__Item--Active'
+                  className='PageSwitcher__Item'
+                >
+                  Sign Up
+                </NavLink>
+              </div>
+
+              <div className='FormTitle'>
+                <NavLink
+                  to='/sign-in'
+                  activeClassName='FormTitle__Link--Active'
+                  className='FormTitle__Link'
+                >
+                  Sign In
+                </NavLink>{' '}
+                or{' '}
+                <NavLink
+                  exact
+                  to='/'
+                  activeClassName='FormTitle__Link--Active'
+                  className='FormTitle__Link'
+                >
+                  Sign Up
+                </NavLink>
+              </div>
+
+              <Route exact path='/' component={Signup}></Route>
+              <Route path='/sign-in' component={Login}></Route>
+            </div>
+          </div>
+        </Router>
       </div>
     );
   }
