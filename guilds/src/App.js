@@ -22,11 +22,9 @@ class App extends Component {
           <Route exact path='/' component={Home}></Route>
           <Route path='/profile' component={Profile}>
             <Navigation></Navigation>
-            <Profile />
           </Route>
           <Route path='/market-place' component={MarketPlace}>
             <Navigation></Navigation>
-            <MarketPlace />
           </Route>
         </Switch>
       </Router>
