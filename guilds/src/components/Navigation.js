@@ -8,15 +8,17 @@ const Navigation = () => {
   return (
     <HashRouter>
       <div className='Nav-Bar'>
-        <NavLink to='/Profile'>Profile</NavLink>
-        <NavLink to='/Market-Place'>Market Place</NavLink>
-        <NavLink to='/All-Guilds'>All Guilds</NavLink>
-        <NavLink to='/Messages'>Messages</NavLink>
-        <NavLink to='/Log-out'>Logout</NavLink>
+        <NavLink to='/profile'>Profile</NavLink>
+        <NavLink exact to='/market-place'>
+          Market Place
+        </NavLink>
+        <NavLink to='/all-guilds'>All Guilds</NavLink>
+        <NavLink to='/messages'>Messages</NavLink>
+        <NavLink to='/log-out'>Logout</NavLink>
       </div>
       <div className='content'>
-        <Route path='/Profile' component={Profile} />
-        <Route path='/Market-Place' component={MarketPlace} />
+        <Route exact path='/profile' component={Profile} />
+        <Route exact path='/market-place' component={MarketPlace} />
       </div>
     </HashRouter>
   );

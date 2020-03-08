@@ -13,7 +13,6 @@ import Navigation from './Components/Navigation';
 import Profile from './Components/Profile';
 import MarketPlace from './Components/MarketPlace';
 import './App.css';
-import guildlogo from './images/guildslogo.png';
 
 class App extends Component {
   render() {
@@ -22,10 +21,12 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={Home}></Route>
           <Route path='/profile' component={Profile}>
-            <Profile></Profile>
+            <Navigation></Navigation>
+            <Profile />
           </Route>
           <Route path='/market-place' component={MarketPlace}>
-            <MarketPlace></MarketPlace>
+            <Navigation></Navigation>
+            <MarketPlace />
           </Route>
         </Switch>
       </Router>
