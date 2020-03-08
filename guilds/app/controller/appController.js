@@ -24,8 +24,8 @@ exports.create_a_User = function(req, res) {
   //handles null error 
    if(!new_User.FIRST_NAME || !new_User.LAST_NAME){
 
-            res.status(400).send({ error:true, message: 'Error Signup not completed fully' + new_User.FIRST_NAME + new_Login.EMAIL});
-        }
+    res.status(400).send({ error:true, message: 'Error Signup not completed fully' + new_User.FIRST_NAME + new_Login.EMAIL});
+  }
     else{
   
   User.createUser(new_User, function(err, User) {
