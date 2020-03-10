@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import '../Home.css';
 import axios from 'axios';
 
 class SignUp extends Component {
@@ -7,10 +8,10 @@ class SignUp extends Component {
     super();
 
     this.state = {
-      EMAIL: '',
-      PASSWORD: '',
-      FIRST_NAME: '',
-      LAST_NAME: ''
+      email: '',
+      password: '',
+      firstname: '',
+      lastname: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -96,7 +97,7 @@ class SignUp extends Component {
 
           <div className='FormField'>
             <button className='FormField__Button mr-20'>Sign Up</button>{' '}
-            <Link to='/sign-in' className='FormField__Link'>
+            <Link exact to='sign-in' className='FormField__Link'>
               I'm already a member
             </Link>
           </div>
