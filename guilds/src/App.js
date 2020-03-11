@@ -8,27 +8,25 @@ import {
   Switch
 } from 'react-router-dom';
 
-import Home from './Components/Home';
-import Navigation from './Components/Navigation';
-import Profile from './Components/Profile';
-import MarketPlace from './Components/MarketPlace';
-import './App.css';
-import guildlogo from './images/guildslogo.png';
+import Home from './components/Home';
+import Navigation from './components/Navigation';
+import Profile from './components/Profile';
+import MarketPlace from './components/MarketPlace';
 
 class App extends Component {
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         <Switch>
           <Route exact path='/' component={Home}></Route>
           <Route path='/profile' component={Profile}>
-            <Profile></Profile>
+            <Navigation></Navigation>
           </Route>
           <Route path='/market-place' component={MarketPlace}>
-            <MarketPlace></MarketPlace>
+            <Navigation></Navigation>
           </Route>
         </Switch>
-      </Router>
+      </BrowserRouter>
     );
   }
 }
