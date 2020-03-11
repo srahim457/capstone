@@ -1,12 +1,12 @@
 import React from 'react';
-import { Route, NavLink, HashRouter } from 'react-router-dom';
+import { Route, NavLink, BrowserRouter } from 'react-router-dom';
 import '../Navigation.css';
 import MarketPlace from './MarketPlace';
-import Profile from './Profile';
+import Profile from './Profile.js';
 //add & import routes within content div
 const Navigation = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div className='Nav-Bar'>
         <NavLink to='/profile'>Profile</NavLink>
         <NavLink exact to='/market-place'>
@@ -20,7 +20,7 @@ const Navigation = () => {
         <Route exact path='/profile' component={Profile} />
         <Route exact path='/market-place' component={MarketPlace} />
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 export default Navigation;
