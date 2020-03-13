@@ -62,7 +62,7 @@ class Home extends Component {
               </NavLink>
             </div>
 
-            <Route path='/' component={Signup}></Route>
+            <Route exact path='/' component={Signup}></Route>
             <Route path='/sign-in' component={Login}></Route>
           </div>
         </div>
