@@ -16,7 +16,7 @@ import '../App.css';
 class Home extends Component {
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         <div className='App'>
           <div className='App__Aside'>
             <img src={guildlogo} alt=''></img>
@@ -66,7 +66,7 @@ class Home extends Component {
             <Route path='/sign-in' component={Login}></Route>
           </div>
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }
