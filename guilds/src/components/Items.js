@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import CreateListing from './CreateListing';
 
 class Items extends Component {
+  super();
   render() {
-    return <h1>This is an Item</h1>;
+    return <h1>This is an {this.props.name} Component</h1>;
   }
 }
 

@@ -3,6 +3,7 @@ import { Route, NavLink, BrowserRouter } from 'react-router-dom';
 import '../Navigation.css';
 import MarketPlace from './MarketPlace';
 import Profile from './Profile.js';
+
 //add & import routes within content div
 const Navigation = () => {
   return (
