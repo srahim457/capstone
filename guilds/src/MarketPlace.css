@@ -1,0 +1,23 @@
+.containerParent {
+  background-color: #570415;
+  display: flex;
+  justify-content: center;
+  width: auto;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+}
+.items {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  color: #f3e055;
+}
+.title {
+  display: flex;
+  justify-content: center;
+  color: #f3e055;
+}
