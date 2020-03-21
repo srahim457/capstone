@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import '../Home.css';
+import './styles/Home.css';
 import axios from 'axios';
 
 class SignUp extends Component {
@@ -35,12 +35,12 @@ class SignUp extends Component {
   }
   handleEmailChange(e) {
     this.setState({
-      email : e.target.value
+      email: e.target.value
     });
   }
   handlePasswordChange(e) {
     this.setState({
-      password : e.target.value
+      password: e.target.value
     });
   }
   handleSubmit(e) {

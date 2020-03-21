@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
-import CreateListing from './CreateListing';
 
 class Items extends Component {
-  super();
+  constructor() {
+    super();
+    this.state = {
+      name: '',
+      price: '',
+      description: '',
+      start: date.toLocaleDateString(),
+      end: Date()
+    };
+  }
+
   render() {
-    return <h1>This is an {this.props.name} Component</h1>;
+    return <h1>{this.state}</h1>;
   }
 }
 

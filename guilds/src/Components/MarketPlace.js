@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Pagination from './Pagination';
-import '../MarketPlace.css';
+import CreateListing from './CreateListing';
+import './styles/MarketPlace.css';
 
 class MarketPlace extends Component {
   constructor() {
@@ -31,6 +32,9 @@ class MarketPlace extends Component {
       <div className='containerParent'>
         <div className='container'>
           <h1 className='title'>Market Place</h1>
+          <div className='button-wrapper'>
+            <button className='listing-button'>Create a Listing</button>
+          </div>
           {this.state.pageOfItems.map(item => (
             <div className='items' key={item.id}>
               {item.name}

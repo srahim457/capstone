@@ -5,12 +5,12 @@
 }
 .App__Aside {
   width: 50%;
-  background-image: url(./images/wood.jpg);
+  background-image: url(../../images/wood.jpg);
 }
 
 .App__Form {
   width: 50%;
-  background-image: url(./images/parchment_background.jpg);
+  background-image: url(../../images/parchment_background.jpg);
   padding: 25px 40px;
   overflow: auto;
 }

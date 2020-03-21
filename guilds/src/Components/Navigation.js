@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, NavLink, BrowserRouter } from 'react-router-dom';
-import '../Navigation.css';
+import './styles/Navigation.css';
 import MarketPlace from './MarketPlace';
 import Profile from './Profile.js';
 

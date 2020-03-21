@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../Pagination.css';
+import './styles/Pagination.css';
 
 const propTypes = {
   items: PropTypes.array.isRequired,
