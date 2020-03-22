@@ -37,7 +37,7 @@
   justify-content: flex-end;
 }
 
-/* .paginate {
-  display: flex;
-  align-items: flex-end;
-} */
+.paginate {
+  position: relative;
+  top: 375px;
+}

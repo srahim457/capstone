@@ -40,9 +40,10 @@ class CreateListing extends Component {
                 Input the time and date that you want the item returned
               </label>
               <br />
-              <input type='datetime-local'></input>
+              <input type='datetime-local' className='form-input'></input>
             </div>
           </form>
+          <button>Submit</button>
         </div>
       </div>
     );
