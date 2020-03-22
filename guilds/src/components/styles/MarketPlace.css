@@ -8,6 +8,7 @@
 
 .container {
   width: 100%;
+  min-height: 100vh;
 }
 .items {
   display: flex;
@@ -35,3 +36,8 @@
   display: flex;
   justify-content: flex-end;
 }
+
+/* .paginate {
+  display: flex;
+  align-items: flex-end;
+} */
