@@ -7,7 +7,7 @@
 }
 
 .container {
-  width: 100%;
+  width: 70%;
   min-height: 100vh;
 }
 .items {
@@ -24,9 +24,11 @@
   color: #f3e055;
   font-family: fantasy;
   font-weight: bold;
+  font-size: 40px;
 }
 .body {
   background-color: #570415;
+  min-height: 100vh;
 }
 .listing-button {
   color: #f3e055;
@@ -41,5 +43,5 @@
 
 .paginate {
   position: relative;
-  top: 375px;
+  top: 246px;
 }
