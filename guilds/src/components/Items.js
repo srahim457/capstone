@@ -4,16 +4,16 @@ class Items extends Component {
   constructor() {
     super();
     this.state = {
-      name: '',
-      price: '',
-      description: '',
-      start: date.toLocaleDateString(),
-      end: Date()
+      // name: '',
+      // price: '',
+      // description: '',
+      // start: date.toLocaleDateString(),
+      // end: Date()
     };
   }
 
   render() {
-    return <h1>{this.state}</h1>;
+    return <h1>{this.name.state}</h1>;
   }
 }
 
