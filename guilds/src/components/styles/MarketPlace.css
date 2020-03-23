@@ -22,6 +22,8 @@
   display: flex;
   justify-content: center;
   color: #f3e055;
+  font-family: fantasy;
+  font-weight: bold;
 }
 .body {
   background-color: #570415;
