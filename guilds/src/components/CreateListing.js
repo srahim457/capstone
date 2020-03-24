@@ -111,6 +111,7 @@ class CreateListing extends Component {
               />
               <label for='rental'>Rental</label>
             </div>
+            <br />
             <div>
               <label>
                 Input the time and date that you want the item to be returned
