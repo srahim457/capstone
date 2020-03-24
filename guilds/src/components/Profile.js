@@ -48,11 +48,11 @@ class Profile extends Component {
         </div>
 
         <div className='Listings'>
-          <div className='PageSwitcher'>
+          <div className='PageSwitcher_profile'>
             <NavLink
               to='/profile-borrowed'
               activeClassName='PageSwitcher__Item--Active'
-              className='PageSwitcher__Item'
+              className='PageSwitcher__Item_profile'
             >
               Borrowed Items
             </NavLink>
@@ -60,7 +60,7 @@ class Profile extends Component {
               exact
               to='/profile-listed'
               activeClassName='PageSwitcher__Item--Active'
-              className='PageSwitcher__Item'
+              className='PageSwitcher__Item_profile'
             >
               Listed Items
             </NavLink>
