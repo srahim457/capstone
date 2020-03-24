@@ -30,7 +30,7 @@ class Profile extends Component {
       <BrowserRouter>
         <div className='Background'>
           <div className='Header'>
-            <div className='NameField'>
+            <div className='ProfilePic'>
               <img src={LaserLouis} alt=''></img>
             </div>
             <div className='NameField'>
