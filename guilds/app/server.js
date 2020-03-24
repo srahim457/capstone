@@ -20,13 +20,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 // Heroku
 if (process.env.NODE_ENV === 'production') {
-	app.use(express.static('guilds/build'));
+	app.use(express.static('../build'));
 }
 var routes = require('./routes/appRoutes.js'); //importing route
 routes(app); //register the route
 
 app.get('/', (request, response) => {
-	response.sendFile(path.join(__dirname, 'guilds/build', 'index.html'));
+	response.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 console.log('API server started on: ' + port);
