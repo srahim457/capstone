@@ -25,6 +25,7 @@
 .form-input {
   background-color: #f3e055;
   border-color: #f3e055;
+  resize: none;
 }
 .close-button {
   background-color: #f3e055;

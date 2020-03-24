@@ -46,34 +46,43 @@ class CreateListing extends Component {
               <div className='button-wrapper'>
                 <button className='close-button'>X</button>
               </div>
-              <label>Item Name </label>
+              <label>
+                <strong>Item Name</strong>
+              </label>
               <br />
               <input
                 type='text'
                 className='form-input'
                 placeholder='Name of item'
                 maxLength='50'
+                col='10'
                 value={this.state.name}
                 onChange={this.itemNameChangeHandler}
               ></input>
             </div>
+            <br />
             <div>
               {/* make into a description box */}
-              <label>Item Description</label>
+              <label>
+                <strong>Item Description</strong>
+              </label>
               <br />
               <textarea
                 className='form-input'
                 autofocus
                 placeholder='Type your description'
                 maxlength='180'
-                rows='5'
-                cols='40'
+                rows='8'
+                cols='70'
                 value={this.state.description}
                 onChange={this.descriptionChangeHandler}
               />
             </div>
+            <br />
             <div>
-              <label>Type of Listing:</label>
+              <label>
+                <strong>Type of Listing:</strong>
+              </label>
               <br />
               <input
                 type='radio'
@@ -104,7 +113,7 @@ class CreateListing extends Component {
             </div>
             <div>
               <label>
-                Input the time and date that you want the item returned
+                Input the time and date that you want the item to be returned
               </label>
               <br />
               <input type='datetime-local' className='form-input' />
