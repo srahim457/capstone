@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { Redirect } from 'react-router-dom';
 import './styles/CreateListing.css';
+import MarketPlace from './MarketPlace';
 
 class CreateListing extends Component {
   constructor(props) {
@@ -9,7 +11,9 @@ class CreateListing extends Component {
       name: '',
       price: '',
       description: '',
-      option: ''
+      option: '',
+      policy: '',
+      curTime: new Date().toLocaleString()
     };
   }
 
@@ -28,11 +32,126 @@ class CreateListing extends Component {
   };
 
   handleOptionChange = e => {
-    e.preventDefault();
     this.setState({
       option: e.currentTarget.value
     });
   };
+
+  priceChangeHandler = e => {
+    e.preventDefault();
+    this.setState({
+      price: e.currentTarget.value
+    });
+  };
+
+  policyChangeHandler = e => {
+    e.preventDefault();
+    this.setState({
+      policy: e.currentTarget.value
+    });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    console.log(this.state);
+  };
+
+  loanForm() {
+    return (
+      <Fragment>
+        <label>
+          <strong>
+            Input the time and date that you want the item to be returned
+          </strong>
+        </label>
+        <br />
+        <input type='datetime-local' className='form-input' />
+        <br />
+        <br />
+        <label>
+          <strong>Set loan policy</strong>
+        </label>
+        <br />
+        <textarea
+          className='form-input'
+          autofocus
+          placeholder='Type your policy'
+          maxlength='180'
+          rows='8'
+          cols='70'
+          value={this.state.policy}
+          onChange={this.policyChangeHandler}
+        />
+      </Fragment>
+    );
+  }
+
+  saleForm() {
+    return (
+      <Fragment>
+        <label>Price</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.priceChangeHandler}
+        ></input>
+      </Fragment>
+    );
+  }
+
+  rentForm() {
+    return (
+      <Fragment>
+        <label>Set price per hr</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.priceChangeHandler}
+        ></input>
+        <br />
+        <br />
+        <label>
+          <strong>
+            Input the time and date that you want the item to be returned
+          </strong>
+        </label>
+        <br />
+        <input
+          type='datetime-local'
+          className='form-input'
+          min={this.state.curTime}
+        />
+        <br />
+        <br />
+        <label>
+          <strong>Set rental policy</strong>
+        </label>
+        <br />
+        <textarea
+          className='form-input'
+          autofocus
+          placeholder='Type your policy'
+          maxlength='180'
+          rows='8'
+          cols='70'
+          value={this.state.policy}
+          onChange={this.policyChangeHandler}
+        />
+      </Fragment>
+    );
+  }
+
+  closeButton() {
+    return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+  }
 
   render() {
     return (
@@ -44,7 +163,9 @@ class CreateListing extends Component {
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
               <div className='button-wrapper'>
-                <button className='close-button'>X</button>
+                <button className='close-button'>
+                  <strong>X</strong>
+                </button>
               </div>
               <label>
                 <strong>Item Name</strong>
@@ -62,16 +183,15 @@ class CreateListing extends Component {
             </div>
             <br />
             <div>
-              {/* make into a description box */}
               <label>
                 <strong>Item Description</strong>
               </label>
               <br />
               <textarea
                 className='form-input'
-                autofocus
+                autoFocus
                 placeholder='Type your description'
-                maxlength='180'
+                maxLength='180'
                 rows='8'
                 cols='70'
                 value={this.state.description}
@@ -87,40 +207,46 @@ class CreateListing extends Component {
               <input
                 type='radio'
                 id='sale'
-                value={this.state.option === 'sale'}
+                value='sale'
                 name='contact'
                 onChange={this.handleOptionChange}
+                checked={this.state.option === 'sale'}
               />
               <label for='sale'>Sale</label>
               <br />
               <input
                 type='radio'
                 id='loan'
-                value={this.state.option === 'loan'}
+                value='loan'
                 name='contact'
                 onChange={this.handleOptionChange}
+                checked={this.state.option === 'loan'}
               />
               <label for='loan'>Loan</label>
               <br />
               <input
                 type='radio'
                 id='rental'
-                value={this.state.option === 'rental'}
+                value='rental'
                 name='contact'
                 onChange={this.handleOptionChange}
+                checked={this.state.option === 'rental'}
               />
               <label for='rental'>Rental</label>
             </div>
             <br />
-            <div>
-              <label>
-                Input the time and date that you want the item to be returned
-              </label>
-              <br />
-              <input type='datetime-local' className='form-input' />
-            </div>
+
+            {this.state.option === 'sale' || this.state.option === ''
+              ? this.saleForm()
+              : this.state.option === 'loan'
+              ? this.loanForm()
+              : this.rentForm()}
           </form>
-          <button>Submit</button>
+          <div className='submit-button-wrapper'>
+            <button className='submit-button' onClick={this.handleSubmit}>
+              <strong>Submit</strong>
+            </button>
+          </div>
         </div>
       </div>
     );

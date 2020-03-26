@@ -31,3 +31,19 @@
   background-color: #f3e055;
   color: #3b000b;
 }
+
+.submit-button {
+  background-color: #3b000b;
+  color: #f3e055;
+  border-color: #f3e055;
+}
+
+.submit-button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.priceBox {
+  background-color: #f3e055;
+  border-color: #f3e055;
+}

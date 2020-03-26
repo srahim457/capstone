@@ -44,7 +44,7 @@ class MarketPlace extends Component {
           <h1 className='title'>Market Place</h1>
           <div className='button-wrapper'>
             <button className='listing-button' onClick={this.onClickHandler}>
-              Create a Listing
+              <strong>Create a Listing</strong>
             </button>
           </div>
           {this.state.pageOfItems.map(item => (
