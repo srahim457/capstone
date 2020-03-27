@@ -74,9 +74,9 @@ class CreateListing extends Component {
         <br />
         <textarea
           className='form-input'
-          autofocus
+          autoFocus
           placeholder='Type your policy'
-          maxlength='180'
+          maxLength='180'
           rows='8'
           cols='70'
           value={this.state.policy}
@@ -137,9 +137,9 @@ class CreateListing extends Component {
         <br />
         <textarea
           className='form-input'
-          autofocus
+          autoFocus
           placeholder='Type your policy'
-          maxlength='180'
+          maxLength='180'
           rows='8'
           cols='70'
           value={this.state.policy}
@@ -155,15 +155,13 @@ class CreateListing extends Component {
 
   render() {
     return (
-      // <div>{this.props.children}</div>
-
       <div className='container-parent'>
         <div className='container'>
           <h1 className='title'>Create Listing</h1>
-          <form onSubmit={this.handleSubmit} className='form-fields'>
+          <form className='form-fields'>
             <div>
               <div className='button-wrapper'>
-                <button className='close-button'>
+                <button className='close-button' onClick={this.closeButton}>
                   <strong>X</strong>
                 </button>
               </div>
