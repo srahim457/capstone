@@ -13,7 +13,8 @@ class CreateListing extends Component {
       description: '',
       option: '',
       policy: '',
-      curTime: new Date().toLocaleString()
+      curTime: new Date().toLocaleString(),
+      image: ''
     };
   }
 
@@ -54,6 +55,13 @@ class CreateListing extends Component {
   handleSubmit = e => {
     e.preventDefault();
     console.log(this.state);
+  };
+
+  fileSelectedHandler = e => {
+    console.log(e.target.files[0]);
+    this.setState({
+      image: e.currentTarget.value
+    });
   };
 
   loanForm() {
@@ -239,6 +247,15 @@ class CreateListing extends Component {
               : this.state.option === 'loan'
               ? this.loanForm()
               : this.rentForm()}
+            <br />
+            <br />
+            <label>Upload an image</label>
+            <br />
+            <input
+              type='file'
+              onChange={this.fileSelectedHandler}
+              value={this.state.image}
+            />
           </form>
           <div className='submit-button-wrapper'>
             <button className='submit-button' onClick={this.handleSubmit}>

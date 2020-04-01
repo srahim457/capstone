@@ -35,7 +35,7 @@ class MarketPlace extends Component {
   }
 
   render() {
-    if (this.state.click == true) {
+    if (this.state.click === true) {
       return <CreateListing />;
     }
     return (
