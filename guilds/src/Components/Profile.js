@@ -12,6 +12,7 @@ import {
 import './styles/profile.css';
 import Profile_Borrowed from './Profile_Borrowed';
 import Profile_Listed from './Profile_Listed';
+import LaserLouis from '../images/LaserLouis.jpg';
 
 function Nombre(props) {
   return <h1>{props.name}</h1>;
@@ -30,8 +31,11 @@ class Profile extends Component {
       <div className='Background'>
 
         <div className='Header'>
+          <div className='button-container'>
+            <h1> Edit </h1>
+          </div>
           <div className='ProfilePic'>
-            <img src='../images/guildslogo.png' alt=''></img>
+            <img src={LaserLouis} alt=''></img>
           </div>
           <div className='NameField'>
             <h1> My Name: </h1>
@@ -48,11 +52,11 @@ class Profile extends Component {
         </div>
 
         <div className='Listings'>
-          <div className='PageSwitcher'>
+          <div className='PageSwitcher_profile'>
             <NavLink
               to='/profile-borrowed'
               activeClassName='PageSwitcher__Item--Active'
-              className='PageSwitcher__Item'
+              className='PageSwitcher__Item_profile'
             >
               Borrowed Items
             </NavLink>
@@ -60,7 +64,7 @@ class Profile extends Component {
               exact
               to='/profile-listed'
               activeClassName='PageSwitcher__Item--Active'
-              className='PageSwitcher__Item'
+              className='PageSwitcher__Item_profile'
             >
               Listed Items
             </NavLink>
