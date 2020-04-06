@@ -1,6 +1,7 @@
 'use strict';
-var sql = require('./db.js');
-var bcrypt = require('bcryptjs')
+var sql = require('./db.js').pool;
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 //User object constructor
 var User = function(user){
@@ -12,7 +13,7 @@ var User = function(user){
 
 var Login = function(login){
     this.email = login.email;
-    this.password = login.password;
+    this.password = login.password; 
 };
 
 
@@ -25,7 +26,9 @@ Login.createLogin = function (newLogin,result) {
             result(0,null);
         }
         else{
-            sql.query("INSERT INTO guilds.login (EMAIL,PASSWORD) VALUES ($1,$2) ",[newLogin.email, newLogin.password], function (err, res) {
+            var newpw = bcrypt.hashSync(newLogin.password,saltRounds)
+            console.log(newpw,newLogin.password )
+            sql.query("INSERT INTO guilds.login (EMAIL,PASSWORD) VALUES ($1,$2) ",[newLogin.email, newpw], function (err, res) {
             
                 if(err) {
                     console.log("error: ", err);

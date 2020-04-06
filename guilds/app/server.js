@@ -8,7 +8,7 @@ var cors = require('cors');
 port = process.env.PORT || 4000;
 
 // connection configurations
-var db = require('./model/db.js') 
+var db = require('./model/db.js').pool 
 
 var app = express();
 app.listen(port);
