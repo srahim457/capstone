@@ -12,11 +12,25 @@ import {
 import './styles/profile.css';
 
 class Profile_Listed extends Component {
-  render() {
+  render(){
+    var tmp = [];
+    for (var i = 0; i < 4; i++) {
+      tmp.push(i);
+    }
+
+    var items = tmp.map(function (i) {
+      return (
+        <div className='item'>
+
+        </div>
+      );
+    });
+
     return (
-      <div>
-        <h1> My Listed Items </h1>
+      <div className='ItemListWrapper'>
+        {items}
       </div>
+
     );
   }
 }
