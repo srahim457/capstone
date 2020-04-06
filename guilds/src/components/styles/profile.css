@@ -4,7 +4,8 @@ the profile page.
 relevant files: Profile.js
 */
 
-.Background { /*background color of the entire page*/
+.Background {
+  /*background color of the entire page*/
   height: 100vh;
   position: relative;
   display: flex;
@@ -12,7 +13,8 @@ relevant files: Profile.js
   padding-top: 50px;
 }
 
-.Header { /*the background of the top part with the name and image*/
+.Header {
+  /*the background of the top part with the name and image*/
   background-image: url(../../images/parchment_background.jpg);
   position: absolute;
   display: inline-block;
@@ -21,7 +23,8 @@ relevant files: Profile.js
   height: 47%;
 }
 
-.NameField{ /*fields for username and ranking; will edit to make better later*/
+.NameField {
+  /*fields for username and ranking; will edit to make better later*/
   color: black;
   display: inline-block;
   text-decoration: none;
@@ -29,7 +32,8 @@ relevant files: Profile.js
   margin-left: 600px;
 }
 
-.Listings { /*the background of the bottom part with the listings*/
+.Listings {
+  /*the background of the bottom part with the listings*/
   background-image: url(../../images/parchment_background.jpg);
   position: absolute;
   display: block;
@@ -39,13 +43,11 @@ relevant files: Profile.js
   left: 150px;
 }
 
-.ProfilePic{
+.ProfilePic {
   background-color: brown;
   position: absolute;
   display: inline-block;
-
 }
-
 
 .PageSwitcher_profile {
   display: flex;
@@ -66,7 +68,7 @@ relevant files: Profile.js
 }
 
 .PageSwitcher__Item--Active {
-  background-color: red;
+  background-color: #b82100;
   color: white;
 }
 

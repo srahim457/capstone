@@ -10,6 +10,7 @@ import {
 
 import Login from './Login';
 import Signup from './SignUp';
+import ForgotPassword from './ForgotPassword';
 import guildlogo from '../images/guildslogo.png';
 import '../App.css';
 
@@ -64,6 +65,7 @@ class Home extends Component {
 
             <Route exact path='/' component={Signup}></Route>
             <Route path='/sign-in' component={Login}></Route>
+            <Route path='/forgot-password' component={ForgotPassword}></Route>
           </div>
         </div>
       </BrowserRouter>

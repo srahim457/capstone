@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, NavLink, BrowserRouter } from 'react-router-dom';
 import './styles/Navigation.css';
 import MarketPlace from './MarketPlace';
+import Messages from './Messages';
 import Profile from './Profile.js';
 
 //add & import routes within content div
@@ -20,6 +21,7 @@ const Navigation = () => {
       <div className='content'>
         <Route exact path='/profile' component={Profile} />
         <Route exact path='/market-place' component={MarketPlace} />
+        <Route exact path='/messages' component={Messages} />
       </div>
     </BrowserRouter>
   );

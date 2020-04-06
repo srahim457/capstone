@@ -1,15 +1,4 @@
 import React, { Component } from 'react';
-import Navigation from './Navigation';
-import {
-  BrowserRouter,
-  HashRouter as Router,
-  Route,
-  Link,
-  NavLink,
-  Switch
-} from 'react-router-dom';
-
-import './styles/profile.css';
 
 class Profile_Listed extends Component {
   render() {

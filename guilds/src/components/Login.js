@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
+import ForgotPassword from './ForgotPassword';
 import './styles/Home.css';
 
 class Login extends Component {
@@ -71,6 +72,12 @@ class Login extends Component {
               <button className='FormField__Button mr-20'>Sign In</button>{' '}
               <Link to='/' className='FormField__Link'>
                 <strong>Create an account</strong>
+              </Link>
+              <br />
+              <br />
+              <Route path='/forgot-password' component={ForgotPassword}></Route>
+              <Link to='/forgot-password' className='FormField__Link'>
+                <strong>Forgot your password?</strong>
               </Link>
             </div>
           </form>

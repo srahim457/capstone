@@ -4,8 +4,8 @@ import './styles/CreateListing.css';
 import MarketPlace from './MarketPlace';
 
 class CreateListing extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       name: '',
