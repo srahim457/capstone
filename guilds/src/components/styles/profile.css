@@ -85,8 +85,8 @@ h2{
   margin-right: auto;
   margin-top: 150px;
   float: none;
-
   position: relative;
+  padding-bottom: 50px;
 }
 
 .ProfilePic{ /*the object holding the profile pic*/
@@ -139,11 +139,26 @@ h2{
   top: 10px;
 }
 
-.listed-item {
+/*the listed and borrowed item stuff*/
+.ItemListWrapper { /*wrapper for all the items to appear*/
+  background-color: ;
+  display: block;
+  width: 950px;
+  min-height: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+  position: relative;
+}
+
+.item {
   background-color: #3b000b;
   display: block;
-  top: 100px;
-  width: 950px;
-  height: 50px;
-  position: absolute;
+  width: 650px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  float: none;
+  position: relative;
 }
