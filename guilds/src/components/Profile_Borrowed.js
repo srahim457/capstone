@@ -2,11 +2,24 @@ import React, { Component } from 'react';
 import './styles/profile.css';
 
 class Profile_Borrowed extends Component {
-  render() {
+  render(){
+    var tmp = [];
+    for (var i = 0; i < 15; i++) {
+      tmp.push(i);
+    }
+    var items = tmp.map(function (i) {
+      return (
+        <div className='item'>
+
+        </div>
+      );
+    });
+    
     return (
-      <div>
-        <h1> My Borrowed Items </h1>
+      <div className='ItemListWrapper'>
+        {items}
       </div>
+
     );
   }
 }

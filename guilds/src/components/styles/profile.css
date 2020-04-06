@@ -6,49 +6,105 @@ relevant files: Profile.js
 
 .Background {
   /*background color of the entire page*/
-  height: 100vh;
-  position: relative;
-  display: flex;
   background-color: #570415;
-  padding-top: 50px;
+  min-height: 100vh;
+  padding-bottom: 50px;
 }
 
 .Header {
   /*the background of the top part with the name and image*/
   background-image: url(../../images/parchment_background.jpg);
-  position: absolute;
-  display: inline-block;
-  left: 150px;
-  width: 80%;
-  height: 47%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  top: 50px;
+  width: 950px;
+  height: 300px;
+  float: none;
+
+  position: relative;
 }
 
-.NameField {
-  /*fields for username and ranking; will edit to make better later*/
+.UserInfoContainer {
+  /*wrapper to place user information*/
+  display: block;
+  width: 300px;
+  height: 300px;
+  float: none;
+  position: absolute;
+  top: 15px;
+  left: 500px;
+}
+
+.HeaderField {
+  /*field labels*/
+  color: #570415;
+  display: block;
+  text-decoration: none;
+}
+
+.UserField {
+  /*fields for username and ranking*/
+  color: black;
+  display: block;
+  text-decoration: none;
+  left: 50px;
+}
+
+.SubfieldInfoContainer {
+  /*wrapper to place user information*/
+  display: block;
+  width: 700px;
+  height: 100px;
+  float: none;
+  position: absolute;
+  top: 250px;
+  right: 30px;
+}
+
+.HeaderSubfield {
+  color: #570415;
+  display: inline-block;
+  text-decoration: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.UserSubfield {
   color: black;
   display: inline-block;
   text-decoration: none;
-  padding-bottom: 10px;
-  margin-left: 600px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+h2 {
+  font-size: 20px;
 }
 
 .Listings {
   /*the background of the bottom part with the listings*/
   background-image: url(../../images/parchment_background.jpg);
-  position: absolute;
   display: block;
-  top: 500px;
-  width: 80%;
-  height: 100%;
-  left: 150px;
+  width: 950px;
+  min-height: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 150px;
+  float: none;
+  position: relative;
+  padding-bottom: 50px;
 }
 
 .ProfilePic {
-  background-color: brown;
+  /*the object holding the profile pic*/
   position: absolute;
-  display: inline-block;
+  display: block;
+  left: 120px;
+  top: 40px;
 }
 
+/*Listing tab stuff*/
 .PageSwitcher_profile {
   display: flex;
   justify-content: flex-end;
@@ -58,7 +114,7 @@ relevant files: Profile.js
 .PageSwitcher__Item_profile {
   background-color: #4c5d72;
   color: #9da6b1;
-  padding: 10px 250px;
+  padding: 10px 200px;
   cursor: pointer;
   font-size: 0.9em;
   border: none;
@@ -68,121 +124,50 @@ relevant files: Profile.js
 }
 
 .PageSwitcher__Item--Active {
-  background-color: #b82100;
-  color: white;
+  background-color: red;
+  color: yellow;
 }
 
-.PageSwitcher__Item:first-child {
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
-}
-.PageSwitcher__Item:last-child {
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
-}
-
-.FormCenter {
-  margin-bottom: 100px;
+/*editing profile stuff*/
+.edit-button {
+  /* edit profile button*/
+  color: #f3e055;
+  background-color: #3b000b;
+  border-color: #f3e055;
+  padding: 5px 15px;
+  cursor: pointer;
 }
 
-.FormTitle {
-  color: black;
-  font-weight: 300;
-  margin-bottom: 50px;
-}
-
-.FormTitle__Link {
-  color: #707c8b;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1.7em;
-  margin: 0 10px;
-  padding-bottom: 5px;
-}
-
-.FormTitle__Link:first-child {
-  margin-left: 0;
-}
-
-.FormTitle__Link--Active {
-  color: black;
-  border-bottom: 1px solid #b82100;
-}
-
-.FormField {
-  margin-bottom: 40px;
-}
-
-.FormField__Label {
+.button-container {
+  position: absolute;
   display: block;
-  text-transform: uppercase;
-  font-size: 0.9em;
-  color: black;
-}
-.FormField__Input {
-  width: 85%;
-  background-color: transparent;
-  border: none;
-
-  color: black;
-  outline: none;
-  border-bottom: 1px solid black;
-
-  font-size: 1em;
-  font-weight: 300;
-  padding-bottom: 10px;
-  margin-top: 10px;
+  width: 50px;
+  height: 20px;
+  right: 20px;
+  top: 10px;
 }
 
-.FormField__Input::placeholder {
-  color: black;
-}
-
-.FormField__Button {
-  background-color: #b82100;
-
-  color: white;
-  border: none;
-  outline: none;
-  border-radius: 25px;
-  padding: 15px 70px;
-  font-size: 0.8em;
-  font-weight: 500;
-}
-
-.FormField__Link {
-  color: black;
-
-  text-decoration: none;
-  display: inline-block;
-  border-bottom: 1.5px solid #b82100;
-
-  padding-bottom: 5px;
-}
-
-.FormField__CheckboxLabel {
-  color: #646f7d;
-  font-size: 0.9em;
-}
-
-.FormField__Checkbox {
+/*the listed and borrowed item stuff*/
+.ItemListWrapper {
+  /*wrapper for all the items to appear*/
+  background-color: ;
+  display: block;
+  width: 950px;
+  min-height: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
   position: relative;
-  top: 1.5px;
 }
 
-.FormField__TermsLink {
-  color: white;
-  border-bottom: 1px solid #199087;
-  text-decoration: none;
-  display: inline-block;
-  padding-bottom: 2px;
-  margin-left: 5px;
-}
-
-.caption {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-
-  color: #f5df49;
+.item {
+  background-color: #3b000b;
+  display: block;
+  width: 650px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  float: none;
+  position: relative;
 }
