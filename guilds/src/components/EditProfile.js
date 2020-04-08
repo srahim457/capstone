@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './styles/EditProfile.css';
 
-{/* !!! not pretty, did not edit all the change handlers*/}
+/* !!! not pretty, did not edit all the change handlers*/
 class CreateListing extends Component {
   constructor(props) {
     super(props);
@@ -13,24 +13,24 @@ class CreateListing extends Component {
     };
   }
 
-  itemNameChangeHandler = e => {
+  itemNameChangeHandler = (e) => {
     e.preventDefault();
     this.setState({
-      name: e.currentTarget.value
+      name: e.currentTarget.value,
     });
   };
 
-  emailChangeHandler = e => {
+  emailChangeHandler = (e) => {
     e.preventDefault();
     this.setState({
-      email: e.currentTarget.value
+      email: e.currentTarget.value,
     });
   };
 
-  handleOptionChange = e => {
+  handleOptionChange = (e) => {
     e.preventDefault();
     this.setState({
-      option: e.currentTarget.value
+      option: e.currentTarget.value,
     });
   };
 
@@ -81,9 +81,9 @@ class CreateListing extends Component {
             <div>
               <label>User's Profile Picture: </label>
               <input
-                type="file"
-                name="images"
-                id="images"
+                type='file'
+                name='images'
+                id='images'
                 value={this.state.email}
                 onChange={this.emailChangeHandler}
               />

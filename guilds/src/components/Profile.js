@@ -42,7 +42,7 @@ class Profile extends Component {
     {
       /*if the edit profile button is pressed it will redirect*/
     }
-    if (this.state.click == true) {
+    if (this.state.click === true) {
       return <EditProfile />;
     }
     return (
