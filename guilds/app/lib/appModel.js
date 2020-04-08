@@ -1,7 +1,5 @@
 'use strict';
 var sql = require('./db.js').pool;
-const bcrypt = require('bcrypt')
-const saltRounds = 10
 
 //User object constructor
 var User = function(user){
@@ -17,18 +15,18 @@ var Login = function(login){
 };
 
 
-Login.createLogin = function (newLogin,result) {    
+Login.createLogin = function (email,pass,result) {    
     //Checking for duplicate emails
-    sql.query("SELECT * from guilds.login where email = $1",[newLogin.email],function (err,res){
-        console.log('Checking if email ' + newLogin.email + ' exists');
+    sql.query("SELECT * from guilds.login where email = $1",[email],function (err,res){
+        console.log('Checking if email ', email ,' exists');
         if(res.rows.length > 0){
-            console.log('Email already exists');
-            result(0,null);
+            console.log('Email already exists')
+            result(0,null)
         }
         else{
-            var newpw = bcrypt.hashSync(newLogin.password,saltRounds)
-            console.log(newpw,newLogin.password )
-            sql.query("INSERT INTO guilds.login (EMAIL,PASSWORD) VALUES ($1,$2) ",[newLogin.email, newpw], function (err, res) {
+            console.log('Email is new')
+            console.log(pass,email)
+            sql.query("INSERT INTO guilds.login (EMAIL,PASSWORD) VALUES ($1,$2) ",[email, pass], function (err, res) {
             
                 if(err) {
                     console.log("error: ", err);
@@ -97,8 +95,9 @@ User.createUser = function (newUser, result) {
             }
         });           
 };
-User.getUserByEmail = function (User, result) {
-        sql.query("Select User from guilds.users where email = ? ", User.email, function (err, res) {             
+User.getUserByEmail = function (email, result) {
+        console.log('getting user by email ', email)
+        sql.query("Select User from guilds.users where email = $1", [email], function (err, res) {             
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);

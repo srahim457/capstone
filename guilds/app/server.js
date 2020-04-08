@@ -1,18 +1,26 @@
 var express = require('express');
 
 var bodyParser = require('body-parser');
-var session = require('express-session')
 var cors = require('cors');
-
-
-port = process.env.PORT || 4000;
+var express = require('express');
 
 // connection configurations
-var db = require('./model/db.js').pool 
+//require('dotenv').config();
+const PORT = process.env.PORT || 4000;
+
+var flash = require('connect-flash');
+
+var session = require('express-session')
+var passport = require("passport");
+var request = require('request');
 
 var app = express();
-app.listen(port);
+
 app.use(cors());
+app.use(session({secret: 'capstone',resave: 'false',saveUninitialized: 'false'}))
+app.use(passport.initialize());
+app.use(passport.session());
+
 //parse json/application
 app.use(bodyParser.json());
 //parse urlencoded
@@ -22,8 +30,20 @@ app.use(express.static("public"));
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('../build'));
 }
-var routes = require('./routes/appRoutes.js'); //importing route
-routes(app); //register the route
+//var routes = require('./routes/appRoutes.js'); //importing route
+//routes(app); //register the route
+var path = require('path');
+
+app.use('/public', express.static(__dirname + '/public'));
+
+app.use(flash());
+
+app.use(bodyParser());
+app.set('view engine', 'pug');
+app.set('view options', { layout: false });
 
 
-console.log('API server started on: ' + port);
+require('./lib/routes.js')(app);
+
+app.listen(PORT);
+console.log('Node listening on port %s', PORT);

@@ -1,5 +1,3 @@
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -16,9 +14,7 @@ const pool = new Pool({
 pool.connect(function(err) {
     if (err) throw err;
 });
-const postgresLocal = require('passport-local-postgres')(pool);
 
 module.exports = {
-  pool,
-  postgresLocal
+  pool
 }
