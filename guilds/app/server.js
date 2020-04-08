@@ -1,35 +1,50 @@
-const express = require('express');
+var express = require('express');
 
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const cors = require('cors');
-const path = require('path');
-
-port = process.env.PORT || 4000;
+var bodyParser = require('body-parser');
+var cors = require('cors');
+var express = require('express');
 
 // connection configurations
-const db = require('./model/db.js');
+//require('dotenv').config();
+const PORT = process.env.PORT || 4000;
 
-const app = express();
-app.listen(port);
+var flash = require('connect-flash');
+
+var session = require('express-session')
+var passport = require("passport");
+var request = require('request');
+
+var app = express();
+
 app.use(cors());
+app.use(session({secret: 'capstone',resave: 'false',saveUninitialized: 'false'}))
+app.use(passport.initialize());
+app.use(passport.session());
 
 //parse json/application
 app.use(bodyParser.json());
-
 //parse urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
-
+app.use(express.static("public"));
 // Heroku
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('../build'));
+	app.use(express.static('../build'));
 }
-const routes = require('./routes/appRoutes.js'); //importing route
-routes(app); //register the route
+//var routes = require('./routes/appRoutes.js'); //importing route
+//routes(app); //register the route
+var path = require('path');
 
-app.get('/', (request, response) => {
-  response.sendFile(path.join(__dirname, '../build', 'index.html'));
-});
+app.use('/public', express.static(__dirname + '/public'));
 
-console.log('API server started on: ' + port);
+app.use(flash());
+
+app.use(bodyParser());
+app.set('view engine', 'pug');
+app.set('view options', { layout: false });
+
+
+require('./lib/routes.js')(app);
+require('./lib/forgotPassword.js')(app);
+
+app.listen(PORT);
+console.log('Node listening on port %s', PORT);
