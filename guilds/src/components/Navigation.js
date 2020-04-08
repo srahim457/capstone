@@ -4,6 +4,7 @@ import './styles/Navigation.css';
 import MarketPlace from './MarketPlace';
 import Messages from './Messages';
 import Profile from './Profile.js';
+import AllGuilds from './AllGuilds';
 
 //add & import routes within content div
 const Navigation = () => {
@@ -22,6 +23,7 @@ const Navigation = () => {
         <Route exact path='/profile' component={Profile} />
         <Route exact path='/market-place' component={MarketPlace} />
         <Route exact path='/messages' component={Messages} />
+        <Route exact path='/all-guilds' component={AllGuilds} />
       </div>
     </BrowserRouter>
   );
