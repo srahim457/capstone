@@ -8,7 +8,7 @@ class Login extends Component {
     super();
     this.state = {
       email: '',
-      password: ''
+      password: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,7 +18,7 @@ class Login extends Component {
     let target = e.target;
     let name = target.name;
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   }
 
@@ -33,11 +33,7 @@ class Login extends Component {
     return (
       <div>
         <div className='FormCenter'>
-          <form
-            onSubmit={this.handleSubmit}
-            className='FormFields'
-            onSubmit={this.handleSubmit}
-          >
+          <form onSubmit={this.handleSubmit} className='FormFields'>
             <div className='FormField'>
               <label className='FormField__Label' htmlFor='email'>
                 <strong>E-Mail Address</strong>
