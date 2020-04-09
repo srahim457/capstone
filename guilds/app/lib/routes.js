@@ -46,20 +46,20 @@ module.exports = function (app) {
 		
 		try{
 			var pwd = await bcrypt.hash(req.body.password, 5);
-			await JSON.stringify(User.getUserByEmail([req.body.username], function(err, result) {
+			await JSON.stringify(User.getUserByEmail([req.body.email], function(err, result) {
 				if(result.rows[0]){
 					console.log('email already registered')
 					req.flash('warning', "This email address is already registered.");
 					res.redirect('/signup');
 				}
 				else{
-					Login.createLogin(req.body.username,pwd, function(err, result) {
+					Login.createLogin(req.body.email,pwd, function(err, result) {
 						if(err === 0){
 							console.log('Error email exists redirecting now');
 							res.redirect('/login');
 						}
 						else {
-							User.createUser(req.body.firstName,function(err,result){
+							User.createUser(req.body,function(err,result){
 								if(err){console.log(err);}
 								else {
 									console.log('inserted into users')	
