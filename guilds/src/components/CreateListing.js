@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
-import './styles/CreateListing.css';
 import MarketPlace from './MarketPlace';
+import DateTimePicker from 'react-datetime-picker';
+import './styles/CreateListing.css';
 
 class CreateListing extends Component {
   constructor() {
@@ -12,59 +13,62 @@ class CreateListing extends Component {
       price: '',
       description: '',
       option: '',
+      date: '',
       policy: '',
       curTime: new Date().toLocaleString(),
-      image: ''
+      image: '',
     };
   }
 
-  itemNameChangeHandler = e => {
+  itemNameChangeHandler = (e) => {
     e.preventDefault();
     this.setState({
-      name: e.currentTarget.value
+      name: e.currentTarget.value,
     });
   };
 
-  descriptionChangeHandler = e => {
+  descriptionChangeHandler = (e) => {
     e.preventDefault();
     this.setState({
-      description: e.currentTarget.value
+      description: e.currentTarget.value,
     });
   };
 
-  handleOptionChange = e => {
+  handleOptionChange = (e) => {
     this.setState({
-      option: e.currentTarget.value
+      option: e.currentTarget.value,
     });
   };
 
-  priceChangeHandler = e => {
+  priceChangeHandler = (e) => {
     e.preventDefault();
     this.setState({
-      price: e.currentTarget.value
+      price: e.currentTarget.value,
     });
   };
 
-  policyChangeHandler = e => {
+  policyChangeHandler = (e) => {
     e.preventDefault();
     this.setState({
-      policy: e.currentTarget.value
+      policy: e.currentTarget.value,
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     console.log(this.state);
   };
 
-  fileSelectedHandler = e => {
+  fileSelectedHandler = (e) => {
     console.log(e.target.files[0]);
     this.setState({
-      image: e.currentTarget.value
+      image: e.currentTarget.value,
     });
   };
 
+  onDateChange = (date) => this.setState({ date });
   loanForm() {
+    let minimumDate = new Date();
     return (
       <Fragment>
         <label>
@@ -73,7 +77,14 @@ class CreateListing extends Component {
           </strong>
         </label>
         <br />
-        <input type='datetime-local' className='form-input' />
+
+        <br />
+        <DateTimePicker
+          onChange={this.onDateChange}
+          value={this.state.date}
+          minDate={minimumDate}
+        />
+
         <br />
         <br />
         <label>
@@ -112,6 +123,7 @@ class CreateListing extends Component {
   }
 
   rentForm() {
+    let minimumDate = new Date();
     return (
       <Fragment>
         <label>Set price per hr</label>
@@ -132,10 +144,11 @@ class CreateListing extends Component {
           </strong>
         </label>
         <br />
-        <input
-          type='datetime-local'
-          className='form-input'
-          min={this.state.curTime}
+        <br />
+        <DateTimePicker
+          onChange={this.onDateChange}
+          value={this.state.date}
+          minDate={minimumDate}
         />
         <br />
         <br />

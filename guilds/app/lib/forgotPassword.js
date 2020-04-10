@@ -1,4 +1,5 @@
-const crypto = require('crypto')
+const crypto = require('crypto');
+import User from '../sequelize'; //added this line from tutorial
 
 require('dotenv').config();
 var User = require('./appModel').User;
@@ -8,18 +9,18 @@ module.exports = (app) => {
   app.post('/forgotPassword', (req, res) => {
     if (req.body.email.length === 0) {
       res.status(400).send('email required');
-    }else {
+    } else {
       console.error(req.body.email);
-      User.getUserByEmail([req.body.email], function(err, result) {
-        if (result.rows[0]=== undefined) {
+      User.getUserByEmail([req.body.email], function (err, result) {
+        if (result.rows[0] === undefined) {
           console.error('email not in database');
           res.status(403).send('email not in db');
         } else {
           const token = crypto.randomBytes(20).toString('hex');
-        // user.update({
-        //   resetPasswordToken: token,
-        //   resetPasswordExpires: Date.now() + 3600000,
-        // });
+          // user.update({
+          //   resetPasswordToken: token,
+          //   resetPasswordExpires: Date.now() + 3600000,
+          // });
 
           const transporter = nodemailer.createTransport({
             service: 'gmail',
