@@ -43,5 +43,51 @@
 
 .paginate {
   position: relative;
-  top: 246px;
+  bottom: 10px;
+}
+
+.itemBoard {
+  background-color: #3b000b;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+  min-height: 950px;
+  float: none;
+  position: relative;
+}
+.itemContainer {
+  background-image: url(../../images/parchment_background.jpg);
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  float: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.itemImage {
+  background-color: brown;
+  color: yellow;
+  display: flex;
+  width: 150px;
+  height: 150px;
+}
+
+.searchItemsWrapper{
+  position: absolute;
+  display: block;
+  top: 0px;
+  min-width: 100px;
+  height: 20px;
+}
+
+.item-search-input {
+  background-color: #f3e055;
+  border-color: #f3e055;
+  width: 200px;
 }
