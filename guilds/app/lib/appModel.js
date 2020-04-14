@@ -12,6 +12,8 @@ var User = function(user){
 var Login = function(login){
     this.email = login.email;
     this.password = login.password; 
+    this.reset_pw_tkn = login.reset_pw_tkn;
+    this.reset_pw_expires = login.reset_pw_expires;
 };
 
 
@@ -41,8 +43,36 @@ Login.createLogin = function (email,pass,result) {
     });
          
 };
+Login.forgotPassword = function(reset_info){
+    var curr_date = new Date()
+    curr_date.setTime(reset_info.resetPasswordExpires)
+    curr_date.toDateString()
+    sql.query("UPDATE guilds.login SET reset_pw_tkn =($1), reset_pw_expires =($2) WHERE email =($3) RETURNING *",[reset_info.resetPasswordToken,curr_date.toDateString(),reset_info.email],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log('completed forgot password')
+            console.log(res.rows[0].id);
+        }
+    });
+};
+Login.resetPassword = function(reset_pw_tkn,reset_pw_expires,email){
+    console.log('Made a request to reset password, generating tokens now')
+    sql.query("UPDATE guilds.login SET reset_pw_tkn=($1) reset_pw_expires=($2) WHERE email = ANY($3)"[reset_pw_tkn,reset_pw_expires,email],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log(res.rows[0].id);
+            result(null, res.rows[0].id);
+        }
+    });
+};
 User.updateUserPhone = function (User, result) {
-    console.log('updating user phone',User),
+    console.log('updating user phone',User)
     sql.query("UPDATE guilds.users SET phonenum=($1) WHERE email = ANY($2)"[User.phonenum,User.email], function (err, res) {
             
             if(err) {
@@ -97,7 +127,7 @@ User.createUser = function (newUser, result) {
 };
 User.getUserByEmail = function (email, result) {
         console.log('getting user by email ', email)
-        sql.query("Select User from guilds.users where email = $1", [email], function (err, res) {             
+        sql.query("Select * from guilds.users where email = ANY ($1)", [email], function (err, res) {             
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);
