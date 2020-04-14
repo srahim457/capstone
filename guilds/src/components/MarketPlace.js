@@ -42,16 +42,35 @@ class MarketPlace extends Component {
       <div className='containerParent'>
         <div className='container'>
           <h1 className='title'>Market Place</h1>
-          <div className='button-wrapper'>
-            <button className='listing-button' onClick={this.onClickHandler}>
-              <strong>Create a Listing</strong>
-            </button>
-          </div>
-          {this.state.pageOfItems.map(item => (
-            <div className='items' key={item.id}>
-              {item.name}
+          <div className='itemBoard'>
+
+            <div className='button-wrapper'>
+              <button className='listing-button' onClick={this.onClickHandler}>
+                Create a Listing
+              </button>
             </div>
-          ))}
+
+            <div className='searchItemsWrapper'>
+              <input
+                type='text'
+                className='item-search-input'
+                placeholder='search for item'
+                maxLength='200'
+              ></input>
+              <button class="listing-button">
+                Search
+              </button>
+            </div>
+
+            {this.state.pageOfItems.map(item => (
+                <div className='itemContainer' key={item.id}>
+                  <div className='itemImage'>
+                  image {item.id}
+                  </div>
+                  {item.name}
+                </div>
+            ))}
+          </div>
           <div className='paginate'>
             <Pagination
               items={this.state.exampleItems}
