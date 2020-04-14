@@ -10,7 +10,18 @@ class Profile_Listed extends Component {
     var items = tmp.map(function (i) {
       return (
         <div className='item'>
-
+          <div className='itemImageWrapper'>
+            <h1> img {i} </h1>
+          </div>
+          <div className='itemInfoWrapper'>
+            <h1 className='itemInfoField'> Name: Item {i}</h1>
+            <h1 className='itemInfoField'> Cost: ${i}</h1>
+          </div>
+          <div className='editListingButtonWrapper'>
+            <button class="edit-button">
+              Edit Listed Item
+            </button>
+          </div>
         </div>
       );
     });
