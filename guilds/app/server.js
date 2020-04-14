@@ -38,7 +38,6 @@ app.use('/public', express.static(__dirname + '/public'));
 
 app.use(flash());
 
-app.use(bodyParser());
 app.set('view engine', 'pug');
 app.set('view options', { layout: false });
 
