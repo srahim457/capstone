@@ -46,7 +46,6 @@ Login.createLogin = function (email,pass,result) {
 Login.forgotPassword = function(reset_info){
     var curr_date = new Date()
     curr_date.setTime(reset_info.resetPasswordExpires)
-    curr_date.toDateString()
     sql.query("UPDATE guilds.login SET reset_pw_tkn =($1), reset_pw_expires =($2) WHERE email =($3) RETURNING *",[reset_info.resetPasswordToken,curr_date.toDateString(),reset_info.email],function (err,res) {
         if(err) {
             console.log("error: ", err);
@@ -54,6 +53,20 @@ Login.forgotPassword = function(reset_info){
         }
         else{
             console.log('completed forgot password')
+            console.log(res.rows[0].id);
+        }
+    });
+};
+Login.findByToken = function(login_info){
+    var curr_date = new Date()
+    curr_date.setTime(login_info.resetPasswordExpires)
+    sql.query("Select * from guilds.login where resetPasswordToken = ANY ($1) and resetPasswordExpires > ($2)",[login_info.resetPasswordToken,curr_date.toDateString()],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log('completed find')
             console.log(res.rows[0].id);
         }
     });

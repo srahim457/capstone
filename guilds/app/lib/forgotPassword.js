@@ -50,6 +50,7 @@ module.exports = (app) => {
             } else {
               console.log('here is the res: ', response);
               res.status(200).json('recovery email sent');
+              response.redirect('/resetPassword/?'+token)
             }
           });
         }

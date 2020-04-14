@@ -45,6 +45,7 @@ app.set('view options', { layout: false });
 
 require('./lib/routes.js')(app);
 require('./lib/forgotPassword.js')(app);
+require('./lib/resetPassword.js')(app);
 
 app.listen(PORT);
 console.log('Node listening on port %s', PORT);

@@ -31,6 +31,7 @@ pool.connect(function(err) {
 module.exports = function (app) {
 	
 	app.get('/', function (req, res, next) {
+		//console.log('base email session' , req.session.email)
 		res.render('index', {title: "Home", userData: req.user, messages: {danger: req.flash('danger'), warning: req.flash('warning'), success: req.flash('success')}});
 		
 		console.log(req.user);
@@ -132,7 +133,8 @@ passport.use('local', new  LocalStrategy({passReqToCallback : true}, (req, usern
 		const client = await pool.connect()
 		try{
 			await client.query('BEGIN')
-			var currentAccountsData = await JSON.stringify(client.query('SELECT "email", "password" FROM "login" WHERE "email"=$1', [username], function(err, result) {
+			console.log('local passport use email', username)
+			var currentAccountsData = await JSON.stringify(client.query('SELECT email,password FROM guilds.login WHERE email =$1', [username], function(err, result) {
 				
 				if(err) {
 					return done(err)
@@ -148,6 +150,8 @@ passport.use('local', new  LocalStrategy({passReqToCallback : true}, (req, usern
 							return done();
 						}
 						else if (check){
+							req.session.email = result.rows[0].email
+							console.log('session email,' ,req.session.email)
 							return done(null, [{email: result.rows[0].email, firstName: result.rows[0].firstName}]);
 						}
 						else{
