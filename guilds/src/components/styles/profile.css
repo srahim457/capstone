@@ -4,15 +4,13 @@ the profile page.
 relevant files: Profile.js
 */
 
-.Background {
-  /*background color of the entire page*/
+.Background { /*background color of the entire page*/
   background-color: #570415;
   min-height: 100vh;
   padding-bottom: 50px;
 }
 
-.Header {
-  /*the background of the top part with the name and image*/
+.Header { /*the background of the top part with the name and image*/
   background-image: url(../../images/parchment_background.jpg);
   display: block;
   margin-left: auto;
@@ -25,8 +23,7 @@ relevant files: Profile.js
   position: relative;
 }
 
-.UserInfoContainer {
-  /*wrapper to place user information*/
+.UserInfoContainer { /*wrapper to place user information*/
   display: block;
   width: 300px;
   height: 300px;
@@ -36,23 +33,20 @@ relevant files: Profile.js
   left: 500px;
 }
 
-.HeaderField {
-  /*field labels*/
+.HeaderField{ /*field labels*/
   color: #570415;
   display: block;
   text-decoration: none;
 }
 
-.UserField {
-  /*fields for username and ranking*/
+.UserField{ /*fields for username and ranking*/
   color: black;
   display: block;
   text-decoration: none;
   left: 50px;
 }
 
-.SubfieldInfoContainer {
-  /*wrapper to place user information*/
+.SubfieldInfoContainer { /*wrapper to place user information*/
   display: block;
   width: 700px;
   height: 100px;
@@ -62,7 +56,7 @@ relevant files: Profile.js
   right: 30px;
 }
 
-.HeaderSubfield {
+.HeaderSubfield{
   color: #570415;
   display: inline-block;
   text-decoration: none;
@@ -70,7 +64,7 @@ relevant files: Profile.js
   padding-right: 10px;
 }
 
-.UserSubfield {
+.UserSubfield{
   color: black;
   display: inline-block;
   text-decoration: none;
@@ -78,12 +72,11 @@ relevant files: Profile.js
   padding-right: 10px;
 }
 
-h2 {
+h2{
   font-size: 20px;
 }
 
-.Listings {
-  /*the background of the bottom part with the listings*/
+.Listings { /*the background of the bottom part with the listings*/
   background-image: url(../../images/parchment_background.jpg);
   display: block;
   width: 950px;
@@ -96,15 +89,15 @@ h2 {
   padding-bottom: 50px;
 }
 
-.ProfilePic {
-  /*the object holding the profile pic*/
+.ProfilePic{ /*the object holding the profile pic*/
   position: absolute;
   display: block;
   left: 120px;
   top: 40px;
 }
 
-/*Listing tab stuff*/
+
+/*-------------------Listing tab stuff-----------------------------*/
 .PageSwitcher_profile {
   display: flex;
   justify-content: flex-end;
@@ -128,9 +121,8 @@ h2 {
   color: yellow;
 }
 
-/*editing profile stuff*/
-.edit-button {
-  /* edit profile button*/
+/*-----------------editing profile stuff----------------------*/
+.edit-button { /* edit profile button*/
   color: #f3e055;
   background-color: #3b000b;
   border-color: #f3e055;
@@ -147,9 +139,8 @@ h2 {
   top: 10px;
 }
 
-/*the listed and borrowed item stuff*/
-.ItemListWrapper {
-  /*wrapper for all the items to appear*/
+/*----------------the listed and borrowed item stuff------------*/
+.ItemListWrapper { /*wrapper for all the items to appear*/
   background-color: ;
   display: block;
   width: 950px;
@@ -170,4 +161,43 @@ h2 {
   margin-top: 50px;
   float: none;
   position: relative;
+  cursor: pointer;
+}
+
+.itemImageWrapper { /*space where the picture of an item will go*/
+  background-color: brown;
+  color: yellow;
+  display: inline-block;
+  position: relative;
+  left: 50px;
+  top: 25px;
+  width: 100px;
+  height: 100px;
+}
+
+.itemInfoWrapper {
+  color: yellow;
+  display: block;
+  position: absolute;
+  left: 180px;
+  top: 25px;
+  width: 400px;
+  height: 100px;
+}
+
+.itemInfoField {
+  color: yellow;
+  display: block;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.editListingButtonWrapper {
+  background-color: black;
+  position: absolute;
+  display: block;
+  width: 115px;
+  height: 20px;
+  right: 20px;
+  top: 10px;
 }
