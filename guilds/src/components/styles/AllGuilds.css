@@ -1,0 +1,106 @@
+/* This is the formatting classes that will be used in
+the profile page.
+
+relevant files: Profile.js
+*/
+
+.Background { /*background color of the entire page*/
+  background-color: #570415;
+  min-height: 100vh;
+  padding-bottom: 50px;
+  padding-top: 50px;
+}
+
+.GuildBoard { /*the background of the top part with the name and image*/
+  background-color: #3b000b;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 950px;
+  min-height: 950px;
+  float: none;
+  position: relative;
+}
+
+.title { /*the page title*/
+  display: flex;
+  justify-content: center;
+  color: #f3e055;
+  font-family: fantasy;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+.GuildContainer { /*wrapper to place user information*/
+  background-image: url(../../images/parchment_background.jpg);
+  display: inline-block;
+  width: 400px;
+  height: 400px;
+  margin-left: 50px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  float: none;
+  position: relative;
+
+}
+
+.addGuildsButtonWrapper{
+  position: absolute;
+  display: block;
+  min-width: 100px;
+  height: 20px;
+  right: 0px;
+}
+
+.add-button {
+  color: #f3e055;
+  background-color: #3b000b;
+  border-color: #f3e055;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.searchWrapper{
+  background-color: black;
+  position: absolute;
+  display: block;
+  min-width: 100px;
+  height: 20px;
+}
+
+.search-button {
+  color: #f3e055;
+  background-color: #3b000b;
+  border-color: #f3e055;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.search-input {
+  background-color: #f3e055;
+  border-color: #f3e055;
+  padding: 5px;
+  width: 200px;
+}
+
+.GuildImageWrapper{
+  background-color: white;
+  display: block;
+  position: relative;
+  left: 100px;
+  top: 100px;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.GuildNameWrapper{
+  color: #570415;
+  display: block;
+  text-decoration: none;
+  position: relative;
+  width: 200px;
+  height: 30px;
+  top: 100px;
+  left: 100px;
+}
