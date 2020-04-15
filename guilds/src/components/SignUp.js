@@ -11,7 +11,7 @@ class SignUp extends Component {
       email: '',
       password: '',
       firstname: '',
-      lastname: ''
+      lastname: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -23,24 +23,18 @@ class SignUp extends Component {
     let target = e.target;
     let name = target.name;
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   }
-  handleChange(e) {
-    let target = e.target;
-    let name = target.name;
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
+
   handleEmailChange(e) {
     this.setState({
-      email: e.target.value
+      email: e.target.value,
     });
   }
   handlePasswordChange(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
   handleSubmit(e) {
@@ -48,7 +42,7 @@ class SignUp extends Component {
 
     axios
       .post('http://localhost:4000/users  ', this.state)
-      .then(res => console.log(res.data));
+      .then((res) => console.log(res.data));
     console.log('The form was submitted with the following data:');
     console.log(this.state);
   }
