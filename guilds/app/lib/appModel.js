@@ -71,6 +71,18 @@ Login.findByToken = function(login_info){
         }
     });
 };
+Login.findByEmail = function(login_info,result){
+    sql.query("Select * from guilds.login where email = ANY ($1)",[login_info],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log('completed login find')
+            result(null,res)
+        }
+    });
+};
 Login.resetPassword = function(reset_pw_tkn,reset_pw_expires,email){
     console.log('Made a request to reset password, generating tokens now')
     sql.query("UPDATE guilds.login SET reset_pw_tkn=($1) reset_pw_expires=($2) WHERE email = ANY($3)"[reset_pw_tkn,reset_pw_expires,email],function (err,res) {

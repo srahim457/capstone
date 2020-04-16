@@ -47,9 +47,9 @@ class SignUp extends Component {
     e.preventDefault();
 
     axios
-      .post('http://localhost:4000/users  ', this.state)
+      .post('http://localhost:4000/signup', this.state)
       .then(res => console.log(res.data));
-    console.log('The form was submitted with the following data:');
+    console.log('The signup  form was submitted with the following data:');
     console.log(this.state);
   }
 

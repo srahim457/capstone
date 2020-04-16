@@ -29,20 +29,6 @@ pool.connect(function(err) {
 });
 
 module.exports = function (app) {
-	
-	app.get('/', function (req, res, next) {
-		//console.log('base email session' , req.session.email)
-		res.render('index', {title: "Home", userData: req.user, messages: {danger: req.flash('danger'), warning: req.flash('warning'), success: req.flash('success')}});
-		
-		console.log(req.user);
-	});
-
-	
-	app.get('/signup', function (req, res, next) {
-		res.render('join', {title: "Signup", userData: req.user, messages: {danger: req.flash('danger'), warning: req.flash('warning'), success: req.flash('success')}});
-	});
-	
-	
 	app.post('/signup', async function (req, res) {
 		
 		try{
@@ -50,22 +36,20 @@ module.exports = function (app) {
 			await JSON.stringify(User.getUserByEmail([req.body.email], function(err, result) {
 				if(result.rows[0]){
 					console.log('email already registered')
-					req.flash('warning', "This email address is already registered.");
-					res.redirect('/signup');
+					res.status(409).send('Email already exists');
 				}
 				else{
 					Login.createLogin(req.body.email,pwd, function(err, result) {
 						if(err === 0){
 							console.log('Error email exists redirecting now');
-							res.redirect('/login');
+							res.status(409).send('Login email already exists');
 						}
 						else {
 							User.createUser(req.body,function(err,result){
 								if(err){console.log(err);}
 								else {
 									console.log('inserted into users')	
-									req.flash('success','User created.')
-									res.redirect('/login');
+									res.status(200).send('Inserted into users');
 									return;
 										}
 									});		
@@ -78,22 +62,23 @@ module.exports = function (app) {
 		catch(e){throw(e)}
 	});
 	
-	app.get('/account', function (req, res, next) {
+	app.get('/profile', function (req, res, next) {
+		console.log('checking profile get req',req.isAuthenticated())
 		if(req.isAuthenticated()){
-			res.render('account', {title: "Account", userData: req.user, userData: req.user, messages: {danger: req.flash('danger'), warning: req.flash('warning'), success: req.flash('success')}});
+			res.status(200).send(JSON.stringify(User.getUserByEmail([req.session.email])))
 		}
 		else{
-			res.redirect('/login');
+			res.status(403).send('Error: PLease login')
 		}
 	});
 	
 	app.get('/login', function (req, res, next) {
-		console.log('checking login get req')
+		console.log('checking login get req',req.isAuthenticated())
 		if (req.isAuthenticated()) {
-			res.redirect('/account');
+			res.redirect('/profile');
 		}
 		else{
-			res.render('login', {title: "Log in", userData: req.user, messages: {danger: req.flash('danger'), warning: req.flash('warning'), success: req.flash('success')}});
+			res.redirect('/');
 		}
 		
 	});
@@ -108,10 +93,11 @@ module.exports = function (app) {
 	});
 	
 	app.post('/login',	passport.authenticate('local', {
-		successRedirect: '/account',
+		successRedirect: '/profile',
 		failureRedirect: '/login',
 		failureFlash: true
 		}), function(req, res) {
+			console.log('post login auth')
 		if (req.body.remember) {
 			req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
 			} else {
@@ -125,22 +111,17 @@ module.exports = function (app) {
 }
 
 passport.use('local', new  LocalStrategy({passReqToCallback : true}, (req, username, password, done) => {
-	
 	loginAttempt();
 	async function loginAttempt() {
-		
-		
-		const client = await pool.connect()
+		console.log('Login attempt')
 		try{
-			await client.query('BEGIN')
 			console.log('local passport use email', username)
-			var currentAccountsData = await JSON.stringify(client.query('SELECT email,password FROM guilds.login WHERE email =$1', [username], function(err, result) {
-				
+			Login.findByEmail([username], function(err, result) {	
 				if(err) {
 					return done(err)
 				}	
 				if(result.rows[0] == null){
-					req.flash('danger', "Oops. Incorrect login details.");
+					console.log('Error: PLease login');
 					return done(null, false);
 				}
 				else{
@@ -150,9 +131,12 @@ passport.use('local', new  LocalStrategy({passReqToCallback : true}, (req, usern
 							return done();
 						}
 						else if (check){
+							console.log(req.session.passport)
 							req.session.email = result.rows[0].email
-							console.log('session email,' ,req.session.email)
-							return done(null, [{email: result.rows[0].email, firstName: result.rows[0].firstName}]);
+							console.log(req.session)
+							req.session.user = result.rows[0].id
+							console.log(result.rows[0],'session email,' ,req.session.email)
+							return done(null, [{email: result.rows[0].email, user: result.rows[0].id}]);
 						}
 						else{
 							req.flash('danger', "Oops. Incorrect login details.");
@@ -160,7 +144,7 @@ passport.use('local', new  LocalStrategy({passReqToCallback : true}, (req, usern
 						}
 					});
 				}
-			}))
+			})
 		}
 		
 		catch(e){throw (e);}

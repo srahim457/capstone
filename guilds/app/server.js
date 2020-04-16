@@ -38,9 +38,6 @@ app.use('/public', express.static(__dirname + '/public'));
 
 app.use(flash());
 
-app.set('view engine', 'pug');
-app.set('view options', { layout: false });
-
 
 require('./lib/routes.js')(app);
 require('./lib/forgotPassword.js')(app);
