@@ -131,12 +131,9 @@ passport.use('local', new  LocalStrategy({passReqToCallback : true}, (req, usern
 							return done();
 						}
 						else if (check){
-							console.log(req.session.passport)
 							req.session.email = result.rows[0].email
-							console.log(req.session)
-							req.session.user = result.rows[0].id
 							console.log(result.rows[0],'session email,' ,req.session.email)
-							return done(null, [{email: result.rows[0].email, user: result.rows[0].id}]);
+							return done(null, [{email: result.rows[0].email, firstName: result.rows[0].firstName}]);
 						}
 						else{
 							req.flash('danger', "Oops. Incorrect login details.");

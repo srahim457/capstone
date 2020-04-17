@@ -15,8 +15,77 @@ var Login = function(login){
     this.reset_pw_tkn = login.reset_pw_tkn;
     this.reset_pw_expires = login.reset_pw_expires;
 };
-
-
+var Listing = function (listing) {
+    this.time_posted = listing.time_posted;
+    this.time_sold_expired = listing.time_sold_expired;
+    this.total_price = listing.total_price;
+    this.rent_amount = listing.rent_amount;
+    this.insurance_amount = listing.insurance_amount;
+    this.lender_id = listing.lender_id;
+    this.borrower_id = listing.borrower_id;
+    this.completed = listing.completed;
+    this.expired =listing.expired;   
+};
+var Item = function(item){
+    this.item_name = item.item_name;
+    this.item_desc = item.item_desc;
+    this.image = item.image;
+    this.is_available = item.is_available;
+}
+Item.createItem = function(item){
+    sql.query("INSERT INTO guilds.item_info (item_name,item_desc,image,is_available) VALUES($1,$2,$3,$4)",[item.item_name,item.item_desc,item.item_image,item.is_available],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log('found the listings from user')
+            result(null,res)
+        }
+    });    
+}
+//Create a new listing entry
+Listing.createListing = function(listing){
+    console.log('creating new listing',listing),
+    sql.query("INSERT INTO guilds.listings(first_name,last_name,email) values($1,$2,$3) RETURNING *",[newUser.firstname,newUser.lastname,newUser.email], function (err, res) {
+            
+            if(err) {
+                console.log("error: ", err);
+                result(err, null);
+            }
+            else{
+                console.log(res.rows[0].id);
+                result(null, res.rows[0].id);
+            }
+        });   
+};
+//Return all listings by a certain borrower
+Listing.getAllBorrowerListings = function(user_id){
+    sql.query("Select * from guilds.listings where borrower_id = ANY ($1)",[user_id],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log('found the listings from user')
+            result(null,res)
+        }
+    });    
+};
+//Return all listings by a certain lender
+Listing.getAllLenderListings = function(user_id){
+    sql.query("Select * from guilds.listings where lender_id = ANY ($1)",[user_id],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log('found the listings from lender')
+            result(null,res)
+        }
+    });    
+};
+//Create a new login entry
 Login.createLogin = function (email,pass,result) {    
     //Checking for duplicate emails
     sql.query("SELECT * from guilds.login where email = $1",[email],function (err,res){
@@ -43,6 +112,7 @@ Login.createLogin = function (email,pass,result) {
     });
          
 };
+// Set both reset tokens for a login
 Login.forgotPassword = function(reset_info){
     var curr_date = new Date()
     curr_date.setTime(reset_info.resetPasswordExpires)
@@ -83,19 +153,7 @@ Login.findByEmail = function(login_info,result){
         }
     });
 };
-Login.resetPassword = function(reset_pw_tkn,reset_pw_expires,email){
-    console.log('Made a request to reset password, generating tokens now')
-    sql.query("UPDATE guilds.login SET reset_pw_tkn=($1) reset_pw_expires=($2) WHERE email = ANY($3)"[reset_pw_tkn,reset_pw_expires,email],function (err,res) {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        }
-        else{
-            console.log(res.rows[0].id);
-            result(null, res.rows[0].id);
-        }
-    });
-};
+//Updates a user's phone number
 User.updateUserPhone = function (User, result) {
     console.log('updating user phone',User)
     sql.query("UPDATE guilds.users SET phonenum=($1) WHERE email = ANY($2)"[User.phonenum,User.email], function (err, res) {
@@ -150,6 +208,7 @@ User.createUser = function (newUser, result) {
             }
         });           
 };
+// finds a user by their email and returns all of their information
 User.getUserByEmail = function (email, result) {
         console.log('getting user by email ', email)
         sql.query("Select * from guilds.users where email = ANY ($1)", [email], function (err, res) {             
@@ -192,5 +251,7 @@ User.remove = function(id, result){
 
 module.exports= {
     User,
-    Login
+    Login,
+    Listing,
+    Item
 }
