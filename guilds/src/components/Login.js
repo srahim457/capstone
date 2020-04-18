@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
 import ForgotPassword from './ForgotPassword';
 import './styles/Home.css';
+import axios from 'axios';
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: '',
+      username: '',
       password: '',
     };
     this.handleChange = this.handleChange.bind(this);
@@ -25,10 +26,14 @@ class Login extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    console.log('The form was submitted with the following data:');
+    axios
+      .post('http://localhost:4000/login', this.state)
+      .then(res => console.log(res.data));
+    console.log('The login form was submitted with the following data:');
     console.log(this.state);
   }
 
+  // passport requires username instead of email
   render() {
     return (
       <div>
@@ -39,12 +44,12 @@ class Login extends Component {
                 <strong>E-Mail Address</strong>
               </label>
               <input
-                type='email'
-                id='email'
+                type='username'
+                id='username'
                 className='FormField__Input'
                 placeholder='Enter your email'
-                name='email'
-                value={this.state.email}
+                name='username'
+                value={this.state.username}
                 onChange={this.handleChange}
               />
             </div>
