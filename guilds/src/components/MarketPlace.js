@@ -37,7 +37,7 @@ class MarketPlace extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:4000/market-place/listing`).then((res) => {
+    axios.get(`http://localhost:4000/market-place`).then((res) => {
       const item = res.data;
       this.setState({ item });
     });

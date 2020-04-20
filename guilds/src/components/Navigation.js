@@ -20,10 +20,10 @@ const Navigation = () => {
         <NavLink to='/log-out'>Logout</NavLink>
       </div>
       <div className='content'>
-        <Route exact path='/profile' component={Profile} />
-        <Route exact path='/market-place' component={MarketPlace} />
-        <Route exact path='/messages' component={Messages} />
-        <Route exact path='/all-guilds' component={AllGuilds} />
+        <Route path='/profile' component={Profile} />
+        <Route path='/market-place' component={MarketPlace} />
+        <Route path='/messages' component={Messages} />
+        <Route path='/all-guilds' component={AllGuilds} />
       </div>
     </BrowserRouter>
   );

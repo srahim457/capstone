@@ -56,12 +56,10 @@ class CreateListing extends Component {
     e.preventDefault();
     console.log(this.state); //post request with axios
     const item = this.state;
-    axios
-      .post(`http://localhost:4000/create-listing/item`, { item })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-      });
+    axios.post(`http://localhost:4000/create-listing`, { item }).then((res) => {
+      console.log(res);
+      console.log(res.data);
+    });
   };
 
   fileSelectedHandler = (e) => {
