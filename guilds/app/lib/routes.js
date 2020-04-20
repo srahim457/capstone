@@ -170,7 +170,7 @@ passport.use(
 );
 
 //create lisiting and post items to db
-app.post('/market-place', async (req, res) => {
+app.post('/market-place/:userid', async (req, res) => {
   try {
     const listing = await Listing.createListing;
     res.send(listing);
@@ -180,12 +180,25 @@ app.post('/market-place', async (req, res) => {
   console.log('called post request at market');
 });
 
+//example
 app.get('/market-place', (req, res) => {
-  const item = {
-    name: 'Ball',
-    cost: 2.3,
-    policy: 'if lost owe me $',
-  };
+  const item = [
+    {
+      name: 'Ball',
+      cost: 2.3,
+      policy: 'if lost owe me $',
+    },
+    {
+      name: 'Ball',
+      cost: 2.3,
+      policy: 'if lost owe me $',
+    },
+    {
+      name: 'Ball',
+      cost: 2.3,
+      policy: 'if lost owe me $',
+    },
+  ];
   console.log('hit marketplace route');
   res.json(item);
 });

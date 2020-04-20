@@ -36,11 +36,16 @@ class MarketPlace extends Component {
     this.setState({ click: true });
   }
 
+  // componentDidMount() {
+  //   axios.get(`/market-place`).then((res) => {
+  //     const item = res.data;
+  //     this.setState({ item });
+  //   });
+  // }
   componentDidMount() {
-    axios.get(`http://localhost:4000/market-place`).then((res) => {
-      const item = res.data;
-      this.setState({ item });
-    });
+    fetch(`/market-place/users`)
+      .then((res) => res.json())
+      .then((item) => this.setState({ item }));
   }
 
   render() {
@@ -65,7 +70,7 @@ class MarketPlace extends Component {
                 placeholder='search for item'
                 maxLength='200'
               ></input>
-              <button class='listing-button'>Search</button>
+              <button className='listing-button'>Search</button>
             </div>
 
             {this.state.pageOfItems.map((item) => (
