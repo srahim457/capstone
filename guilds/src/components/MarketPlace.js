@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Pagination from './Pagination';
 import CreateListing from './CreateListing';
+import axios from 'axios';
 import './styles/MarketPlace.css';
 
 class MarketPlace extends Component {
@@ -8,15 +9,16 @@ class MarketPlace extends Component {
     super();
 
     // an example array of 150 items to be paged
-    var exampleItems = [...Array(150).keys()].map(i => ({
+    var exampleItems = [...Array(150).keys()].map((i) => ({
       id: i + 1,
-      name: 'Item ' + (i + 1)
+      name: 'Item ' + (i + 1),
     }));
 
     this.state = {
       exampleItems: exampleItems,
       pageOfItems: [],
-      click: false //added to see if it respond on click
+      click: false, //added to see if it respond on click
+      item: [],
     };
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
@@ -34,6 +36,13 @@ class MarketPlace extends Component {
     this.setState({ click: true });
   }
 
+  componentDidMount() {
+    axios.get(`http://localhost:4000/market-place/listing`).then((res) => {
+      const item = res.data;
+      this.setState({ item });
+    });
+  }
+
   render() {
     if (this.state.click === true) {
       return <CreateListing />;
@@ -43,7 +52,6 @@ class MarketPlace extends Component {
         <div className='container'>
           <h1 className='title'>Market Place</h1>
           <div className='itemBoard'>
-
             <div className='button-wrapper'>
               <button className='listing-button' onClick={this.onClickHandler}>
                 Create a Listing
@@ -57,18 +65,14 @@ class MarketPlace extends Component {
                 placeholder='search for item'
                 maxLength='200'
               ></input>
-              <button class="listing-button">
-                Search
-              </button>
+              <button class='listing-button'>Search</button>
             </div>
 
-            {this.state.pageOfItems.map(item => (
-                <div className='itemContainer' key={item.id}>
-                  <div className='itemImage'>
-                  image {item.id}
-                  </div>
-                  {item.name}
-                </div>
+            {this.state.pageOfItems.map((item) => (
+              <div className='itemContainer' key={item.id}>
+                <div className='itemImage'>image {item.id}</div>
+                {item.name}
+              </div>
             ))}
           </div>
           <div className='paginate'>

@@ -5,7 +5,7 @@ class ErrorPage extends Component {
     return (
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Page not found!</h1>
+          <h1 className='title'>Page not found</h1>
           <h2>Looks like the page you requested couldn't be found</h2>
         </div>
       </div>

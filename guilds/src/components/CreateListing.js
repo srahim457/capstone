@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import MarketPlace from './MarketPlace';
 import DateTimePicker from 'react-datetime-picker';
+import axios from 'axios';
+
 import './styles/CreateListing.css';
 
 class CreateListing extends Component {
@@ -21,14 +23,12 @@ class CreateListing extends Component {
   }
 
   itemNameChangeHandler = (e) => {
-    e.preventDefault();
     this.setState({
       name: e.currentTarget.value,
     });
   };
 
   descriptionChangeHandler = (e) => {
-    e.preventDefault();
     this.setState({
       description: e.currentTarget.value,
     });
@@ -41,14 +41,12 @@ class CreateListing extends Component {
   };
 
   priceChangeHandler = (e) => {
-    e.preventDefault();
     this.setState({
       price: e.currentTarget.value,
     });
   };
 
   policyChangeHandler = (e) => {
-    e.preventDefault();
     this.setState({
       policy: e.currentTarget.value,
     });
@@ -56,11 +54,18 @@ class CreateListing extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    console.log(this.state); //post request with axios
+    const item = this.state;
+    axios
+      .post(`http://localhost:4000/create-listing/item`, { item })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      });
   };
 
   fileSelectedHandler = (e) => {
-    console.log(e.target.files[0]);
+    //console.log(e.target.files[0]);
     this.setState({
       image: e.currentTarget.value,
     });
@@ -231,7 +236,7 @@ class CreateListing extends Component {
                 onChange={this.handleOptionChange}
                 checked={this.state.option === 'sale'}
               />
-              <label for='sale'>Sale</label>
+              <label htmlFor='sale'>Sale</label>
               <br />
               <input
                 type='radio'
