@@ -7,6 +7,7 @@ import {
   NavLink,
   Switch,
 } from 'react-router-dom';
+import axios from 'axios';
 
 import './styles/profile.css';
 import Profile_Borrowed from './Profile_Borrowed';
@@ -38,6 +39,13 @@ class Profile extends Component {
     this.setState({ click: true });
   }
 
+  componentDidMount(){
+    axios.get('http://localhost:4000/profile')
+    .then(res =>{
+      const profile = res.data;
+      this.setState({profile});
+    })
+  }
   render() {
     {
       /*if the edit profile button is pressed it will redirect*/

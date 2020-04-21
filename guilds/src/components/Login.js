@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
 import ForgotPassword from './ForgotPassword';
 import './styles/Home.css';
+import axios from 'axios';
 
 class Login extends Component {
   constructor() {
@@ -25,7 +26,10 @@ class Login extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    console.log('The form was submitted with the following data:');
+    axios
+      .post('http://localhost:4000/login', this.state)
+      .then(res => console.log(res.data));
+    console.log('The login form was submitted with the following data:');
     console.log(this.state);
   }
 

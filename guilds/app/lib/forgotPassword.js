@@ -1,8 +1,8 @@
 const crypto = require('crypto');
 
 require('dotenv').config();
-var User = require('./appModel').User;
-var Login = require('./appModel').Login;
+var User = require('./UserModel').User;
+var Login = require('./LoginModel').Login;
 const nodemailer = require('nodemailer');
 
 module.exports = (app) => {

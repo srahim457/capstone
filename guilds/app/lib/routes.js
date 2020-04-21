@@ -21,8 +21,8 @@ const LocalStrategy = require('passport-local').Strategy;
 
 var currentAccountsData = [];
 
-var User = require('./appModel').User;
-var Login = require('./appModel').Login;
+var User = require('./UserModel').User;
+var Login = require('./LoginModel').Login;
 
 pool.connect(function(err) {
     if (err) throw err;
@@ -44,7 +44,7 @@ module.exports = function (app) {
 	
 	
 	app.post('/signup', async function (req, res) {
-		
+
 		try{
 			var pwd = await bcrypt.hash(req.body.password, 5);
 			await JSON.stringify(User.getUserByEmail([req.body.email], function(err, result) {
@@ -78,9 +78,11 @@ module.exports = function (app) {
 		catch(e){throw(e)}
 	});
 	
-	app.get('/account', function (req, res, next) {
+	app.get('/profile', function (req, res, next) {
 		if(req.isAuthenticated()){
-			res.render('account', {title: "Account", userData: req.user, userData: req.user, messages: {danger: req.flash('danger'), warning: req.flash('warning'), success: req.flash('success')}});
+			User.getUserByEmail(res.session.email,function(err,result){
+				return result(res)
+			})
 		}
 		else{
 			res.redirect('/login');
@@ -108,7 +110,7 @@ module.exports = function (app) {
 	});
 	
 	app.post('/login',	passport.authenticate('local', {
-		successRedirect: '/account',
+		successRedirect: '/profile',
 		failureRedirect: '/login',
 		failureFlash: true
 		}), function(req, res) {
