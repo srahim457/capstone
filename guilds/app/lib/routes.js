@@ -14,6 +14,8 @@ const bcrypt = require('bcrypt');
 //Add edit account page
 
 // app.use(express.static('public'));
+// let router = express.Router(); //added
+// app.use(router); //added
 
 const LocalStrategy = require('passport-local').Strategy;
 //const connectionString = process.env.DATABASE_URL;
@@ -169,31 +171,34 @@ passport.use(
   )
 );
 
-//create lisiting and post items to db
-app.post('/market-place/:userid', async (req, res) => {
-  try {
-    const listing = await Listing.createListing;
-    res.send(listing);
-  } catch (err) {
-    console.err('error posting to marketplace');
-  }
-  console.log('called post request at market');
-});
+//create route to create lisiting and post items to db
+// app.post('/market-place/:userid', async (req, res) => {
+//   try {
+//     const listing = await Listing.createListing;
+//     res.send(listing);
+//   } catch (err) {
+//     console.err('error posting to marketplace');
+//   }
+//   console.log('called post request at market');
+// });
 
-//example
+//example;
 app.get('/market-place', (req, res) => {
   const item = [
     {
+      id: 1,
       name: 'Ball',
       cost: 2.3,
       policy: 'if lost owe me $',
     },
     {
+      id: 2,
       name: 'Ball',
       cost: 2.3,
       policy: 'if lost owe me $',
     },
     {
+      id: 3,
       name: 'Ball',
       cost: 2.3,
       policy: 'if lost owe me $',
@@ -202,6 +207,21 @@ app.get('/market-place', (req, res) => {
   console.log('hit marketplace route');
   res.json(item);
 });
+
+//create route to edit profile
+app.post('/profile', (req, res) => {});
+
+//create route to fetch profile
+app.get('/profile', (req, res) => {});
+
+//creat route to create a guild
+app.post('/all-guilds', (req, res) => {});
+
+//create route to fetch all guilds
+app.get('/all-guilds', (req, res) => {});
+
+//create route to logout user
+app.post('/logout', (req, res) => {});
 
 passport.serializeUser(function (user, done) {
   done(null, user);

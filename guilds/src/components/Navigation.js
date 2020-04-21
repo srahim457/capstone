@@ -12,9 +12,7 @@ const Navigation = () => {
     <BrowserRouter>
       <div className='Nav-Bar'>
         <NavLink to='/profile'>Profile</NavLink>
-        <NavLink exact to='/market-place'>
-          Market Place
-        </NavLink>
+        <NavLink to='/market-place'>Market Place</NavLink>
         <NavLink to='/all-guilds'>All Guilds</NavLink>
         <NavLink to='/messages'>Messages</NavLink>
         <NavLink to='/log-out'>Logout</NavLink>

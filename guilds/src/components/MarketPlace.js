@@ -18,7 +18,7 @@ class MarketPlace extends Component {
       exampleItems: exampleItems,
       pageOfItems: [],
       click: false, //added to see if it respond on click
-      item: [],
+      items: [],
     };
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
@@ -41,11 +41,15 @@ class MarketPlace extends Component {
   //     const item = res.data;
   //     this.setState({ item });
   //   });
+  //   console.log(this.item);
   // }
+
   componentDidMount() {
-    fetch(`/market-place/users`)
+    fetch(`/market-place/`)
       .then((res) => res.json())
-      .then((item) => this.setState({ item }));
+      .then((items) =>
+        this.setState({ items }, () => console.log('items fetched..', items))
+      );
   }
 
   render() {
