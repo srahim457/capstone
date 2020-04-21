@@ -62,6 +62,19 @@ Item.getItemByID = function(item_id,result){
         }
     });    
 };
+//Return any item matching the name provided
+Item.getItemByName = function(item_name,result){
+    sql.query("Select * from guilds.item_info where item_id LIKE ($1)",[item_name],function (err,res) {
+        if(err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else{
+            console.log('Found the item ')
+            result(null,res)
+        }
+    });    
+};
 //Updates an item's information (name,desc,image)
 //Returns new item ID   
 Item.updateItemInformation = function (item, result) {
