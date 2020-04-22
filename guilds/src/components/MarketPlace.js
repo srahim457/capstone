@@ -45,7 +45,12 @@ class MarketPlace extends Component {
   // }
 
   componentDidMount() {
-    fetch(`/market-place/`)
+    fetch(`/market-place/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
       .then((res) => res.json())
       .then((items) =>
         this.setState({ items }, () => console.log('items fetched..', items))
