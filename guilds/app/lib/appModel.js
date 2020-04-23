@@ -33,7 +33,7 @@ var Item = function (item) {
   this.is_available = item.is_available;
 };
 
-//Item
+// @Item
 
 //Creates a new item entry
 //Returns item id
@@ -120,7 +120,7 @@ Item.deleteItem = function (item_id) {
   );
 };
 
-//Listing
+// @Listing
 
 //Create a new listing entry
 //Returns listing id
@@ -248,7 +248,7 @@ Listing.deleteItem = function (listing_id) {
     }
   );
 };
-//Login
+//@Login
 
 //Create a new login entry
 //Returns the whole login entry
@@ -336,7 +336,7 @@ Login.findByEmail = function (login_info, result) {
   );
 };
 
-//User
+//@User
 
 //Updates a user's phone number
 //Returns user id

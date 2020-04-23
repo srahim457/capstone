@@ -3,6 +3,7 @@ const router = express.Router();
 
 let pool = require('../../db').pool;
 
+//models
 let User = require('./../../appModel').User;
 let Login = require('./../../appModel').Login;
 let Listing = require('./../../appModel').Listing;
