@@ -11,6 +11,8 @@ const config = require('config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+let sql = require('../../db').pool;
+
 // @route Post api/users
 // @desc Register user
 // @access Private
@@ -18,7 +20,7 @@ const jwt = require('jsonwebtoken');
 router.post(
   '/',
   [
-    check('firstname', 'firstname is required').not().isEmpty(), //just change name to first name last name
+    check('firstname', 'firstname is required').not().isEmpty(),
     check('lastname', 'lastname is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check(
@@ -57,27 +59,37 @@ router.post(
                   email,
                   password,
                 });
+
+                //@ still need to get user id for payload
+                res.send(
+                  sql.query('SELECT MAX(id) FROM guilds.login', User['id'])
+                );
+
                 const payload = {
                   user: {
                     id: user.id, //payload supposed to time in with users id
                   },
                 };
-                jwt.sign(
-                  payload,
-                  config.get('jwtSecret'),
-                  { expiresIn: 360000 },
-                  (err, token) => {
-                    if (err) throw err;
-                    res.json({ token });
-                  }
-                ); //3600 = 1hr
 
+                // const payload = sql.query(
+                //   'SELECT MAX(id) FROM guilds.login',
+                //   User['id']
+                // );
                 User.createUser(req.body, function (err, result) {
                   if (err) {
                     console.log(err);
                   } else {
                     console.log('inserted into users');
-                    res.status(200).send('Inserted into users');
+                    //res.status(200).send('Inserted into users');
+                    jwt.sign(
+                      payload,
+                      config.get('jwtSecret'),
+                      { expiresIn: 360000 },
+                      (err, token) => {
+                        if (err) throw err;
+                        res.status(200).json({ token });
+                      }
+                    ); //3600 = 1hr
                     return;
                   }
                 });
@@ -103,10 +115,16 @@ router.post(
   }
 );
 
+// @route GET api/users
+// @desc Register user
+// @access Private
 router.get('/', (req, res) => {
   res.send('User route');
 });
 
+// @route DELETE api/users
+// @desc Register user
+// @access Private
 router.delete('/:id', (req, res) => {
   User.deleteremove(req.id, res);
 });

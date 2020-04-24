@@ -7,6 +7,7 @@ var User = function (user) {
   this.lastname = user.lastname;
   this.email = user.email;
   this.phonenum = user.phonenum;
+  this.id = user.id; //added
 };
 //User
 
@@ -120,6 +121,21 @@ User.deleteremove = function (id, result) {
   });
 };
 
+//Get user by id
+User.getUserByid = (id) => {
+  sql.query('SELECT FROM guilds.users WHERE USER_ID = ?', [id], (err, res) => {
+    if (err) {
+      result(null, err);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+//Get last user in table
+User.getLastEntry = () => {
+  sql.query('SELECT MAX(id) FROM guilds.users', [id], (err, res) => {});
+};
 module.exports = {
   User,
 };
