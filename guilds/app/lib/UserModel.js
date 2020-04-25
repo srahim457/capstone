@@ -68,6 +68,22 @@ User.createUser = function (newUser, result) {
             }
         });           
 };
+//Returns the id of the last entered user
+User.getLastEnteredUser = function (result) {
+    console.log('getting last entered user'),
+    sql.query("SELECT * from guilds.users order by id DESC limit 1",function (err, res) {
+            
+            if(err) {
+                console.log("error: ", err);
+                result(err, null);
+            }
+            else{
+                console.log(res.rows[0]);
+                result(null, res.rows[0].id);
+            }
+        });           
+};
+
 // finds a user by their email and returns all of their information
 // Returns user entry
 User.getUserByEmail = function (email, result) {
