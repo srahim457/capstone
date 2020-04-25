@@ -52,25 +52,6 @@ router.post(
                 console.log('Error email exists redirecting now');
                 res.status(409).send('Login email already exists');
               } else {
-                user = new User({
-                  //might put object at the beginning
-                  firstname,
-                  lastname,
-                  email,
-                  password,
-                });
-
-                //@ still need to get user id for payload
-                res.send(
-                  sql.query('SELECT MAX(id) FROM guilds.login', User['id'])
-                );
-
-                const payload = {
-                  user: {
-                    id: user.id, //payload supposed to time in with users id
-                  },
-                };
-
                 // const payload = sql.query(
                 //   'SELECT MAX(id) FROM guilds.login',
                 //   User['id']
@@ -80,6 +61,24 @@ router.post(
                     console.log(err);
                   } else {
                     console.log('inserted into users');
+                    user = new User({
+                      //might put object at the beginning
+                      firstname,
+                      lastname,
+                      email,
+                      password,
+                      id: result.id
+                    });
+                    //@ still need to get user id for payload
+                    res.send(
+                      sql.query('SELECT MAX(id) FROM guilds.login', User['id'])
+                    );    
+                    const payload = {
+                      user: {
+                        id: user.id, //payload supposed to time in with users id
+                      },
+                    };
+                    console.log('payload \n',payload)
                     //res.status(200).send('Inserted into users');
                     jwt.sign(
                       payload,
@@ -87,9 +86,11 @@ router.post(
                       { expiresIn: 360000 },
                       (err, token) => {
                         if (err) throw err;
+                        console.log('token \n' , token)
                         res.status(200).json({ token });
                       }
                     ); //3600 = 1hr
+
                     return;
                   }
                 });
