@@ -10,14 +10,14 @@ var User = function(user){
 };
 //User
 
-//Updates a user's phone number
-//Returns user id
-User.updateUserPhone = function (User, result) {
-    console.log('updating user phone',User)
-    sql.query("UPDATE guilds.users SET phonenum=($1) WHERE email = ANY($2)"[User.phonenum,User.email], function (err, res) {
-            
+//Updates a User's information
+//Returns the user ID   
+User.updateUserInformation = function (user, result) {
+    console.log('updating user information',user)
+    sql.query("UPDATE guilds.users info SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)",[user.id,user.first_name,user.last_name,user.username,user.phonenum,user.description,user.dominion_id])
+    Item.createItem(item, function (err,res){            
             if(err) {
-                console.log("error: ", err);
+                console.log("error updating user information: ", err);
                 result(err, null);
             }
             else{
@@ -25,38 +25,14 @@ User.updateUserPhone = function (User, result) {
                 result(null, res.rows[0].id);
             }
         });           
-};
-//Updates both the user and their login email
-//Returns user id
-User.updateUserEmail = function (User, result) {
-    console.log('updating user email',User['email']),
-    sql.query("UPDATE guilds.users SET email=($1) WHERE email = ANY($1)",[User['email']], function (err, res) {
-            if(err) {
-                console.log("error: ", err);
-                result(err, null);
-            }
-            else{
-                console.log(res.rows[0].id);
-                sql.query("UPDATE guilds.login SET email=($1) WHERE email = ANY($1)",[User.email], function (err, res) {
-            
-                    if(err) {
-                        console.log("error: ", err);
-                        result(err, null);
-                    }
-                    else{
-                        console.log(res.rows[0].id);
-                        result(null, res.rows[0].id);
-                    }
-                });
-                result(null, res.rows[0].id);
-            }
-        });           
-};
-//checks for duplicate emails before creating a user
+}
+//Takes in a user object
+//creates the user in the database
 //Returns the whole user entry
 User.createUser = function (newUser, result) {
+    var d = new Date();
     console.log('inserting new user now',newUser),
-    sql.query("INSERT INTO guilds.users(first_name,last_name,email) values($1,$2,$3) RETURNING *",[newUser.firstname,newUser.lastname,newUser.email], function (err, res) {
+    sql.query("INSERT INTO guilds.users(first_name,last_name,email,creation_date) values($1,$2,$3,$4) RETURNING *",[newUser.firstname,newUser.lastname,newUser.email,d.toDateString()], function (err, res) {
             
             if(err) {
                 console.log("error: ", err);
@@ -98,32 +74,52 @@ User.getUserByEmail = function (email, result) {
                 }
             });   
 };
-// TODO: Convert to prepared statements
-User.getAllUsers = function (result) {
-        sql.query("Select * from guilds.users", function (err, res) {
+//Sets a user online
+//Take a whole user object
+//Returns user ID   
+User.online = function (user, result) {
+    console.log('Setting user online',user)
+    sql.query("UPDATE guilds.users info SET online= 'T' WHERE id =($1)",[user.id])
+    Item.createItem(item, function (err,res){            
+            if(err) {
+                console.log("error updating user online status: ", err);
+                result(err, null);
+            }
+            else{
+                console.log(res.rows[0].id);
+                result(null, res.rows[0].id);
+            }
+        });           
+}
+//Sets a user offline
+//Take a whole user object
+//Returns user ID
+User.offline = function (user, result) {
+    console.log('Setting user offline ',user)
+    sql.query("UPDATE guilds.users info SET online= 'F' WHERE id =($1)",[user.id])
+    Item.createItem(item, function (err,res){            
+            if(err) {
+                console.log("error updating user online status: ", err);
+                result(err, null);
+            }
+            else{
+                console.log(res.rows[0].id);
+                result(null, res.rows[0].id);
+            }
+        });           
+}
+//Delete a user by setting delete flag
+//Take a whole user object
+//Returns user ID
+User.delete = function(user, result){
+    sql.query("UPDATE guilds.users info SET deleted= 'T' WHERE id =($1)",[user.id], function (err, res) {
 
                 if(err) {
                     console.log("error: ", err);
                     result(null, err);
                 }
-                else{
-                  console.log('Users : ', res.rows);  
-
-                 result(null, res.rows);
-                }
-            });   
-};
-// TODO: Convert to prepared statements and change to new "Delete"
-User.deleteremove = function(id, result){
-     sql.query("DELETE FROM users WHERE USER_ID = ?", [id], function (err, res) {
-
-                if(err) {
-                    console.log("error: ", err);
-                    result(null, err);
-                }
-                else{
-               
-                 result(null, res);
+                else{               
+                 result(null, res.rows[0].id);
                 }
             }); 
 };
