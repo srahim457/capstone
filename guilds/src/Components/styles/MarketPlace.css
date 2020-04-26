@@ -1,0 +1,96 @@
+.containerParent {
+  background-color: #570415;
+  display: flex;
+  justify-content: center;
+  width: auto;
+  height: 100%;
+}
+
+.container {
+  width: 70%;
+  min-height: 100vh;
+}
+.items {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  color: #f3e055;
+  background-color: #3b000b;
+}
+.title {
+  display: flex;
+  justify-content: center;
+  color: #f3e055;
+  font-family: fantasy;
+  font-weight: bold;
+  font-size: 40px;
+}
+.body {
+  background-color: #570415;
+  min-height: 100vh;
+}
+.listing-button {
+  color: #f3e055;
+  background-color: #3b000b;
+  border-color: #f3e055;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.paginate {
+  position: relative;
+  bottom: 10px;
+}
+
+
+
+
+.itemBoard {
+  background-color: #3b000b;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+  min-height: 950px;
+  float: none;
+  position: relative;
+}
+.itemContainer {
+  background-image: url(../../images/parchment_background.jpg);
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  float: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.itemImage {
+  background-color: brown;
+  color: yellow;
+  display: flex;
+  width: 150px;
+  height: 150px;
+}
+
+.searchItemsWrapper{
+  position: absolute;
+  display: block;
+  top: 0px;
+  min-width: 100px;
+  height: 20px;
+}
+
+.item-search-input {
+  background-color: #f3e055;
+  border-color: #f3e055;
+  width: 200px;
+}
