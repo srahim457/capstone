@@ -14,8 +14,7 @@ var User = function(user){
 //Returns the user ID   
 User.updateUserInformation = function (user, result) {
     console.log('updating user information',user)
-    sql.query("UPDATE guilds.users info SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)",[user.id,user.first_name,user.last_name,user.username,user.phonenum,user.description,user.dominion_id])
-    Item.createItem(item, function (err,res){            
+    sql.query("UPDATE guilds.users info SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)",[user.id,user.first_name,user.last_name,user.username,user.phonenum,user.description,user.dominion_id], function (err,res){            
             if(err) {
                 console.log("error updating user information: ", err);
                 result(err, null);
