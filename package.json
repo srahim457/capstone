@@ -1,0 +1,22 @@
+{
+  "name": "capstone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node guilds/app/server.js",
+    "heroku-postbuild": "cd guilds/app && npm install && npm build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srahim457/capstone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/srahim457/capstone/issues"
+  },
+  "homepage": "https://github.com/srahim457/capstone#readme"
+}

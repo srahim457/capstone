@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
+import ForgotPassword from './ForgotPassword';
 import './styles/Home.css';
+import axios from 'axios';
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: '',
-      password: ''
+      username: '',
+      password: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,37 +19,37 @@ class Login extends Component {
     let target = e.target;
     let name = target.name;
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
-    console.log('The form was submitted with the following data:');
+    axios
+      .post('http://localhost:4000/login', this.state)
+      .then(res => console.log(res.data));
+    console.log('The login form was submitted with the following data:');
     console.log(this.state);
   }
 
+  // passport requires username instead of email
   render() {
     return (
       <div>
         <div className='FormCenter'>
-          <form
-            onSubmit={this.handleSubmit}
-            className='FormFields'
-            onSubmit={this.handleSubmit}
-          >
+          <form onSubmit={this.handleSubmit} className='FormFields'>
             <div className='FormField'>
               <label className='FormField__Label' htmlFor='email'>
                 <strong>E-Mail Address</strong>
               </label>
               <input
-                type='email'
-                id='email'
+                type='username'
+                id='username'
                 className='FormField__Input'
                 placeholder='Enter your email'
-                name='email'
-                value={this.state.email}
+                name='username'
+                value={this.state.username}
                 onChange={this.handleChange}
               />
             </div>
@@ -71,6 +73,12 @@ class Login extends Component {
               <button className='FormField__Button mr-20'>Sign In</button>{' '}
               <Link to='/' className='FormField__Link'>
                 <strong>Create an account</strong>
+              </Link>
+              <br />
+              <br />
+              <Route path='/forgot-password' component={ForgotPassword}></Route>
+              <Link to='/forgot-password' className='FormField__Link'>
+                <strong>Forgot your password?</strong>
               </Link>
             </div>
           </form>

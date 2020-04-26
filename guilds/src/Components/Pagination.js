@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import './styles/Pagination.css';
 
 const propTypes = {
   items: PropTypes.array.isRequired,
   onChangePage: PropTypes.func.isRequired,
   initialPage: PropTypes.number,
-  pageSize: PropTypes.number
+  pageSize: PropTypes.number,
 };
 
 const defaultProps = {
   initialPage: 1,
-  pageSize: 10
+  pageSize: 10,
 };
 
 class Pagination extends React.Component {
@@ -90,7 +91,7 @@ class Pagination extends React.Component {
 
     // create an array of pages to ng-repeat in the pager control
     var pages = [...Array(endPage + 1 - startPage).keys()].map(
-      i => startPage + i
+      (i) => startPage + i
     );
 
     // return object with all pager properties required by the view
@@ -103,7 +104,7 @@ class Pagination extends React.Component {
       endPage: endPage,
       startIndex: startIndex,
       endIndex: endIndex,
-      pages: pages
+      pages: pages,
     };
   }
 
@@ -118,28 +119,30 @@ class Pagination extends React.Component {
     return (
       <ul className='pagination'>
         <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-          <a onClick={() => this.setPage(1)}>First</a>
+          <Link onClick={() => this.setPage(1)}>First</Link>
         </li>
         <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-          <a onClick={() => this.setPage(pager.currentPage - 1)}>Previous</a>
+          <Link onClick={() => this.setPage(pager.currentPage - 1)}>
+            Previous
+          </Link>
         </li>
         {pager.pages.map((page, index) => (
           <li
             key={index}
             className={pager.currentPage === page ? 'active' : ''}
           >
-            <a onClick={() => this.setPage(page)}>{page}</a>
+            <Link onClick={() => this.setPage(page)}>{page}</Link>
           </li>
         ))}
         <li
           className={pager.currentPage === pager.totalPages ? 'disabled' : ''}
         >
-          <a onClick={() => this.setPage(pager.currentPage + 1)}>Next</a>
+          <Link onClick={() => this.setPage(pager.currentPage + 1)}>Next</Link>
         </li>
         <li
           className={pager.currentPage === pager.totalPages ? 'disabled' : ''}
         >
-          <a onClick={() => this.setPage(pager.totalPages)}>Last</a>
+          <Link onClick={() => this.setPage(pager.totalPages)}>Last</Link>
         </li>
       </ul>
     );

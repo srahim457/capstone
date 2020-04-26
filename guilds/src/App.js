@@ -6,10 +6,10 @@ import {
   Switch
 } from 'react-router-dom';
 
-import Home from './Components/Home';
-import Navigation from './Components/Navigation';
-import Profile from './Components/Profile';
-import MarketPlace from './Components/MarketPlace';
+import Home from './components/Home';
+import Navigation from './components/Navigation';
+import Profile from './components/Profile';
+import MarketPlace from './components/MarketPlace';
 
 class App extends Component {
   render() {
