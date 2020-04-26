@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Pagination from './Pagination';
 import CreateListing from './CreateListing';
+import DisplayListing from './DisplayListing';
 import axios from 'axios';
 import './styles/MarketPlace.css';
 
@@ -9,21 +10,25 @@ class MarketPlace extends Component {
     super();
 
     // an example array of 150 items to be paged
-    var exampleItems = [...Array(150).keys()].map((i) => ({
+    let exampleItems = [...Array(150).keys()].map((i) => ({
       id: i + 1,
-      name: 'Item ' + (i + 1),
+      name: 'Item ' + (i+1),
+      lender: 'Random guy '+ (i+1),
+      description: 'This is the item '+ (i+1) +' an item posted by Random guy '+ (i+1),
     }));
 
     this.state = {
       exampleItems: exampleItems,
       pageOfItems: [],
       click: false, //added to see if it respond on click
+      open: false,
       items: [],
     };
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
     this.onChangePage = this.onChangePage.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
+    this.openListing = this.openListing.bind(this);
   }
 
   onChangePage(pageOfItems) {
@@ -34,6 +39,11 @@ class MarketPlace extends Component {
   onClickHandler(e) {
     e.preventDefault();
     this.setState({ click: true });
+  }
+
+  openListing(e) {
+    e.preventDefault();
+    this.setState({ open: true });
   }
 
   // componentDidMount() {
@@ -61,6 +71,9 @@ class MarketPlace extends Component {
     if (this.state.click === true) {
       return <CreateListing />;
     }
+    if(this.state.open === true){
+      return <DisplayListing />;
+    }
     return (
       <div className='containerParent'>
         <div className='container'>
@@ -84,7 +97,7 @@ class MarketPlace extends Component {
 
             {this.state.pageOfItems.map((item) => (
               <div className='itemContainer' key={item.id}>
-                <div className='itemImage'>image {item.id}</div>
+                <div className='itemImage' onClick={this.openListing}>image {item.id}</div>
                 {item.name}
               </div>
             ))}
