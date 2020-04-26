@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
+{/*uses the same css file as create listing,
+because the layout is exactly the same except
+when editing the form fields should be filled with existing information
+also there is a delete button to delete the listing entirely
+*/}
 
-function validate(name, description, option, datetime) {
-  // true means invalid, so our conditions got reversed
-  return {
-    name: name.length === 0,
-    description: description.length === 0,
-    option: option === '',
-    datetime: datetime < new Date(),
-
-  };
-}
-
-class CreateListing extends Component {
+class EditListing extends Component {
   constructor(props) {
     super(props);
 
@@ -20,9 +14,7 @@ class CreateListing extends Component {
       name: '',
       price: '',
       description: '',
-      option: '',
-      insurance: 0,
-      datetime: '',
+      option: ''
     };
   }
 
@@ -47,46 +39,14 @@ class CreateListing extends Component {
     });
   };
 
-  handleDatetimeChange = e => {
-    e.preventDefault();
-    this.setState({
-      datetime: e.currentTarget.value
-    });
-  };
-
-  handleSubmit = evt => {
-    if (!this.canBeSubmitted()) {
-      evt.preventDefault();
-      alert('Unable to submit: some field may be empty');
-      return;
-    }
-    else{
-      alert('submission has been completed');
-    }
-  };
-
-  canBeSubmitted() {
-    const empty = validate(
-                            this.state.name,
-                            this.state.description,
-                            this.state.option,
-                            this.state.datetime,
-                          );
-    const isDisabled = Object.keys(empty).some(x => empty[x]);
-    return !isDisabled;
-  }
-
   render() {
-    const errors = validate(
-                    this.state.name,
-                    this.state.description,
-                    this.state.option,
-                    this.state.datetime,
-                  );
+    var {name, price} = this.props;
     return (
+      // <div>{this.props.children}</div>
+
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Create Listing</h1>
+          <h1 className='title'>Editing This Listing</h1>
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
               <div className='button-wrapper'>
@@ -97,7 +57,7 @@ class CreateListing extends Component {
               <input
                 type='text'
                 className='form-input'
-                placeholder='Name of item'
+                placeholder={name}
                 maxLength='50'
                 value={this.state.name}
                 onChange={this.itemNameChangeHandler}
@@ -149,35 +109,18 @@ class CreateListing extends Component {
               <label for='rental'>Rental</label>
             </div>
             <div>
-              <label>Insurance cost </label>
-              <br />
-              <input
-                type='number'
-                className='form-input'
-                placeholder='0'
-                maxLength='3'
-                value={this.state.insurance}
-                onChange={this.itemNameChangeHandler}
-              ></input>
-            </div>
-            <div>
               <label>
                 Input the time and date that you want the item returned
               </label>
               <br />
-              <input
-                type='datetime-local'
-                className='form-input'
-                value={this.state.datetime}
-                onChange={this.handleDatetimeChange}
-              />
+              <input type='datetime-local' className='form-input' />
             </div>
           </form>
-          <button onClick={this.handleSubmit}>Submit</button>
+          <button>Submit</button>
         </div>
       </div>
     );
   }
 }
 
-export default CreateListing;
+export default EditListing;
