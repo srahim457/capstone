@@ -132,9 +132,47 @@ User.getUserByid = (id) => {
   });
 };
 
-//Get last user in table
-User.getLastEntry = () => {
-  sql.query('SELECT MAX(id) FROM guilds.users', [id], (err, res) => {});
+//Get last user id entry in user table
+// User.getLastEntry = () => {
+//   sql.query('SELECT MAX(id) FROM guilds.users', (err, result) => {
+//     if (err) {
+//       result(null, err);
+//     } else {
+//       result(null, res.row[0]);
+//     }
+//   });
+// };
+
+User.getUserByEmail = function (email, result) {
+  console.log('getting user by email ', email);
+  sql.query(
+    'Select * from guilds.users where email = ANY ($1)',
+    [email],
+    function (err, res) {
+      if (err) {
+        console.log('error: ', err);
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+User.getLastEnteredUser = function (err, result) {
+  console.log('getting last entered user'),
+    sql.query('SELECT * from guilds.users order by id DESC limit 1', function (
+      err,
+      res
+    ) {
+      if (err) {
+        console.log('error: ', err);
+        result(err, null);
+      } else {
+        console.log(res.rows[0]);
+        result(null, res.rows[0].id);
+      }
+    });
 };
 module.exports = {
   User,

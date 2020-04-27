@@ -50,6 +50,7 @@ app.use('/market-place', require('./lib/routes/marketplace/marketplace'));
 app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users'));
+app.use('/auth', require('./lib/routes/auth'));
 //app.use('/auth', require('./lib/routes/auth/auth'));
 
 // app.get('/', (req, res) => {
