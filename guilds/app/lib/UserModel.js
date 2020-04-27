@@ -91,7 +91,22 @@ User.getLastEnteredUser = function (result) {
             }
         });           
 };
+//Gets the information of the user
+//Takes the user ID
+//Returns the user entry
 
+User.getUserById = function (userid, result) {
+    console.log('getting user by id \n ')
+    sql.query("Select * from guilds.users where id = ANY ($1)", [userid], function (err, res) {             
+            if(err) {
+                console.log("error: ", err);
+                result(err, null);
+            }
+            else{
+                result(null, res);
+            }
+        });   
+};
 // finds a user by their email and returns all of their information
 // Returns user entry
 User.getUserByEmail = function (email, result) {
