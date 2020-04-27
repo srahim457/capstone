@@ -67,6 +67,7 @@ router.post(
                       lastname,
                       email,
                       password,
+<<<<<<< HEAD
                       id: result.id,
                     });
                     //@ still need to get user id for payload
@@ -77,12 +78,24 @@ router.post(
                     res.send(
                       sql.query('SELECT MAX(id) FROM guilds.login', User['id'])
                     );
+=======
+                      id: result.id
+                    });
+                    //@ still need to get user id for payload
+                    res.send(
+                      sql.query('SELECT MAX(id) FROM guilds.login', User['id'])
+                    );    
+>>>>>>> 9d259e772ce1fe988bc115bb39b9c0d4fccc69b5
                     const payload = {
                       user: {
                         id: user.id, //payload supposed to time in with users id
                       },
                     };
+<<<<<<< HEAD
                     console.log('payload \n', payload);
+=======
+                    console.log('payload \n',payload)
+>>>>>>> 9d259e772ce1fe988bc115bb39b9c0d4fccc69b5
                     //res.status(200).send('Inserted into users');
                     jwt.sign(
                       payload,
@@ -90,8 +103,13 @@ router.post(
                       { expiresIn: 360000 },
                       (err, token) => {
                         if (err) throw err;
+<<<<<<< HEAD
                         console.log('token \n', token);
                         res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
+=======
+                        console.log('token \n' , token)
+                        res.status(200).json({ token });
+>>>>>>> 9d259e772ce1fe988bc115bb39b9c0d4fccc69b5
                       }
                     ); //3600 = 1hr
 
