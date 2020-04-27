@@ -95,29 +95,33 @@ User.getLastEnteredUser = function (result) {
 //Takes the user ID
 //Returns the user entry
 
-User.getUserById = function (userid, result) {
-    console.log('getting user by id \n ')
-    sql.query("Select * from guilds.users where id = ANY ($1)", [userid], function (err, res) {             
+User.getUserById = function (req, res) {
+    sql.query("Select * from guilds.users where id =($1)", [req], function (err, resp) {             
             if(err) {
                 console.log("error: ", err);
-                result(err, null);
+                res.status(400);
             }
             else{
-                result(null, res);
+                console.log(resp.rows,resp.rows.length)
+                if(resp.rows.length === 0){
+                    res.status(400).send('User doesnt exist');
+                }
+                else{
+                    res.status(200).send(resp.rows);
+                }
             }
         });   
 };
 // finds a user by their email and returns all of their information
 // Returns user entry
-User.getUserByEmail = function (email, result) {
-        console.log('getting user by email ', email)
-        sql.query("Select * from guilds.users where email = ANY ($1)", [email], function (err, res) {             
+User.getUserByEmail = function (req, res) {
+        sql.query("Select * from guilds.users where email =($1)", [req], function (err, resp) {             
                 if(err) {
                     console.log("error: ", err);
-                    result(err, null);
+                    res(err, null);
                 }
                 else{
-                    result(null, res);
+                    res.status(200).send(resp.rows);
                 }
             });   
 };
