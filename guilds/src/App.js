@@ -10,6 +10,8 @@ import Home from './components/Home';
 import Navigation from './components/Navigation';
 import Profile from './components/Profile';
 import MarketPlace from './components/MarketPlace';
+import AllGuilds from './components/AllGuilds';
+import Messages from './components/Messages';
 
 class App extends Component {
   render() {
@@ -22,6 +24,12 @@ class App extends Component {
           </Route>
           <Route path='/market-place' component={MarketPlace}>
             <Navigation></Navigation>
+          </Route>
+          <Route path='/all-guilds' component={AllGuilds}>
+          <Navigation></Navigation>
+          </Route>
+          <Route path='/messages' component={Messages}>
+          <Navigation></Navigation>
           </Route>
         </Switch>
       </BrowserRouter>

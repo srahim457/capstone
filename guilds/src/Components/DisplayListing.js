@@ -11,7 +11,7 @@ class DisplayListing extends Component {
     super(props);
 
     this.state = {
-      name: 'some listing',
+      name: '',
       price: '',
       description: 'some description',
       option: '',
@@ -28,9 +28,8 @@ class DisplayListing extends Component {
   };
 
   render() {
-    var {name, price} = this.props;
+    const {name, description} = this.props;
     return (
-      // <div>{this.props.children}</div>
 
       <div className='container-parent'>
         <div className='container'>
@@ -41,12 +40,12 @@ class DisplayListing extends Component {
                 <button className='close-button'>X</button>
               </div>
               <label>Item Name: </label>
-              {this.state.name}
+              {name}
             </div>
             <div>
               {/* make into a description box */}
               <label>Item Description:</label>
-              {this.state.description}
+              {description}
             </div>
             <div>
               <label>Type of Listing:</label>
