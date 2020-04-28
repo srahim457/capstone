@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import MarketPlace from './MarketPlace';
+import AllGuilds from './AllGuilds';
 import DateTimePicker from 'react-datetime-picker';
 import axios from 'axios';
 
@@ -174,7 +175,8 @@ class CreateListing extends Component {
   }
 
   closeButton() {
-    return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    return <Redirect path='/all-guilds' Component={AllGuilds}></Redirect>;
   }
 
   render() {
@@ -182,13 +184,16 @@ class CreateListing extends Component {
       <div className='container-parent'>
         <div className='container'>
           <h1 className='title'>Create Listing</h1>
+
+          <div className='button-wrapper'>
+            <button className='close-button' onClick={this.closeButton}>
+              <strong>X</strong>
+            </button>
+          </div>
+          
           <form className='form-fields'>
             <div>
-              <div className='button-wrapper'>
-                <button className='close-button' onClick={this.closeButton}>
-                  <strong>X</strong>
-                </button>
-              </div>
+
               <label>
                 <strong>Item Name</strong>
               </label>
