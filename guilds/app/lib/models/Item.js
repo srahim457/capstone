@@ -12,100 +12,97 @@ var Item = function (item) {
 //Item
 //Creates a new item entry
 //Returns item id
-Item.createItem = function (item, result) {
+Item.createItem = function (req,res) {
   sql.query(
     'INSERT INTO guilds.item_info (item_name,item_desc,image,is_available) VALUES($1,$2,$3,$4)',
-    [item.item_name, item.item_desc, item.item_image, item.is_available],
-    function (err, res) {
+    [req.item_name, req.item_desc, req.item_image, req.is_available],
+    function (err, resp) {
       if (err) {
         console.log('error: ', err);
-        result(err, null);
-      } else {
-        console.log('created item');
-        result(null, res.rows[0].id);
+        res.status(400);
+      }
+      else{
+          res.status(200).send(resp.rows[0].id);
       }
     }
   );
 };
 //Return item that matches item id
-Item.getItemByID = function (item_id, result) {
+Item.getItemByID = function (req, res) {
   sql.query(
     'Select * from guilds.item_info where item_id = ANY ($1)',
-    [item_id],
-    function (err, res) {
+    [req.item_id],
+    function (err, resp) {
       if (err) {
         console.log('error: ', err);
-        result(err, null);
-      } else {
-        console.log('found the item ');
-        result(null, res);
+        res.status(400);
+      }
+      else{
+          res.status(200).send(resp.rows[0]);
       }
     }
   );
 };
 //Return any item matching the name provided
-Item.getItemByName = function (item_name, result) {
+Item.getItemByName = function (req,res) {
   sql.query(
     'Select * from guilds.item_info where item_id LIKE ($1)',
-    [item_name],
-    function (err, res) {
+    [req.item_name],
+    function (err, resp) {
       if (err) {
         console.log('error: ', err);
-        result(err, null);
-      } else {
-        console.log('Found the item ');
-        result(null, res);
+        res.status(400);
+      }
+      else{
+          res.status(200).send(resp.rows);
       }
     }
   );
 };
 //Updates an item's information (name,desc,image)
 //Returns new item ID
-Item.updateItemInformation = function (item, result) {
+Item.updateItemInformation = function (req,res) {
   console.log('updating item information', item);
   sql.query(
     'UPDATE guilds.item_info SET item_name=($1), item_desc =($2),image = ($3) WHERE item_id = ($4)',
-    [item.item_name, item.item_desc, item.item_image, item.id]
-  );
-  Item.createItem(item, function (err, res) {
+    [req.item_name, req.item_desc, req.item_image, req.id],function (err, resp) {
     if (err) {
       console.log('error updating item information: ', err);
-      result(err, null);
-    } else {
-      console.log(res.rows[0].id);
-      result(null, res.rows[0].id);
+      res.status(400);
+    }
+    else{
+        res.status(200).send(resp.rows[0].id);
     }
   });
 };
 //Sets the items availability
-Item.updateAvailability = function (item, result) {
+Item.updateAvailability = function (req,res) {
   console.log('updating item Availability', item);
   sql.query(
     'UPDATE guilds.item_info SET is_available=($1) WHERE item_id = ($2)',
-    [item.is_available, item.id]
-  );
-  Item.createItem(item, function (err, res) {
+    [req.is_available, req.id], function (err, resp) {
     if (err) {
-      console.log('error updating item information: ', err);
-      result(err, null);
-    } else {
-      console.log(res.rows[0].id);
-      result(null, res.rows[0].id);
+      console.log('error updating item availability: ', err);
+      res.status(400);
+    }
+    else{
+        res.status(200);
     }
   });
 };
 //"Deletes" item
 //Takes in only item id
-Item.deleteItem = function (item_id) {
+Item.deleteItem = function (req,res) {
   sql.query(
     "UPDATE guilds.item_info SET delete = 'T' where id = ($1)",
-    [item_id],
-    function (err, res) {
+    [req.item_id],
+    function (err, resp) {
       if (err) {
         console.log('error deleting item: ', err);
-        result(err, null);
-      } else {
-        console.log('Deleted item');
+        res.status(400);
+      }
+      else{
+          res.status(200);
       }
     }
   );
