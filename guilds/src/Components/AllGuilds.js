@@ -22,9 +22,9 @@ class AllGuilds extends Component {
 
     var numItems = [...Array(100).keys()].map(i => ({
       id: i + 1,
-      name: 'Item ' + (i + 1),
-      description: 'this is an item',
-      cost: i+1,
+      name: 'Guild ' + (i + 1),
+      description: 'this is guild' + (i+1),
+      guildmaster: 'Guy '+ (i+1),
     }));
 
     this.state = {
@@ -34,15 +34,16 @@ class AllGuilds extends Component {
       open: false
     };
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.openGuild = this.openGuild.bind(this);
   }
 
   onClickHandler(e) {
     e.preventDefault();
     this.setState({ click: true });
   }
-  openGuild(e) {
-    e.preventDefault();
+  openGuild(item) {
+    this.setState({name: item.name});
+    this.setState({description: item.description});
+    this.setState({guildmaster: item.guildmaster});
     this.setState({ open: true });
   }
 
@@ -52,7 +53,11 @@ class AllGuilds extends Component {
     }
 
     if (this.state.open === true) {
-      return <DisplayGuild />;
+      return <DisplayGuild
+              name = {this.state.name}
+              description = {this.state.description}
+              guildmaster = {this.state.guildmaster}
+            />;
     }
 
     return(
@@ -80,9 +85,9 @@ class AllGuilds extends Component {
 
             {this.state.numItems.map(item => (
               <div className='GuildContainer'>
-                <div className='GuildImageWrapper'>
+                <div className='GuildImageWrapper'
+                     onClick={this.openGuild.bind(this, item)}>
                   <h1> Image {item.id} </h1>
-                  <button onClick={this.openGuild}> open </button>
                 </div>
                 <div className='GuildNameWrapper'>
                   <h1> guild {item.id} </h1>

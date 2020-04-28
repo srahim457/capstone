@@ -29,6 +29,7 @@ class Profile extends Component {
     super();
     this.state = {
       click: false, //added to see if it respond on click
+      testToken: false,
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -36,6 +37,19 @@ class Profile extends Component {
   onClickHandler(e) {
     e.preventDefault();
     this.setState({ click: true });
+  }
+  displayBorrowed() {
+    return <Profile_Borrowed />;
+  }
+  displayListings(){
+    return <Profile_Listed />;
+  }
+
+  listings(){
+    this.setState({ testToken: false })
+  }
+  borrowed(){
+    this.setState({ testToken: true })
   }
 
   render() {
@@ -100,26 +114,36 @@ class Profile extends Component {
           <div className='Listings'>
             {/*the button that switched tabs between items listed and borrowed*/}
             <div className='PageSwitcher_profile'>
-              <NavLink
-                to='/profile'
-                activeClassName='PageSwitcher__Item--Active'
-                className='PageSwitcher__Item_profile'
-              >
-                Borrowed Items
-              </NavLink>
-              <NavLink
-                exact
-                to='/profile-listed'
-                activeClassName='PageSwitcher__Item--Active'
-                className='PageSwitcher__Item_profile'
+              <button
+                onClick = {this.listings.bind(this)}
+                className={this.state.testToken === false
+                            ? 'PageSwitcher__Item_profile_active'
+                            : 'PageSwitcher__Item_profile'
+                          }
               >
                 Listed Items
-              </NavLink>
+              </button>
+              <button
+                onClick = {this.borrowed.bind(this)}
+                className={this.state.testToken === true
+                            ? 'PageSwitcher__Item_profile_active'
+                            : 'PageSwitcher__Item_profile'
+                          }
+              >
+                Borrowed Items
+              </button>
             </div>
             {/*these components can be found in Profile_Borrowed.js and Profile_Listed.js*/}
+            {this.state.testToken === true
+              ? this.displayBorrowed()
+              : this.displayListings()
+            }
+            {/*
             <Route path='/profile-listed' component={Profile_Listed}></Route>
             <Route path='/profile' component={Profile_Borrowed}></Route>
+            */}
           </div>
+
         </div>
       </BrowserRouter>
     );

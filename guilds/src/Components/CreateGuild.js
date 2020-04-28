@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import './styles/CreateListing.css';
 import AllGuilds from './AllGuilds';
+import MarketPlace from './MarketPlace';
 
 function validate(name, description) {
   // true means invalid, so our conditions got reversed
@@ -18,7 +19,10 @@ class CreateGuild extends Component {
     this.state = {
       name: '',
       description: '',
+      close: 'false',
+      value: '',
     };
+    this.closeButton = this.closeButton.bind(this);
   }
 
   itemNameChangeHandler = e => {
@@ -55,11 +59,15 @@ class CreateGuild extends Component {
     return !isDisabled;
   }
 
-  closeButton() {
-    return <Redirect path='/all-guilds' Component={AllGuilds}></Redirect>;
+  closeButton(e) {
+    e.preventDefault();
+    this.setState({ close: true });
   }
 
   render() {
+    if (this.state.close === true) {
+      return <AllGuilds />;
+    }
     return (
       <div className='container-parent'>
         <div className='container'>
@@ -96,6 +104,15 @@ class CreateGuild extends Component {
                 value={this.state.description}
                 onChange={this.descriptionChangeHandler}
               />
+              <br />
+              <label>Upload an image</label>
+              <br />
+              <input
+                type='file'
+                onChange={this.fileSelectedHandler}
+                value={this.state.image}
+              />
+              <br />
               <br />
               <button> submit </button>
             </div>

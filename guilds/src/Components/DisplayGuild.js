@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
+import AllGuilds from './AllGuilds';
 {/*uses the same css file as create listing,
 because the layout is exactly the same except
 when editing the form fields should be filled with existing information
@@ -11,39 +12,51 @@ class DisplayGuild extends Component {
     super(props);
 
     this.state = {
-      name: 'some guild',
-      description: 'some description',
+      name: '',
+      description: '',
+      guildmaster: '',
+      close: false,
     };
+    this.closeButton = this.closeButton.bind(this);
   }
 
-
-  handleOptionChange = e => {
+  closeButton(e) {
     e.preventDefault();
-    this.setState({
-      option: e.currentTarget.value
-    });
-  };
+    this.setState({ close: true });
+  }
 
   render() {
-    var {name, price} = this.props;
+    var {name, description, guildmaster} = this.props;
+
+    if (this.state.close === true) {
+      return <AllGuilds />;
+    }
+
     return (
       // <div>{this.props.children}</div>
 
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>{this.state.name}</h1>
+          <h1 className='title'>{name}</h1>
+          <div className='button-wrapper'>
+            <button className='close-button' onClick={this.closeButton}>
+              X
+            </button>
+          </div>
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
-              <div className='button-wrapper'>
-                <button className='close-button'>X</button>
-              </div>
-              <label>Item Name: </label>
-              {this.state.name}
+              <label> Name: </label>
+              {name}
             </div>
             <div>
               {/* make into a description box */}
-              <label>Item Description:</label>
-              {this.state.description}
+              <label> Description:</label>
+              {description}
+            </div>
+            <div>
+              {/* make into a description box */}
+              <label> Founded by: </label>
+              {guildmaster}
             </div>
             <div>
               <label>

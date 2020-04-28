@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+/*install this stuff for the confirmation pop-ups:
+      npm install react-confirm-alert --save
+*/
 import './styles/CreateListing.css';
 {/*uses the same css file as create listing,
 because the layout is exactly the same except
@@ -14,15 +19,16 @@ class EditListing extends Component {
       name: '',
       price: '',
       description: '',
-      option: ''
+      option: '',
+      delete_item: 'false',
     };
+    this.delete = this.delete.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   itemNameChangeHandler = e => {
-    e.preventDefault();
-    this.setState({
-      name: e.currentTarget.value
-    });
+   const { target: {value} } = e;
+   this.setState({ name: value });
   };
 
   descriptionChangeHandler = e => {
@@ -38,26 +44,60 @@ class EditListing extends Component {
       option: e.currentTarget.value
     });
   };
+  handleDeletion (){
+    this.setState({delete_item: true});
+    window.location.reload(false);
+  }
+
+  delete (){
+    confirmAlert({
+      title: 'Delete this Listing: ',
+      message: 'Are you sure you want to do this?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () =>  this.handleDeletion()
+        },
+        {
+          label: 'No',
+          onClick: () => this.setState({delete_item: false})
+        }
+      ]
+    });
+  }
+
+  reloadPage (){
+    window.location.reload(false)
+  }
+
+  componentDidMount() {
+  const {name} = this.props;
+   this.setState({ name: name});
+  }
 
   render() {
-    var {name, price} = this.props;
+    const {name} = this.props;
     return (
       // <div>{this.props.children}</div>
 
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Editing This Listing</h1>
+          <h1 className='title'>Edit Listing: {name} </h1>
+          <div className='button-wrapper'>
+            <button className='close-button'
+                    onClick = {this.reloadPage}
+            >
+              X
+            </button>
+          </div>
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
-              <div className='button-wrapper'>
-                <button className='close-button'>X</button>
-              </div>
               <label>Item Name </label>
               <br />
               <input
                 type='text'
                 className='form-input'
-                placeholder={name}
+                placeholder={this.state.name}
                 maxLength='50'
                 value={this.state.name}
                 onChange={this.itemNameChangeHandler}
@@ -117,6 +157,7 @@ class EditListing extends Component {
             </div>
           </form>
           <button>Submit</button>
+          <button onClick={this.delete}>Delete Listing</button>
         </div>
       </div>
     );

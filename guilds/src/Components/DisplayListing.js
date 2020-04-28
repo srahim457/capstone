@@ -50,32 +50,6 @@ class DisplayListing extends Component {
             <div>
               <label>Type of Listing:</label>
               <br />
-              <input
-                type='radio'
-                id='loan'
-                value={this.state.option === 'loan'}
-                name='contact'
-                onChange={this.handleOptionChange}
-              />
-              <label for='sale'>Sale</label>
-              <br />
-              <input
-                type='radio'
-                id='loan'
-                value={this.state.option === 'loan'}
-                name='contact'
-                onChange={this.handleOptionChange}
-              />
-              <label for='loan'>Loan</label>
-              <br />
-              <input
-                type='radio'
-                id='rental'
-                value={this.state.option === 'rental'}
-                name='contact'
-                onChange={this.handleOptionChange}
-              />
-              <label for='rental'>Rental</label>
             </div>
             <div>
               <label>Insurance: $</label>

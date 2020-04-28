@@ -1,10 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import MarketPlace from './MarketPlace';
+import AllGuilds from './AllGuilds';
 import DateTimePicker from 'react-datetime-picker';
 import axios from 'axios';
-
 import './styles/CreateListing.css';
+
+function validate(name, description) {
+  // true means invalid, so our conditions got reversed
+  return {
+    name: name.length === 0,
+    description: description.length === 0,
+  };
+}
 
 class CreateListing extends Component {
   constructor() {
@@ -53,15 +61,32 @@ class CreateListing extends Component {
   };
 
   handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state); //post request with axios
-    const item = this.state;
-    axios.post(`http://localhost:4000/market-place`, { item }).then((res) => {
-      console.log(res);
-      console.log(res.data);
-    });
-  };
+      if (!this.canBeSubmitted()) {
+        alert('Unable to submit: some field may be empty');
+        return;
+      }
+      else{
+        alert('submission has been completed');
+        e.preventDefault();
+        console.log(this.state); //post request with axios
+        const item = this.state;
+        axios.post(`http://localhost:4000/market-place`, { item }).then((res) => {
+          console.log(res);
+          console.log(res.data);
+        });
+        window.location.reload(false);
+      }
+    };
 
+    canBeSubmitted() {
+      const empty = validate(
+                              this.state.name,
+                              this.state.description,
+                            );
+      const isDisabled = Object.keys(empty).some(x => empty[x]);
+      return !isDisabled;
+    }
+    
   fileSelectedHandler = (e) => {
     //console.log(e.target.files[0]);
     this.setState({
@@ -174,7 +199,8 @@ class CreateListing extends Component {
   }
 
   closeButton() {
-    return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    window.location.reload(false);
   }
 
   render() {
@@ -182,13 +208,16 @@ class CreateListing extends Component {
       <div className='container-parent'>
         <div className='container'>
           <h1 className='title'>Create Listing</h1>
+
+          <div className='button-wrapper'>
+            <button className='close-button' onClick={this.closeButton}>
+              <strong>X</strong>
+            </button>
+          </div>
+
           <form className='form-fields'>
             <div>
-              <div className='button-wrapper'>
-                <button className='close-button' onClick={this.closeButton}>
-                  <strong>X</strong>
-                </button>
-              </div>
+
               <label>
                 <strong>Item Name</strong>
               </label>

@@ -121,6 +121,18 @@ h2{
   color: yellow;
 }
 
+.PageSwitcher__Item_profile_active {
+  background-color: red;
+  color: yellow;
+  padding: 10px 200px;
+  cursor: pointer;
+  font-size: 0.9em;
+  border: none;
+  outline: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
 /*-----------------editing profile stuff----------------------*/
 .edit-button { /* edit profile button*/
   color: #f3e055;
