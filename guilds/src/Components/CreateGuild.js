@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
-import DisplayLi from './DisplayListing';
+
+
 function validate(name, description) {
   // true means invalid, so our conditions got reversed
   return {
@@ -33,7 +34,6 @@ class CreateGuild extends Component {
     });
   };
 
-
   handleSubmit = evt => {
     if (!this.canBeSubmitted()) {
       evt.preventDefault();
@@ -54,48 +54,13 @@ class CreateGuild extends Component {
     return !isDisabled;
   }
 
+
+
   render() {
     return (
-      <div className='container-parent'>
-        <div className='container'>
-          <h1 className='title'>Create Listing</h1>
-          <form onSubmit={this.handleSubmit} className='form-fields'>
-            <div>
-              <div className='button-wrapper'>
-                <button className='close-button'>X</button>
-              </div>
-              <label>Item Name </label>
-              <br />
-              <input
-                type='text'
-                className='form-input'
-                placeholder='Name of item'
-                maxLength='50'
-                value={this.state.name}
-                onChange={this.itemNameChangeHandler}
-              ></input>
-            </div>
-            <div>
-              {/* make into a description box */}
-              <label>Item Description</label>
-              <br />
-              <textarea
-                className='form-input'
-                autofocus
-                placeholder='Type your description'
-                maxlength='180'
-                rows='5'
-                cols='40'
-                value={this.state.description}
-                onChange={this.descriptionChangeHandler}
-              />
-              <br />
-              <button> submit </button>
-            </div>
-          </form>
-        </div>
+      <div>
+        Hello
       </div>
-
     );
   }
 }
