@@ -20,7 +20,8 @@ router.put('/', (req, res) => {});
 // @access private
 router.get('/me', auth, async (req, res) => {
   try {
-    const profile = await User.getUserByid(req.body.id);
+    //const profile = await User.getUserByid(req.body.id);
+    //need to extract id, name, email, date
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
