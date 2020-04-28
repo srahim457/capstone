@@ -121,6 +121,7 @@ class MarketPlace extends Component {
     );
   }
 }
+
 export default MarketPlace;
 
 {/*

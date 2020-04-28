@@ -12,6 +12,7 @@ import Profile from './components/Profile';
 import MarketPlace from './components/MarketPlace';
 import AllGuilds from './components/AllGuilds';
 import Messages from './components/Messages';
+import Payment from './components/Payment';
 
 class App extends Component {
   render() {
@@ -30,6 +31,9 @@ class App extends Component {
           </Route>
           <Route path='/messages' component={Messages}>
           <Navigation></Navigation>
+          </Route>
+          <Route path='/payment' component={Payment}>
+            <Navigation></Navigation>
           </Route>
         </Switch>
       </BrowserRouter>
