@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import './styles/CreateListing.css';
-
+import AllGuilds from './AllGuilds';
 
 function validate(name, description) {
   // true means invalid, so our conditions got reversed
@@ -54,12 +55,52 @@ class CreateGuild extends Component {
     return !isDisabled;
   }
 
-
+  closeButton() {
+    return <Redirect path='/all-guilds' Component={AllGuilds}></Redirect>;
+  }
 
   render() {
     return (
-      <div>
-        Hello
+      <div className='container-parent'>
+        <div className='container'>
+          <h1 className='title'>Create Listing</h1>
+          <div className='button-wrapper'>
+            <button className='close-button' onClick={this.closeButton}>
+              X
+            </button>
+          </div>
+          <form onSubmit={this.handleSubmit} className='form-fields'>
+            <div>
+              <label>Item Name </label>
+              <br />
+              <input
+                type='text'
+                className='form-input'
+                placeholder='Name of item'
+                maxLength='50'
+                value={this.state.name}
+                onChange={this.itemNameChangeHandler}
+              ></input>
+            </div>
+            <div>
+              {/* make into a description box */}
+              <label>Item Description</label>
+              <br />
+              <textarea
+                className='form-input'
+                autofocus
+                placeholder='Type your description'
+                maxlength='180'
+                rows='5'
+                cols='40'
+                value={this.state.description}
+                onChange={this.descriptionChangeHandler}
+              />
+              <br />
+              <button> submit </button>
+            </div>
+          </form>
+        </div>
       </div>
     );
   }
