@@ -68,6 +68,42 @@ User.createUser = function (req, result) {
   });          
 }
 //Returns the id of the last entered user
+<<<<<<< HEAD
+User.getLastEnteredUser = function (result) {
+  console.log('getting last entered user'),
+    sql.query('SELECT * from guilds.users order by id DESC limit 1', function (
+      err,
+      res
+    ) {
+      if (err) {
+        console.log('error: ', err);
+        result(err, null);
+      } else {
+        console.log(res.rows[0]);
+        result(null, res.rows[0].id);
+      }
+    });
+};
+
+User.getUserById = async function (req, res) {
+  console.log(req, 'here');
+  await sql.query('Select * from guilds.users where id =($1)', [req], function (
+    err,
+    resp
+  ) {
+    if (err) {
+      console.log('error: ', err);
+      res.status(400);
+    } else {
+      //console.log(resp.rows, resp.rows.length);
+      if (resp.rows.length === 0) {
+        res.status(400).send('User doesnt exist');
+      } else {
+        res.status(200).send(resp.rows);
+      }
+    }
+  });
+=======
 User.getLastEnteredUser = function (req,res) {
     console.log('getting last entered user'),
     sql.query("SELECT * from guilds.users order by id DESC limit 1",function (err, resp) {
@@ -99,6 +135,7 @@ User.getUserById = function (req, res) {
                 }
             }
         });   
+>>>>>>> 0cae92384a9b8b1a05702e81679d41e11e4e477e
 };
 // finds a user by their email and returns all of their information
 // Returns user entry

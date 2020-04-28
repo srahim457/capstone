@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-//const user = require('../../models/User');
+
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken');
 
 let sql = require('../../db').pool;
 
-// @route Post api/users
+// @route Post /users
 // @desc Register user
 // @access Private
 
@@ -35,11 +35,8 @@ router.post(
     }
 
     const { firstname, lastname, email, password } = req.body;
-    //const { name, email, password } = req.body;
 
     try {
-      //see if user exists
-      //****
       let pwd = await bcrypt.hash(req.body.password, 5);
       await JSON.stringify(
         User.getUserByEmail([req.body.email], function (err, result) {
@@ -52,17 +49,12 @@ router.post(
                 console.log('Error email exists redirecting now');
                 res.status(409).send('Login email already exists');
               } else {
-                // const payload = sql.query(
-                //   'SELECT MAX(id) FROM guilds.login',
-                //   User['id']
-                // );
                 User.createUser(req.body, function (err, result) {
                   if (err) {
                     console.log(err);
                   } else {
-                    console.log('inserted into users');
+                    console.log('inserted into users,', result);
                     user = new User({
-                      //might put object at the beginning
                       firstname,
                       lastname,
                       email,
@@ -75,7 +67,7 @@ router.post(
                     );
                     const payload = {
                       user: {
-                        id: user.id, //payload supposed to time in with users id
+                        id: result.id, //payload supposed to time in with users id
                       },
                     };
                     console.log('payload \n', payload);
@@ -83,14 +75,13 @@ router.post(
                     jwt.sign(
                       payload,
                       config.get('jwtSecret'),
-                      { expiresIn: 360000 },
+                      { expiresIn: 3600000 },
                       (err, token) => {
                         if (err) throw err;
                         console.log('token \n', token);
                         res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
                       }
                     ); //3600 = 1hr
-
                     return;
                   }
                 });
@@ -99,32 +90,32 @@ router.post(
           }
         })
       );
-      //****
-      //can create a gravatar for user
-
-      //encrypt password
-
-      //return jwt
-
       // res.send('User route');
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
-
     //console.log(req.body);
   }
 );
 
-// @route GET api/users
-// @desc Register user
+// @route GET /users
+// @desc Gets a user
 // @access Private
-router.get('/', (req, res) => {
-  res.send('User route');
+router.get('/', async (req, res) => {
+  //res.send('User route');
+  try {
+    console.log(req.user.id);
+    const user = await User.getUserById(req.user.id, res); //gets firstname lastname email
+    console.log(user, 'after');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
 });
 
 // @route DELETE api/users
-// @desc Register user
+// @desc Deletes a  user
 // @access Private
 router.delete('/:id', (req, res) => {
   User.deleteremove(req.id, res);
