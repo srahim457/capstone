@@ -4,8 +4,15 @@ import MarketPlace from './MarketPlace';
 import AllGuilds from './AllGuilds';
 import DateTimePicker from 'react-datetime-picker';
 import axios from 'axios';
-
 import './styles/CreateListing.css';
+
+function validate(name, description) {
+  // true means invalid, so our conditions got reversed
+  return {
+    name: name.length === 0,
+    description: description.length === 0,
+  };
+}
 
 class CreateListing extends Component {
   constructor() {
@@ -54,15 +61,32 @@ class CreateListing extends Component {
   };
 
   handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state); //post request with axios
-    const item = this.state;
-    axios.post(`http://localhost:4000/market-place`, { item }).then((res) => {
-      console.log(res);
-      console.log(res.data);
-    });
-  };
+      if (!this.canBeSubmitted()) {
+        alert('Unable to submit: some field may be empty');
+        return;
+      }
+      else{
+        alert('submission has been completed');
+        e.preventDefault();
+        console.log(this.state); //post request with axios
+        const item = this.state;
+        axios.post(`http://localhost:4000/market-place`, { item }).then((res) => {
+          console.log(res);
+          console.log(res.data);
+        });
+        window.location.reload(false);
+      }
+    };
 
+    canBeSubmitted() {
+      const empty = validate(
+                              this.state.name,
+                              this.state.description,
+                            );
+      const isDisabled = Object.keys(empty).some(x => empty[x]);
+      return !isDisabled;
+    }
+    
   fileSelectedHandler = (e) => {
     //console.log(e.target.files[0]);
     this.setState({
@@ -176,7 +200,7 @@ class CreateListing extends Component {
 
   closeButton() {
     //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
-    return <Redirect path='/all-guilds' Component={AllGuilds}></Redirect>;
+    window.location.reload(false);
   }
 
   render() {
@@ -190,7 +214,7 @@ class CreateListing extends Component {
               <strong>X</strong>
             </button>
           </div>
-          
+
           <form className='form-fields'>
             <div>
 
