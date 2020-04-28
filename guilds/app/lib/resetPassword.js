@@ -1,5 +1,5 @@
-var User = require('./appModel').User;
-var Login = require('./appModel').Login;
+var User = require('./UserModel').User;
+var Login = require('./LoginModel').Login;
 
 /**
  * @swagger
