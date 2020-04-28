@@ -84,10 +84,11 @@ User.getLastEnteredUser = function (req,res) {
       }
     });
 };
-
+//Takes an id as a param
+//Return a user entry
 User.getUserById = async function (req, res) {
   console.log(req, 'here');
-  await sql.query('Select * from guilds.users where id =($1)', [req.id], function (
+  await sql.query('Select * from guilds.users where id =($1)', [req], function (
     err,
     resp
   ) {
@@ -107,13 +108,15 @@ User.getUserById = async function (req, res) {
 // finds a user by their email and returns all of their information
 // Returns user entry
 User.getUserByEmail = function (req, res) {
-        sql.query("Select * from guilds.users where email =($1)", [req.email], function (err, resp) {             
+        sql.query("Select * from guilds.users where email =($1)", [req], function (err, resp) {             
                 if(err) {
                     console.log("error: ", err);
                     res.sendStatus(400);
                 }
-                else{
-                    res.status(200).send(resp.rows[0]);
+                if (resp.rows.length === 0) {
+                  res.status(400).send('Email doesnt exist');
+                } else {
+                  res.status(200).send(resp.rows);
                 }
             });   
 };
