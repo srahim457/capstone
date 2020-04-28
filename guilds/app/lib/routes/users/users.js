@@ -39,7 +39,7 @@ router.post(
     try {
       let pwd = await bcrypt.hash(req.body.password, 5);
       await JSON.stringify(
-        User.getUserByEmail([req.body.email], function (err, result) {
+        User.getUserByEmail([req.body.email],res, function (err, result) {
           if (result.rows[0]) {
             console.log('email already registered');
             res.status(409).send('Email already exists');
