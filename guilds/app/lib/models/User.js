@@ -1,5 +1,5 @@
 'use strict';
-var sql = require('../db').pool;
+var sql = require('./db').pool;
 
 //User object constructor
 var User = function(user){
