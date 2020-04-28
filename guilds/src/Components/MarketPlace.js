@@ -105,8 +105,15 @@ class MarketPlace extends Component {
 
             {this.state.pageOfItems.map((item) => (
               <div className='itemContainer' key={item.id}>
-                <div className='itemImage' onClick={this.openListing.bind(this, item)}>image {item.id}</div>
+                <div className='itemImage'
+                  onClick={this.openListing.bind(this, item)}>
+
+                  image {item.id}
+
+                </div>
+
                 {item.name}
+
               </div>
             ))}
           </div>

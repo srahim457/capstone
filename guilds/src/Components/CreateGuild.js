@@ -105,6 +105,15 @@ class CreateGuild extends Component {
                 onChange={this.descriptionChangeHandler}
               />
               <br />
+              <label>Upload an image</label>
+              <br />
+              <input
+                type='file'
+                onChange={this.fileSelectedHandler}
+                value={this.state.image}
+              />
+              <br />
+              <br />
               <button> submit </button>
             </div>
           </form>
