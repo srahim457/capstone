@@ -117,6 +117,7 @@ class EditListing extends Component {
             </div>
           </form>
           <button>Submit</button>
+          <button>Delete Listing</button>
         </div>
       </div>
     );
