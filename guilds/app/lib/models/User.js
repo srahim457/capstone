@@ -111,48 +111,10 @@ User.getLastEnteredUser = function (result) {
       }
     });
 };
-//Gets the information of the user
-//Takes the user ID
-//Returns the user entry
 
-// User.getUserById = function (userid, result) {
-//   console.log('getting user by id \n ');
-//   sql.query(
-//     'Select * from guilds.users where id = ANY ($1)',
-//     [userid],
-//     function (err, res) {
-//       if (err) {
-//         console.log('error: ', err);
-//         result(err, null);
-//       } else {
-//         result(null, res);
-//       }
-//     }
-//   );
-// };
-
-// User.getUsers = (request, response) => {
-//   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
-//     if (error) {
-//       throw error;
-//     }
-//     response.status(200).json(results.rows);
-//   });
-// };
-
-// User.getUserById = function (request, response) {
-//   const id = parseInt(request.user.id);
-
-//   sql.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
-//     if (error) {
-//       throw error;
-//     }
-//     response.status(200).json(results.rows);
-//   });
-// };
-
-User.getUserById = function (req, res) {
-  sql.query('Select * from guilds.users where id =($1)', [req], function (
+User.getUserById = async function (req, res) {
+  console.log(req, 'here');
+  await sql.query('Select * from guilds.users where id =($1)', [req], function (
     err,
     resp
   ) {
@@ -160,7 +122,7 @@ User.getUserById = function (req, res) {
       console.log('error: ', err);
       res.status(400);
     } else {
-      console.log(resp.rows, resp.rows.length);
+      //console.log(resp.rows, resp.rows.length);
       if (resp.rows.length === 0) {
         res.status(400).send('User doesnt exist');
       } else {
