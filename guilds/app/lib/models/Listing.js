@@ -20,16 +20,17 @@ var Listing = function (listing) {
 //Create a new listing entry
 //Returns listing id
 Listing.createListing = function (req,res) {
+  var d = new Date();
   console.log('creating new listing \n'),
     sql.query(
-      'INSERT INTO guilds.listings(item_id,time_posted,total_price,rent_amount,insurance_amount,lender_id) VALUES($1,$2,$3,$4,$5,$6) RETURNING *',
+      'INSERT INTO guilds.listings(item_id,total_price,rent_amount,insurance_amount,lender_id) VALUES($1,$2,$3,$4,$5) RETURNING *',
       [
-        listing.item_id,
-        listing.time_posted,
-        listing.total_price,
-        listing.rent_amount,
-        listing.insurance_amount,
-        listing.lender_id,
+        req.item_id,
+        d.toDateString(),
+        req.total_price,
+        req.rent_amount,
+        req.insurance_amount,
+        req.lender_id,
       ],
       function (err, resp) {
         if (err) {
