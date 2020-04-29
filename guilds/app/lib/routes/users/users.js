@@ -39,7 +39,7 @@ router.post(
     try {
       let pwd = await bcrypt.hash(req.body.password, 5);
       await JSON.stringify(
-        User.getUserByEmail([req.body.email],res, function (err, result) {
+        User.getUserByEmail([req.body.email], res, function (err, result) {
           if (result.rows[0]) {
             console.log('email already registered');
             res.status(409).send('Email already exists');
@@ -104,10 +104,16 @@ router.post(
 // @access Private
 router.get('/', async (req, res) => {
   //res.send('User route');
+  let someVar = [];
+  function setValue(value) {
+    someVar = value;
+    console.log(someVar);
+  }
   try {
     console.log(req.user.id);
     const user = await User.getUserById(req.user.id, res); //gets firstname lastname email
-    console.log(user, 'after');
+    //console.log(user, 'after');
+    setValue(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

@@ -168,15 +168,15 @@ User.getUserById = function (req, res) {
         if (resp.rows.length === 0) {
           res.status(400).send('User doesnt exist');
         } else {
-          res.status(200).send(resp.rows);
+          res.status(200).json(resp.rows);
         }
       }
     }
   });
 };
 
-// finds a user by their email and returns all of their information
-// Returns user entry
+// // finds a user by their email and returns all of their information
+// // Returns user entry
 User.getUserByEmail = function (email, result) {
   console.log('getting user by email ', email);
   sql.query('Select * from guilds.users where email =($1)', [email], function (
@@ -187,10 +187,26 @@ User.getUserByEmail = function (email, result) {
       console.log('error: ', err);
       result(err, null);
     } else {
+      //console.log('res = ', res);
       result(null, res);
     }
   });
 };
+
+// User.getUserByEmail = function (req, res) {
+//   sql.query('Select * from guilds.users where email =($1)', [req], function (
+//     err,
+//     resp
+//   ) {
+//     if (err) {
+//       console.log('error: ', err);
+//       res(err, null);
+//     } else {
+//       res.status(200).send(resp.rows);
+//     }
+//   });
+// };
+
 //Sets a user online
 //Take a whole user object
 //Returns user ID

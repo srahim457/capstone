@@ -14,10 +14,15 @@ let sql = require('../db').pool;
 
 router.get('/', auth, async (req, res) => {
   //res.send('Auth route');
+  let uservar;
+
+  function callback(placeholder) {
+    uservar = placeholder;
+  }
   try {
     console.log(req.user.id);
-    const user = await User.getUserById(req.user.id, res); //gets firstname lastname email
-    console.log(user, 'after');
+    const user = await User.getUserById(req.user.id, res, callback(res)); //gets firstname lastname email
+    console.log(uservar, 'after');
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -43,29 +48,19 @@ router.post(
 
     const { email, password } = req.body;
 
+    console.log(typeof email);
     try {
-      //await JSON.stringify(
-      const test = await JSON.stringify(
-        User.getUserByEmail([email], function (err, result) {
-          // if (result.rows[0]) {
-          //   console.log('email already registered');
-          //   res.status(409).send('Email already exists');
-          // } else {
-          // }
-          //console.log(result);
-          //return result;
-          result = res.json(result.rows[0].id);
-          //return result;
-        })
+      const user = await sql.query(
+        'Select * from guilds.users where id =($1)',
+        [email]
       );
-      //);
-      console.log(test);
+
+      //console.log(typeof user);
+      res.json(user.rows);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
-
-    //console.log(req.body);
   }
 );
 
