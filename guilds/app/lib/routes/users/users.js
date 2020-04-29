@@ -42,7 +42,10 @@ router.post(
       let pwd = await bcrypt.hash(req.body.password, 5);
       const theuser = await (User.getUserByEmail([req.body.email],res))
       /// 0 = no row
-      if(theuser.length === 0 ){
+      if(theuser.length >0){
+        return res.status(400).send('Email already exists');
+      }
+      else{
         ///asigned hashed password
         req.body.pwd = pwd;
         const thelogin = await (Login.createLogin([req.body],res))
@@ -84,16 +87,13 @@ router.post(
         // res.send('User route');
   
       }
-      if(theuser[0].email === req.body.email){
-        console.log('email already exists')
-        next()
-      }
     } catch (err) {
-      console.error(err.message);
+      console.error('err: ',err.message);
       res.status(500).send('Server error');
+      next()
     }
     finally{
-      console.log('finally')
+      console.log('Successfully signed up user/checked for existing')
       next()
     }
 
