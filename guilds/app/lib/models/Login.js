@@ -11,33 +11,20 @@ var Login = function (login) {
 
 //Create a new login entry
 //Returns the whole login entry
-Login.createLogin = function (req, res) {
+Login.createLogin = async function (req, res) {
   //Checking for duplicate emails
-  sql.query('SELECT * from guilds.login where email = $1', [req.email], function (
-    err,
-    resp
-  ) {
-    console.log('Checking if email ', req.email, ' exists');
-    if (resp.rows.length > 0) {
-      console.log('Email already exists');
-      result(0, null);
-    } else {
-      console.log('Email is new');
-      console.log(req.pass, req.email);
-      sql.query(
-        'INSERT INTO guilds.login (EMAIL,PASSWORD) VALUES ($1,$2) ',
-        [req.email, req.pass],
-        function (err, respon) {
-          if (err) {
-            console.log("error inserting login ", err);
-            res.status(400);
-          } else {
-            res.status(200).send(respon.rows[0]);
-          }
-        }
-      );
+  try {
+    console.log('creating login',req[0].email)
+    const login = await sql.query('SELECT * from guilds.login where email = $1', [req[0].email])
+    console.log('checking for login',login.rows)
+    if(login.rows.length === 0 ){
+      const createlogin = await sql.query('INSERT INTO guilds.login (EMAIL,PASSWORD) VALUES ($1,$2) RETURNING *',[req[0].email, req[0].pwd])
+      console.log('created login', createlogin.rows)
+      return createlogin.rows
     }
-  });
+  } catch (error) {
+    res.sendStatus(400)
+  };
 };
 // Set both reset tokens for a login
 // Returns login id

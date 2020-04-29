@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
@@ -13,7 +12,7 @@ const jwt = require('jsonwebtoken');
 
 let sql = require('../../db').pool;
 
-// @route Post /users
+// @route Post api/users
 // @desc Register user
 // @access Private
 
@@ -28,100 +27,86 @@ router.post(
       'Please enter a password with 6 or more characters'
     ).isLength({ min: 6 }),
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     const { firstname, lastname, email, password } = req.body;
+    //const { name, email, password } = req.body;
 
     try {
+      //see if user exists
+      //****
       let pwd = await bcrypt.hash(req.body.password, 5);
-      await JSON.stringify(
-        User.getUserByEmail([req.body.email], res, function (err, result) {
-          if (result.rows[0]) {
-            console.log('email already registered');
-            res.status(409).send('Email already exists');
-          } else {
-            Login.createLogin(req.body.email, pwd, function (err, result) {
-              if (err === 0) {
-                console.log('Error email exists redirecting now');
-                res.status(409).send('Login email already exists');
-              } else {
-                User.createUser(req.body, function (err, result) {
-                  if (err) {
-                    console.log(err);
-                  } else {
-                    console.log('inserted into users,', result);
-                    user = new User({
-                      firstname,
-                      lastname,
-                      email,
-                      password,
-                      id: result.id,
-                    });
-
-                    res.send(
-                      sql.query('SELECT MAX(id) FROM guilds.login', User['id'])
-                    );
-                    const payload = {
-                      user: {
-                        id: result.id, //payload supposed to time in with users id
-                      },
-                    };
-                    console.log('payload \n', payload);
-                    //res.status(200).send('Inserted into users');
-                    jwt.sign(
-                      payload,
-                      config.get('jwtSecret'),
-                      { expiresIn: 3600000 },
-                      (err, token) => {
-                        if (err) throw err;
-                        console.log('token \n', token);
-                        res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
-                      }
-                    ); //3600 = 1hr
-                    return;
-                  }
-                });
-              }
-            });
+      const theuser = await User.getUserByEmail([req.body.email], res);
+      /// 0 = no row
+      if (theuser.length === 0) {
+        ///asigned hashed password
+        req.body.pwd = pwd;
+        const thelogin = await Login.createLogin([req.body], res);
+        const creatinguser = await User.createUser([req.body], res);
+        // Getting userby id test
+        // const userid = await(User.getUserById([creatinguser[0].id],res))
+        // console.log(userid,'user id test')
+        user = new User({
+          //might put object at the beginning
+          firstname,
+          lastname,
+          email,
+          password,
+          id: theuser.id,
+        });
+        const payload = {
+          user: {
+            id: user.id, //payload supposed to time in with users id
+          },
+        };
+        jwt.sign(
+          payload,
+          config.get('jwtSecret'),
+          { expiresIn: 360000 },
+          (err, token) => {
+            if (err) throw err;
+            console.log('token \n', token);
+            res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
           }
-        })
-      );
-      // res.send('User route');
+        ); //3600 = 1hr;
+        //****
+        //can create a gravatar for user
+
+        //encrypt password
+
+        //return jwt
+
+        // res.send('User route');
+      }
+      if (theuser[0].email === req.body.email) {
+        console.log('email already exists');
+        next();
+      }
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      res.status(500).send('Server error ');
+    } finally {
+      console.log('finally');
+      next();
     }
+
     //console.log(req.body);
   }
 );
 
-// @route GET /users
-// @desc Gets a user
+// @route GET api/users
+// @desc Register user
 // @access Private
-router.get('/', async (req, res) => {
-  //res.send('User route');
-  let someVar = [];
-  function setValue(value) {
-    someVar = value;
-    console.log(someVar);
-  }
-  try {
-    console.log(req.user.id);
-    const user = await User.getUserById(req.user.id, res); //gets firstname lastname email
-    //console.log(user, 'after');
-    setValue(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
+router.get('/', (req, res) => {
+  res.send('User route');
 });
 
 // @route DELETE api/users
-// @desc Deletes a  user
+// @desc Register user
 // @access Private
 router.delete('/:id', (req, res) => {
   User.deleteremove(req.id, res);

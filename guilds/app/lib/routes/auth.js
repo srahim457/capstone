@@ -39,6 +39,7 @@ router.post(
     check('email', 'Please include a valid email').isEmail(),
     check('password', 'Password is required').exists(),
   ],
+  auth,
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -48,15 +49,13 @@ router.post(
 
     const { email, password } = req.body;
 
-    console.log(typeof email);
+    //console.log(typeof email);
     try {
-      const user = await sql.query(
-        'Select * from guilds.users where id =($1)',
-        [email]
-      );
+      const theuser = await User.getUserByEmail([req.body.email], res);
 
       //console.log(typeof user);
-      res.json(user.rows);
+      console.log(theuser);
+      res.status(200).json(theuser[0]);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
