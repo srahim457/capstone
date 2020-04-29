@@ -12,62 +12,65 @@ var User = function (user) {
 
 //Updates a User's rating
 //Takes a user id and a rating
-//Returns a 200 if ok, 400 if error
-User.updateRating = function (req, res) {
+//Returns the user ID
+User.updateRating = function (userid, rating, result) {
   console.log('updating user rating \n');
   sql.query(
     'UPDATE guilds.users SET rating=($2) WHERE user_id = ($1)',
-    [req.userid, req.rating],
-    function (err, resp) {
+    [userid, rating],
+    function (err, res) {
       if (err) {
-        console.log('error updating user rating ', err);
-        res.status(400);
+        console.log('error updating rating:', err);
+        result(err, null);
       } else {
-        res.sendStatus(200);
+        console.log(res.rows[0].id);
+        result(null, res.rows[0].id);
       }
     }
   );
 };
 //Updates a User's dominion
 //Takes a user id and a dominion id
-//Returns a 200 if ok, 400 if error
-User.updateDominion = function (req, res) {
+//Returns user id
+User.updateDominion = function (userid, dominionid, result) {
   console.log('updating user dominon \n');
   sql.query(
     'UPDATE guilds.users SET dominion_id=($2) WHERE user_id = ($1)',
-    [req.userid, req.dominionid],
-    function (err, resp) {
+    [userid, dominionid],
+    function (err, res) {
       if (err) {
-        console.log('error updating user dominion ', err);
-        res.status(400);
+        console.log('error updating dominion:', err);
+        result(err, null);
       } else {
-        res.sendStatus(200);
+        console.log(res.rows[0].id);
+        result(null, res.rows[0].id);
       }
     }
   );
 };
 //Updates a User's information
 //Takes a user object
-//Returns a 200 and user row if ok, 400 if error
-User.updateUserInformation = function (req, result) {
+//Returns the user ID
+User.updateUserInformation = function (user, result) {
   console.log('updating user information \n');
   sql.query(
     'UPDATE guilds.users SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)',
     [
-      req.id,
-      req.first_name,
-      req.last_name,
-      req.username,
-      req.phonenum,
-      req.description,
-      req.dominion_id,
+      user.id,
+      user.first_name,
+      user.last_name,
+      user.username,
+      user.phonenum,
+      user.description,
+      user.dominion_id,
     ],
-    function (err, resp) {
+    function (err, res) {
       if (err) {
-        console.log('error updating user information', err);
-        res.status(400);
+        console.log('error updating user information: ', err);
+        result(err, null);
       } else {
-        res.status(200).send(resp.rows[0]);
+        console.log(res.rows[0].id);
+        result(null, res.rows[0].id);
       }
     }
   );
@@ -75,42 +78,81 @@ User.updateUserInformation = function (req, result) {
 //Takes in a user object
 //creates the user in the database
 //Returns the whole user entry
-User.createUser = function (req, res) {
+User.createUser = function (newUser, result) {
   var d = new Date();
-  console.log('inserting new user now \n'),
+  console.log('inserting new user now', newUser),
     sql.query(
       'INSERT INTO guilds.users(first_name,last_name,email,creation_date) values($1,$2,$3,$4) RETURNING *',
-      [req.firstname, req.lastname, req.email, d.toDateString()],
-      function (err, resp) {
+      [newUser.firstname, newUser.lastname, newUser.email, d.toDateString()],
+      function (err, res) {
         if (err) {
-          console.log('error creating user', err);
-          res.sendStatus(400);
+          console.log('error: ', err);
+          result(err, null);
         } else {
-          res.status(200).send(resp.rows[0]);
+          console.log(res.rows[0]);
+          result(null, res.rows[0]);
         }
       }
     );
 };
 //Returns the id of the last entered user
-User.getLastEnteredUser = function (req, res) {
+User.getLastEnteredUser = function (result) {
   console.log('getting last entered user'),
     sql.query('SELECT * from guilds.users order by id DESC limit 1', function (
       err,
-      resp
+      res
     ) {
       if (err) {
         console.log('error: ', err);
-        res.sendStatus(400);
+        result(err, null);
       } else {
-        res.status(200).send(resp.rows[0].id);
+        console.log(res.rows[0]);
+        result(null, res.rows[0].id);
       }
     });
 };
-//Takes an id as a param
-//Return a user entry
-User.getUserById = async function (req, res) {
-  console.log(req, 'here');
-  await sql.query('Select * from guilds.users where id =($1)', [req], function (
+//Gets the information of the user
+//Takes the user ID
+//Returns the user entry
+
+// User.getUserById = function (userid, result) {
+//   console.log('getting user by id \n ');
+//   sql.query(
+//     'Select * from guilds.users where id = ANY ($1)',
+//     [userid],
+//     function (err, res) {
+//       if (err) {
+//         console.log('error: ', err);
+//         result(err, null);
+//       } else {
+//         result(null, res);
+//       }
+//     }
+//   );
+// };
+
+// User.getUsers = (request, response) => {
+//   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+//     response.status(200).json(results.rows);
+//   });
+// };
+
+// User.getUserById = function (request, response) {
+//   const id = parseInt(request.user.id);
+
+//   sql.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+//     response.status(200).json(results.rows);
+//   });
+// };
+
+User.getUserById = function (req, res) {
+  sql.query('Select * from guilds.users where id =($1)', [req], function (
     err,
     resp
   ) {
@@ -118,7 +160,7 @@ User.getUserById = async function (req, res) {
       console.log('error: ', err);
       res.status(400);
     } else {
-      //console.log(resp.rows, resp.rows.length);
+      console.log(resp.rows, resp.rows.length);
       if (resp.rows.length === 0) {
         res.status(400).send('User doesnt exist');
       } else {
@@ -132,71 +174,71 @@ User.getUserById = async function (req, res) {
     }
   });
 };
+
 // finds a user by their email and returns all of their information
 // Returns user entry
-User.getUserByEmail = function (req, res) {
-  sql.query('Select * from guilds.users where email =($1)', [req], function (
+User.getUserByEmail = function (email, result) {
+  console.log('getting user by email ', email);
+  sql.query('Select * from guilds.users where email =($1)', [email], function (
     err,
-    resp
+    res
   ) {
     if (err) {
       console.log('error: ', err);
-      res.sendStatus(400);
-    }
-    if (resp.rows.length === 0) {
-      res.status(400).send('Email doesnt exist');
+      result(err, null);
     } else {
-      res.status(200).send(resp.rows);
+      result(null, res);
     }
   });
 };
 //Sets a user online
 //Take a whole user object
-//Returns 200 for ok
-User.online = function (req, res) {
-  console.log('Setting user online \n');
-  sql.query(
-    "UPDATE guilds.users SET online= 'T' WHERE id =($1)",
-    [req.id],
-    function (err, resp) {
-      if (err) {
-        console.log('error updating user online status: ', err);
-        res.status(400);
-      } else {
-        res.sendStatus(200);
-      }
+//Returns user ID
+User.online = function (user, result) {
+  console.log('Setting user online', user);
+  sql.query("UPDATE guilds.users SET online= 'T' WHERE id =($1)", [user.id]);
+  Item.createItem(item, function (err, res) {
+    if (err) {
+      console.log('error updating user online status: ', err);
+      result(err, null);
+    } else {
+      console.log(res.rows[0].id);
+      result(null, res.rows[0].id);
     }
-  );
+  });
 };
 //Sets a user offline
 //Take a whole user object
-User.offline = function (req, res) {
-  console.log('Setting user offline \n ');
+//Returns user ID
+User.offline = function (user, result) {
+  console.log('Setting user offline ', user);
   sql.query(
     "UPDATE guilds.users SET online= 'F' WHERE id =($1)",
-    [req.id],
-    function (err, resp) {
+    [user.id],
+    function (err, res) {
       if (err) {
         console.log('error updating user online status: ', err);
-        res.status(400);
+        result(err, null);
       } else {
-        res.sendStatus(200);
+        console.log(res.rows[0].id);
+        result(null, res.rows[0].id);
       }
     }
   );
 };
 //Delete a user by setting delete flag
 //Take a whole user object
-User.delete = function (req, res) {
+//Returns user ID
+User.delete = function (user, result) {
   sql.query(
     "UPDATE guilds.users SET deleted= 'T' WHERE id =($1)",
-    [req.id],
-    function (err, resp) {
+    [user.id],
+    function (err, res) {
       if (err) {
-        console.log('error deleting user: ', err);
-        res.status(400);
+        console.log('error: ', err);
+        result(null, err);
       } else {
-        res.sendStatus(200);
+        result(null, res.rows[0].id);
       }
     }
   );
