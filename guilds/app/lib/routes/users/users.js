@@ -42,11 +42,13 @@ router.post(
       let pwd = await bcrypt.hash(req.body.password, 5);
       const theuser = await User.getUserByEmail([req.body.email], res);
       /// 0 = no row
-      if (theuser.length === 0) {
+      if (theuser.length > 0) {
+        return res.status(400).send('Email already exists');
+      } else {
         ///asigned hashed password
         req.body.pwd = pwd;
         const thelogin = await Login.createLogin([req.body], res);
-        const creatinguser = await User.createUser([req.body], res);
+        const createduser = await User.createUser([req.body], res);
         // Getting userby id test
         // const userid = await(User.getUserById([creatinguser[0].id],res))
         // console.log(userid,'user id test')
@@ -56,8 +58,9 @@ router.post(
           lastname,
           email,
           password,
-          id: theuser.id,
         });
+        //assign new userid to the one that was created
+        user.id = createduser[0].id;
         const payload = {
           user: {
             id: user.id, //payload supposed to time in with users id
@@ -82,15 +85,12 @@ router.post(
 
         // res.send('User route');
       }
-      if (theuser[0].email === req.body.email) {
-        console.log('email already exists');
-        next();
-      }
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error ');
+      console.error('err: ', err.message);
+      res.status(500).send('Server error');
+      next();
     } finally {
-      console.log('finally');
+      console.log('Successfully signed up user/checked for existing');
       next();
     }
 
