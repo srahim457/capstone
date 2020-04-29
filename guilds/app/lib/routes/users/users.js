@@ -47,6 +47,9 @@ router.post(
         req.body.pwd = pwd;
         const thelogin = await (Login.createLogin([req.body],res))
         const creatinguser = await (User.createUser([req.body],res))
+        // Getting userby id test
+        // const userid = await(User.getUserById([creatinguser[0].id],res))
+        // console.log(userid,'user id test')
         user = new User({
           //might put object at the beginning
           firstname,

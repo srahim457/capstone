@@ -81,22 +81,15 @@ User.getLastEnteredUser = function (req,res) {
 //Takes the user ID
 //Returns the user entry
 
-User.getUserById = function (req, res) {
-    sql.query("Select * from guilds.users where id =($1)", [req], function (err, resp) {             
-            if(err) {
-                console.log("error: ", err);
-                res.sendStatus(400);
-            }
-            else{
-                console.log(resp.rows,resp.rows.length)
-                if(resp.rows.length === 0){
-                    res.status(400).send('User doesnt exist');
-                }
-                else{
-                    res.status(200).send(resp.rows[0]);
-                }
-            }
-        });   
+User.getUserById = async function (req, res) {
+  try {
+    console.log('getting user by id', req)
+    const user = await sql.query("Select * from guilds.users where id = ANY($1)", [req]);      
+    console.log('user found by id ',req,user.rows.length)
+    return user.rows  
+  } catch (error) {
+    res.sendStatus(400)
+  }
 };
 // finds a user by their email and returns all of their information
 // Returns user entry
