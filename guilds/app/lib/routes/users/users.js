@@ -46,7 +46,7 @@ router.post(
         ///asigned hashed password
         req.body.pwd = pwd;
         const thelogin = await (Login.createLogin([req.body],res))
-        const creatinguser = await (User.createUser([req.body],res))
+        const createduser = await (User.createUser([req.body],res))
         // Getting userby id test
         // const userid = await(User.getUserById([creatinguser[0].id],res))
         // console.log(userid,'user id test')
@@ -56,8 +56,9 @@ router.post(
           lastname,
           email,
           password,
-          id: theuser.id,
         });
+        //assign new userid to the one that was created
+        user.id = createduser[0].id
         const payload = {
           user: {
             id: user.id, //payload supposed to time in with users id
