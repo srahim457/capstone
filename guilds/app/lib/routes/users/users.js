@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
+const {
+  check,
+  validationResult
+} = require('express-validator');
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
@@ -25,34 +28,52 @@ router.post(
     check(
       'password',
       'Please enter a password with 6 or more characters'
-    ).isLength({ min: 6 }),
+    ).isLength({
+      min: 6
+    }),
   ],
-  async (req, res,next) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        errors: errors.array()
+      });
     }
 
-    const { firstname, lastname, email, password } = req.body;
+    const {
+      firstname,
+      lastname,
+      email,
+      password
+    } = req.body;
     //const { name, email, password } = req.body;
 
     try {
       //see if user exists
       //****
       let pwd = await bcrypt.hash(req.body.password, 5);
-      const theuser = await (User.getUserByEmail([req.body.email],res))
+      const theuser = await (User.getUserByEmail([req.body.email], res))
       /// 0 = no row
-      if(theuser.length >0){
+      if (theuser.length > 0) {
         return res.status(400).send('Email already exists');
-      }
-      else{
+      } else {
         ///asigned hashed password
         req.body.pwd = pwd;
-        const thelogin = await (Login.createLogin([req.body],res))
-        const createduser = await (User.createUser([req.body],res))
-        // Getting userby id test
+        const thelogin = await (Login.createLogin([req.body], res))
+        const createduser = await (User.createUser([req.body], res))
+
         // const userid = await(User.getUserById([creatinguser[0].id],res))
         // console.log(userid,'user id test')
+
+        //Setting useronline test
+        //const online = await(User.online([createduser[0]],res))
+        //var userbyemail = await(User.getUserByEmail([req.body.email],res))
+        //console.log('check',userbyemail[0].online)
+
+        //Setting useroffline test
+        //const offline = await(User.offline([createduser[0]],res))
+        //userbyemail = await(User.getUserByEmail([req.body.email],res))
+        //console.log('check',userbyemail[0].online)
         user = new User({
           //might put object at the beginning
           firstname,
@@ -69,30 +90,32 @@ router.post(
         };
         jwt.sign(
           payload,
-          config.get('jwtSecret'),
-          { expiresIn: 360000 },
+          config.get('jwtSecret'), {
+            expiresIn: 360000
+          },
           (err, token) => {
             if (err) throw err;
             console.log('token \n', token);
-            res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
+            res.status(200).json({
+              token
+            }); //console logs the token but it doesnt senf it to the server
           }
         ); //3600 = 1hr;
         //****
         //can create a gravatar for user
-  
+
         //encrypt password
-  
+
         //return jwt
-  
+
         // res.send('User route');
-  
+
       }
     } catch (err) {
-      console.error('err: ',err.message);
+      console.error('err: ', err.message);
       res.status(500).send('Server error');
       next()
-    }
-    finally{
+    } finally {
       console.log('Successfully signed up user/checked for existing')
       next()
     }
