@@ -48,29 +48,15 @@ User.updateDominion = function (req, res) {
 };
 //Updates a User's information
 //Takes a user object
-//Returns a 200 and user row if ok, 400 if error
-User.updateUserInformation = function (req, result) {
-  console.log('updating user information \n');
-  sql.query(
-    'UPDATE guilds.users SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)',
-    [
-      req.id,
-      req.first_name,
-      req.last_name,
-      req.username,
-      req.phonenum,
-      req.description,
-      req.dominion_id,
-    ],
-    function (err, resp) {
-      if (err) {
-        console.log('error updating user information', err);
-        res.status(400);
-      } else {
-        res.status(200).send(resp.rows[0]);
-      }
-    }
-  );
+//Returns the user row
+User.updateUserInformation = async function (req, res) {
+  try {
+    const user = await sql.query("UPDATE guilds.users SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)", [req.id, req.first_name, req.last_name, req.username, req.phonenum, req.description, req.dominion_id]);
+    console.log('updated user information ', req, user.rows.length)
+    return user.rows
+  } catch (error) {
+    res.sendStatus(400)
+  }
 };
 //Takes in a user object
 //creates the user in the database
@@ -78,30 +64,22 @@ User.updateUserInformation = function (req, result) {
 User.createUser = async function (req, res) {
   try {
     var d = new Date();
-    console.log('inserting new user now \n');
-    const userentry = await sql.query(
-      'INSERT INTO guilds.users(first_name,last_name,email,creation_date) values($1,$2,$3,$4) RETURNING *',
-      [req[0].firstname, req[0].lastname, req[0].email, d.toDateString()]
-    );
-    return userentry.rows;
+    console.log('inserting new user now \n')
+    const userentry = await sql.query("INSERT INTO guilds.users(first_name,last_name,email,creation_date) values($1,$2,$3,$4) RETURNING *", [req[0].firstname, req[0].lastname, req[0].email, d])
+    return userentry.rows
   } catch (error) {
     res.sendStatus(400);
   }
 };
 //Returns the id of the last entered user
-User.getLastEnteredUser = function (req, res) {
-  console.log('getting last entered user'),
-    sql.query('SELECT * from guilds.users order by id DESC limit 1', function (
-      err,
-      resp
-    ) {
-      if (err) {
-        console.log('error getting last entered user', err);
-        res.status(400);
-      } else {
-        res.status(200).send(resp.rows[0].id);
-      }
-    });
+User.getLastEnteredUser = async function (req, res) {
+  try {
+    console.log('getting last entered user now \n')
+    const user = await sql.query("SELECT * from guilds.users order by id DESC limit 1");
+    return user.rows[0].id
+  } catch (error) {
+    res.sendStatus(400)
+  }
 };
 //Gets the information of the user
 //Takes the user ID
