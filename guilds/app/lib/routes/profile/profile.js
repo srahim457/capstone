@@ -10,23 +10,29 @@ let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
 let Item = require('../../models/Item').Item;
 
-// @route /profile
-// @desc Route to create guild for user
-// @access private
-router.put('/', (req, res) => {});
-
-// @route profile/me
+// @route GET profile/me
 // @desc  Get current user profile
 // @access private
 router.get('/me', auth, async (req, res) => {
   try {
-    //const profile = await User.getUserByid(req.body.id);
-    //need to extract id, name, email, date
+    const { email, password } = req.body;
+    const profile = await User.getUserByEmail([email], res); //finds user using email instead of id
+    console.log(profile[0]);
+    if (profile == 0) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: 'There is no profile for this user' }] }); //checks to see if the profile is valid
+    }
+    res.status(200).json(profile[0]);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-  //res.send('Profile');
 });
+
+// @route /profile
+// @desc Update users profile
+// @access Private
+router.put('/', auth, async (req, res) => {});
 
 module.exports = router;

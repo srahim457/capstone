@@ -12,7 +12,7 @@ let sql = require('../db').pool;
 
 //@route    GET /auth
 //@desc     gets auth user
-//@access   Public
+//@access   Private
 
 router.get('/', auth, async (req, res) => {
   //res.send('Auth route');
