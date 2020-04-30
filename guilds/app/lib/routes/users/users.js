@@ -38,7 +38,6 @@ router.post(
     }
 
     const { firstname, lastname, email, password } = req.body;
-    //const { name, email, password } = req.body;
 
     try {
       //see if user exists

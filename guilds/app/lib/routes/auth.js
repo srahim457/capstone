@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../models/User').User;
+let Login = require('../models/Login').Login;
 const { check, validationResult } = require('express-validator');
 
 let sql = require('../db').pool;
@@ -44,23 +45,27 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      let user = await User.getUserByEmail([email], res);
+      let user = await Login.getUserByEmail([email], res); //changed from user to login
 
-      if (!user) {
+      if (user == 0) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+          .json({ errors: [{ msg: 'Invalid Credentials' }] }); //checks if user email is valid
       }
-      console.log(user[0].password, 'user info');
+      console.log(user[0].password, 'user hash psw');
       //res.status(200).json(user[0]);
       //console.log(user[0].password, 'this is password');
-      //const isMatch = await bcrypt.compare(password, user.pasword);
+      console.log(req.body.password, 'input password');
+      const isMatch = await bcrypt.compare(req.body.password, user[0].password);
 
-      // if (!isMatch) {
-      //   return res
-      //     .status(400)
-      //     .json({ errors: [{ msg: 'Invalid Credentials' }] });
-      // }
+      if (isMatch == 0) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] }); //checks to see password is valid
+      }
+
+      user = await User.getUserByEmail([email], res);
+
       const payload = {
         user: {
           id: user[0].id, //payload supposed to time in with users id
