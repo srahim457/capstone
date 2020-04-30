@@ -19,7 +19,7 @@ User.updateRating = async function (req, res) {
     console.log('updated user rating \n')
     return user.rows
   } catch (error) {
-    res.sendStatus(400)
+    res.status(400);
   }
 };
 //Updates a User's dominion
@@ -31,7 +31,7 @@ User.updateDominion = async function (req, res) {
     console.log('updated user dominon \n');
     return user.rows
   } catch (error) {
-    res.sendStatus(400)
+    res.status(400);
   }
 };
 //Updates a User's information
@@ -43,7 +43,19 @@ User.updateUserInformation = async function (req, res) {
     console.log('updated user information ', req, user.rows.length)
     return user.rows
   } catch (error) {
-    res.sendStatus(400)
+    res.status(400);
+  }
+};
+// Updates user email used
+// Takes new email and old email
+// Returns the user row
+User.updateEmail  = async function (req, res) {
+  try {
+    const user = await sql.query("UPDATE guilds.users SET email=($2) WHERE email = ($1)", [req.old_email,req.new_email]);
+    console.log('updated user information ', req, user.rows.length)
+    return user.rows
+  } catch (error) {
+    res.status(400);
   }
 };
 //Takes in a user object
@@ -56,7 +68,7 @@ User.createUser = async function (req, res) {
     const userentry = await sql.query("INSERT INTO guilds.users(first_name,last_name,email,creation_date) values($1,$2,$3,$4) RETURNING *", [req[0].firstname, req[0].lastname, req[0].email, d])
     return userentry.rows
   } catch (error) {
-    res.sendStatus(400);
+    res.status(400);
   }
 };
 //Returns the id of the last entered user
@@ -66,7 +78,7 @@ User.getLastEnteredUser = async function (req, res) {
     const user = await sql.query("SELECT * from guilds.users order by id DESC limit 1");
     return user.rows[0].id
   } catch (error) {
-    res.sendStatus(400)
+    res.status(400)
   }
 };
 //Gets the information of the user
@@ -83,7 +95,7 @@ User.getUserById = async function (req, res) {
     console.log('user found by id ', req, user.rows.length);
     return user.rows;
   } catch (error) {
-    res.sendStatus(400);
+    res.status(400);
   }
 };
 // finds a user by their email and returns all of their information
@@ -97,7 +109,7 @@ User.getUserByEmail = async function (req, res) {
     console.log('user found with info ', req, user.rows.length);
     return user.rows;
   } catch (error) {
-    res.sendStatus(400);
+    res.status(400);
   }
 };
 //Sets a user online
@@ -119,6 +131,7 @@ User.online = async function (req, res) {
 };
 //Sets a user offline
 //Take a whole user object
+//Returns user entry
 User.offline = async function (req, res) {
   try {
     console.log('Setting user online \n', req[0].id);
@@ -134,20 +147,16 @@ User.offline = async function (req, res) {
   }
 };
 //Delete a user by setting delete flag
-//Take a whole user object
-User.delete = function (req, res) {
-  sql.query(
-    "UPDATE guilds.users SET deleted= 'T' WHERE id =($1)",
-    [req.id],
-    function (err, resp) {
-      if (err) {
-        console.log('error deleting user: ', err);
-        res.status(400);
-      } else {
-        res.sendStatus(200);
-      }
-    }
-  );
+//Take a user id
+//Returns user entry
+User.delete = async function (req, res) {
+  try {
+    const user = await sql.query("UPDATE guilds.users SET deleted= 'T' WHERE id =($1)", [req]);
+    console.log(' deleted user \n')
+    return user
+  } catch (error) {
+    res.status(400)
+  }
 };
 
 module.exports = {

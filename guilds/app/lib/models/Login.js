@@ -23,10 +23,23 @@ Login.createLogin = async function (req, res) {
       return createlogin.rows
     }
   } catch (error) {
-    res.sendStatus(400);
+    res.status(400);
+  }
+};
+// Updates login email used
+// Takes new email and old email
+// Returns login entry
+Login.updateEmail = async function (req, res) {
+  try {
+    const login = await sql.query('UPDATE guilds.login SET email =($2) WHERE email = ($1) RETURNING *', [req.old_email, req.new_email]);
+    console.log('login exists with this email \n', )
+    return login.rows
+  } catch (error) {
+    res.status(400);
   }
 };
 // Set both reset tokens for a login
+// Takes resetPasswordToken and email
 // Returns login id
 Login.forgotPassword = async function (req, res) {
   try {
@@ -36,10 +49,11 @@ Login.forgotPassword = async function (req, res) {
     console.log('set reset pw and reset pw expire token \n')
     return login.rows[0].id
   } catch (error) {
-    res.sendStatus(400)
+    res.status(400);
   }
 };
-//Return login entry
+// Return login entry
+// Takes resetToken and resetExpire
 Login.findByToken = async function (req, res) {
   try {
     var curr_date = new Date();
@@ -48,19 +62,21 @@ Login.findByToken = async function (req, res) {
     console.log('found login with token \n')
     return login.rows
   } catch (error) {
-    res.sendStatus(400)
+    res.status(400);
   }
 };
 //Return login entry
+//Takes email 
 Login.getLoginByEmail = async function (req, res) {
   try {
-    const login = await sql.query('Select * from guilds.login where email = ($1)', [login_info]);
+    const login = await sql.query('Select * from guilds.login where email = ($1)', [req]);
     console.log('login exists with this email \n', )
     return login.rows
   } catch (error) {
-    res.sendStatus(400)
+    res.status(400);
   }
 };
+
 
 module.exports = {
   Login,
