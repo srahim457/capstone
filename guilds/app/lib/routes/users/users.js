@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
+const {
+  check,
+  validationResult
+} = require('express-validator');
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
@@ -37,13 +40,19 @@ router.post(
       });
     }
 
-    const { firstname, lastname, email, password } = req.body;
+    const {
+      firstname,
+      lastname,
+      email,
+      password
+    } = req.body;
 
     try {
       //see if user exists
       //****
       let pwd = await bcrypt.hash(req.body.password, 5);
-      const theuser = await User.getUserByEmail([req.body.email], res);
+
+      const theuser = await (User.getUserByEmail([req.body.email], res))
       /// 0 = no row
       if (theuser.length > 0) {
         return res.status(400).send('Email already exists');
@@ -65,6 +74,10 @@ router.post(
         //const offline = await(User.offline([createduser[0]],res))
         //userbyemail = await(User.getUserByEmail([req.body.email],res))
         //console.log('check',userbyemail[0].online)
+
+        //Last entered user test
+        //const lastuser = await(User.getLastEnteredUser(req,res));
+        //console.log('last entered user id ', lastuser)
         user = new User({
           firstname,
           lastname,
@@ -80,8 +93,7 @@ router.post(
         };
         jwt.sign(
           payload,
-          config.get('jwtSecret'),
-          {
+          config.get('jwtSecret'), {
             expiresIn: 360000,
           },
           (err, token) => {
