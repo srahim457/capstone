@@ -12,39 +12,27 @@ var User = function (user) {
 
 //Updates a User's rating
 //Takes a user id and a rating
-//Returns a 200 if ok, 400 if error
-User.updateRating = function (req, res) {
-  console.log('updating user rating \n');
-  sql.query(
-    'UPDATE guilds.users SET rating=($2) WHERE user_id = ($1)',
-    [req.userid, req.rating],
-    function (err, resp) {
-      if (err) {
-        console.log('error updating user rating ', err);
-        res.status(400);
-      } else {
-        res.sendStatus(200);
-      }
-    }
-  );
+//Returns the user row
+User.updateRating = async function (req, res) {
+  try {
+    const user = await sql.query('UPDATE guilds.users SET rating=($2) WHERE user_id = ($1)', [req.userid, req.rating]);
+    console.log('updated user rating \n')
+    return user.rows
+  } catch (error) {
+    res.sendStatus(400)
+  }
 };
 //Updates a User's dominion
 //Takes a user id and a dominion id
-//Returns a 200 if ok, 400 if error
-User.updateDominion = function (req, res) {
-  console.log('updating user dominon \n');
-  sql.query(
-    'UPDATE guilds.users SET dominion_id=($2) WHERE user_id = ($1)',
-    [req.userid, req.dominionid],
-    function (err, resp) {
-      if (err) {
-        console.log('error updating user dominion ', err);
-        res.status(400);
-      } else {
-        res.sendStatus(200);
-      }
-    }
-  );
+//Returns the user row
+User.updateDominion = async function (req, res) {
+  try {
+    const user = await sql.query('UPDATE guilds.users SET dominion_id=($2) WHERE user_id = ($1)', [req.userid, req.dominionid]);
+    console.log('updated user dominon \n');
+    return user.rows
+  } catch (error) {
+    res.sendStatus(400)
+  }
 };
 //Updates a User's information
 //Takes a user object
