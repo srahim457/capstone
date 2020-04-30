@@ -25,15 +25,20 @@ router.post(
     check(
       'password',
       'Please enter a password with 6 or more characters'
-    ).isLength({ min: 6 }),
+    ).isLength({
+      min: 6,
+    }),
   ],
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        errors: errors.array(),
+      });
     }
 
     const { firstname, lastname, email, password } = req.body;
+    //const { name, email, password } = req.body;
 
     try {
       //see if user exists
@@ -48,9 +53,19 @@ router.post(
         req.body.pwd = pwd;
         const thelogin = await Login.createLogin([req.body], res);
         const createduser = await User.createUser([req.body], res);
-        // Getting userby id test
+
         // const userid = await(User.getUserById([creatinguser[0].id],res))
         // console.log(userid,'user id test')
+
+        //Setting useronline test
+        //const online = await(User.online([createduser[0]],res))
+        //var userbyemail = await(User.getUserByEmail([req.body.email],res))
+        //console.log('check',userbyemail[0].online)
+
+        //Setting useroffline test
+        //const offline = await(User.offline([createduser[0]],res))
+        //userbyemail = await(User.getUserByEmail([req.body.email],res))
+        //console.log('check',userbyemail[0].online)
         user = new User({
           firstname,
           lastname,
@@ -67,11 +82,15 @@ router.post(
         jwt.sign(
           payload,
           config.get('jwtSecret'),
-          { expiresIn: 360000 },
+          {
+            expiresIn: 360000,
+          },
           (err, token) => {
             if (err) throw err;
             console.log('token \n', token);
-            res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
+            res.status(200).json({
+              token,
+            }); //console logs the token but it doesnt senf it to the server
           }
         ); //3600 = 1hr;
         //****

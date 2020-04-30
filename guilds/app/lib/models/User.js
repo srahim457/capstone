@@ -136,38 +136,36 @@ User.getUserByEmail = async function (req, res) {
 };
 //Sets a user online
 //Take a whole user object
-//Returns 200 for ok
-User.online = function (req, res) {
-  console.log('Setting user online \n');
-  sql.query(
-    "UPDATE guilds.users SET online= 'T' WHERE id =ANY($1)",
-    [req.id],
-    function (err, resp) {
-      if (err) {
-        console.log('error updating user online status: ', err);
-        res.status(400);
-      } else {
-        res.sendStatus(200);
-      }
-    }
-  );
+//Returns the user entry
+User.online = async function (req, res) {
+  try {
+    console.log('Setting user online \n', req[0].id);
+    const stat = await sql.query(
+      "UPDATE guilds.users SET online= 'T' WHERE id =($1)",
+      [req[0].id]
+    );
+    console.log('user set online');
+    return stat;
+  } catch (error) {
+    console.log('error updating user online status: ', error);
+    res.status(400);
+  }
 };
 //Sets a user offline
 //Take a whole user object
-User.offline = function (req, res) {
-  console.log('Setting user offline \n ');
-  sql.query(
-    "UPDATE guilds.users SET online= 'F' WHERE id =($1)",
-    [req.id],
-    function (err, resp) {
-      if (err) {
-        console.log('error updating user online status: ', err);
-        res.status(400);
-      } else {
-        res.sendStatus(200);
-      }
-    }
-  );
+User.offline = async function (req, res) {
+  try {
+    console.log('Setting user online \n', req[0].id);
+    const stat = await sql.query(
+      "UPDATE guilds.users SET online= 'F' WHERE id =($1)",
+      [req[0].id]
+    );
+    console.log('user set offline');
+    return stat;
+  } catch (error) {
+    console.log('error updating user online status: ', error);
+    res.status(400);
+  }
 };
 //Delete a user by setting delete flag
 //Take a whole user object
