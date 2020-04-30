@@ -32,7 +32,19 @@ Login.createLogin = async function (req, res) {
 Login.updateEmail = async function (req, res) {
   try {
     const login = await sql.query('UPDATE guilds.login SET email =($2) WHERE email = ($1) RETURNING *', [req.old_email, req.new_email]);
-    console.log('login exists with this email \n', )
+    console.log('updating login to new email \n', )
+    return login.rows
+  } catch (error) {
+    res.status(400);
+  }
+};
+// Update login password used
+// Takes new password and email
+// Returns login entry
+Login.updatePassword = async function (req, res) {
+  try {
+    const login = await sql.query('UPDATE guilds.login SET password =($2) WHERE email = ($1) RETURNING *', [req.email, req.new_password]);
+    console.log('Updated login password \n', )
     return login.rows
   } catch (error) {
     res.status(400);
