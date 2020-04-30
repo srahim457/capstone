@@ -134,21 +134,6 @@ User.getUserByEmail = async function (req, res) {
     res.sendStatus(400);
   }
 };
-
-// User.getUserByEmail = function (req, res) {
-//   sql.query('Select * from guilds.users where email =($1)', [req], function (
-//     err,
-//     resp
-//   ) {
-//     if (err) {
-//       console.log('error: ', err);
-//       res(err, null);
-//     } else {
-//       res.status(200).send(resp.rows);
-//     }
-//   });
-// };
-
 //Sets a user online
 //Take a whole user object
 //Returns 200 for ok

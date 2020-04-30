@@ -34,7 +34,6 @@ router.post(
     }
 
     const { firstname, lastname, email, password } = req.body;
-    //const { name, email, password } = req.body;
 
     try {
       //see if user exists
@@ -53,7 +52,6 @@ router.post(
         // const userid = await(User.getUserById([creatinguser[0].id],res))
         // console.log(userid,'user id test')
         user = new User({
-          //might put object at the beginning
           firstname,
           lastname,
           email,
@@ -77,13 +75,6 @@ router.post(
           }
         ); //3600 = 1hr;
         //****
-        //can create a gravatar for user
-
-        //encrypt password
-
-        //return jwt
-
-        // res.send('User route');
       }
     } catch (err) {
       console.error('err: ', err.message);

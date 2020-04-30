@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../models/User').User;
@@ -14,15 +15,9 @@ let sql = require('../db').pool;
 
 router.get('/', auth, async (req, res) => {
   //res.send('Auth route');
-  let uservar;
-
-  function callback(placeholder) {
-    uservar = placeholder;
-  }
   try {
-    console.log(req.user.id);
-    const user = await User.getUserById(req.user.id, res, callback(res)); //gets firstname lastname email
-    console.log(uservar, 'after');
+    const user = await User.getUserById([req.user.id]); //gets firstname lastname email
+    res.status(200).json(user[0]);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -39,7 +34,6 @@ router.post(
     check('email', 'Please include a valid email').isEmail(),
     check('password', 'Password is required').exists(),
   ],
-  auth,
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -49,13 +43,40 @@ router.post(
 
     const { email, password } = req.body;
 
-    //console.log(typeof email);
     try {
-      const theuser = await User.getUserByEmail([req.body.email], res);
+      let user = await User.getUserByEmail([email], res);
 
-      //console.log(typeof user);
-      console.log(theuser);
-      res.status(200).json(theuser[0]);
+      if (!user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+      }
+      console.log(user[0].password, 'user info');
+      //res.status(200).json(user[0]);
+      //console.log(user[0].password, 'this is password');
+      //const isMatch = await bcrypt.compare(password, user.pasword);
+
+      // if (!isMatch) {
+      //   return res
+      //     .status(400)
+      //     .json({ errors: [{ msg: 'Invalid Credentials' }] });
+      // }
+      const payload = {
+        user: {
+          id: user[0].id, //payload supposed to time in with users id
+        },
+      };
+      console.log(payload, 'payload');
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          console.log('token \n', token);
+          res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
+        }
+      ); //3600 = 1hr;
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
