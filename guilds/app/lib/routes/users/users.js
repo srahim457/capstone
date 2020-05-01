@@ -60,24 +60,44 @@ router.post(
         ///asigned hashed password
         req.body.pwd = pwd;
         const thelogin = await Login.createLogin([req.body], res);
+        console.log('the new login ', thelogin)
         const createduser = await User.createUser([req.body], res);
+        /*
+        //email update test
+        //Login then users in that order
+        const oldusercheck = await User.getUserByEmail([thelogin[0].email],res)
+        console.log ('usercheck',oldusercheck[0].email)
 
-        // const userid = await(User.getUserById([creatinguser[0].id],res))
-        // console.log(userid,'user id test')
+        emails = {
+          old_email: thelogin[0].email,
+          new_email: 'NEW EMAIL TESt11@EMAIL.COM'
+        }
+        await Login.updateEmail([emails],res)
+        console.log('updated login email')
+        await User.updateEmail([emails],res)
+        console.log('updated user email')
+
+        const newusercheck = await User.getUserByEmail([emails.new_email],res)
+        console.log ('usercheck',newusercheck[0].email)
+
+        const userid = await(User.getUserById([creatinguser[0].id],res))
+        console.log(userid,'user id test')
 
         //Setting useronline test
-        //const online = await(User.online([createduser[0]],res))
-        //var userbyemail = await(User.getUserByEmail([req.body.email],res))
-        //console.log('check',userbyemail[0].online)
+        const online = await(User.online([createduser[0]],res))
+        var userbyemail = await(User.getUserByEmail([req.body.email],res))
+        console.log('check',userbyemail[0].online)
 
         //Setting useroffline test
-        //const offline = await(User.offline([createduser[0]],res))
-        //userbyemail = await(User.getUserByEmail([req.body.email],res))
-        //console.log('check',userbyemail[0].online)
+        const offline = await(User.offline([createduser[0]],res))
+        userbyemail = await(User.getUserByEmail([req.body.email],res))
+        console.log('check',userbyemail[0].online)
 
         //Last entered user test
-        //const lastuser = await(User.getLastEnteredUser(req,res));
-        //console.log('last entered user id ', lastuser)
+        const lastuser = await(User.getLastEnteredUser(req,res));
+        console.log('last entered user id ', lastuser)
+
+        */
         user = new User({
           firstname,
           lastname,

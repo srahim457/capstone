@@ -24,7 +24,8 @@ Listing.createListing = async function (req, res) {
     const listing = await sql.query('INSERT INTO guilds.listings(item_id,total_price,rent_amount,insurance_amount,lender_id) VALUES($1,$2,$3,$4,$5) RETURNING *', [req.item_id, d, req.total_price, req.rent_amount, req.insurance_amount, req.lender_id]);
     return listing.rows[0].id
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Return listing that matches listing id
@@ -35,7 +36,8 @@ Listing.getListingByID = async function (req, res) {
     console.log('Listing found by listing id ', req, listing.rows.length)
     return listing.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Return all listings that are not marked completed in date descending order
@@ -46,7 +48,8 @@ Listing.getAllActiveListings = async function (req, res) {
     console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Returns every single listing ever
@@ -56,7 +59,8 @@ Listing.getEveryListing = async function (req, res) {
     console.log('number of total listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Return all listings by a certain borrower id
@@ -66,7 +70,8 @@ Listing.getAllBorrowerListings = async function (req, res) {
     console.log('number of listings under borrowerid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Return all listings by a certain lender id
@@ -76,7 +81,8 @@ Listing.getAllLenderListings = async function (req, res) {
     console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Updates listing to add a borrower
@@ -88,7 +94,8 @@ Listing.addBorrower = async function (req, res) {
     console.log('added a borrower to listing ', req.listing_id, '\n')
     return listing.rows[0].id
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 // Updates the listing to be marked completed
@@ -100,7 +107,8 @@ Listing.markCompleted = async function (req, res) {
     console.log('marked listing completed \n')
     return listing.rows[0].id
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Deletes a listing

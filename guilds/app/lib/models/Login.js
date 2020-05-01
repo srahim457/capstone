@@ -23,19 +23,21 @@ Login.createLogin = async function (req, res) {
       return createlogin.rows
     }
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 // Updates login email used
-// Takes new email and old email
+// Takes array of old_email and new_email
 // Returns login entry
 Login.updateEmail = async function (req, res) {
   try {
-    const login = await sql.query('UPDATE guilds.login SET email =($2) WHERE email = ($1) RETURNING *', [req.old_email, req.new_email]);
-    console.log('updating login to new email \n', )
+    const login = await sql.query('UPDATE guilds.login SET email =($2) WHERE email = ($1) RETURNING *', [req[0].old_email, req[0].new_email]);
+    console.log('updating login to new email \n',login.rows.length )
     return login.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 // Update login password used
@@ -47,7 +49,8 @@ Login.updatePassword = async function (req, res) {
     console.log('Updated login password \n', )
     return login.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 // Set both reset tokens for a login
@@ -61,7 +64,8 @@ Login.forgotPassword = async function (req, res) {
     console.log('set reset pw and reset pw expire token \n')
     return login.rows[0].id
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 // Return login entry
@@ -74,7 +78,8 @@ Login.findByToken = async function (req, res) {
     console.log('found login with token \n')
     return login.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Return login entry
@@ -85,7 +90,8 @@ Login.getLoginByEmail = async function (req, res) {
     console.log('login exists with this email \n', )
     return login.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 

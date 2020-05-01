@@ -19,7 +19,8 @@ User.updateRating = async function (req, res) {
     console.log('updated user rating \n')
     return user.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Updates a User's dominion
@@ -31,7 +32,8 @@ User.updateDominion = async function (req, res) {
     console.log('updated user dominon \n');
     return user.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Updates a User's information
@@ -43,18 +45,20 @@ User.updateUserInformation = async function (req, res) {
     console.log('updated user information ', req, user.rows.length)
     return user.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 // Updates user email used
-// Takes new email and old email
+// Takes array of old_email and new_email
+// MUST UPDATE LOGIN EMAIL FIRST
 // Returns the user row
-User.updateEmail  = async function (req, res) {
+User.updateEmail = async function (req, res) {
   try {
-    const user = await sql.query("UPDATE guilds.users SET email=($2) WHERE email = ($1)", [req.old_email,req.new_email]);
-    console.log('updated user information ', req, user.rows.length)
+    const user = await sql.query("UPDATE guilds.users SET email=($2) WHERE email = ($1) RETURNING *", [req[0].old_email,req[0].new_email]);
     return user.rows
   } catch (error) {
+    console.log(error)
     res.status(400);
   }
 };
@@ -68,7 +72,8 @@ User.createUser = async function (req, res) {
     const userentry = await sql.query("INSERT INTO guilds.users(first_name,last_name,email,creation_date) values($1,$2,$3,$4) RETURNING *", [req[0].firstname, req[0].lastname, req[0].email, d])
     return userentry.rows
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Returns the id of the last entered user
@@ -95,7 +100,8 @@ User.getUserById = async function (req, res) {
     console.log('user found by id ', req, user.rows.length);
     return user.rows;
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 // finds a user by their email and returns all of their information
@@ -109,7 +115,8 @@ User.getUserByEmail = async function (req, res) {
     console.log('user found with info ', req, user.rows.length);
     return user.rows;
   } catch (error) {
-    res.status(400);
+    console.log(error)
+    res.status(400);    
   }
 };
 //Sets a user online
