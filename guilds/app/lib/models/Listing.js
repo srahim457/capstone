@@ -18,26 +18,28 @@ var Listing = function (listing) {
 //Listing
 
 //Create a new listing entry
+//Takes in a listing object
 //Returns listing id
 Listing.createListing = async function (req, res) {
   try {
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,total_price,rent_amount,insurance_amount,lender_id) VALUES($1,$2,$3,$4,$5) RETURNING *', [req.item_id, d, req.total_price, req.rent_amount, req.insurance_amount, req.lender_id]);
+    var d = new Date();
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,rent_amount,insurance_amount,lender_id) VALUES($1,$2,$3,$4,$5,$6) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].rent_amount, req[0].insurance_amount, req[0].lender_id]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Return listing that matches listing id
 //Only takes in the listing id as a parameter
-Listing.getListingByID = async function (req, res) {
+Listing.getListingByListingID = async function (req, res) {
   try {
     const listing = await sql.query('Select * from guilds.listings where id =($1)', [req]);
     console.log('Listing found by listing id ', req, listing.rows.length)
     return listing.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Return all listings that are not marked completed in date descending order
@@ -49,7 +51,7 @@ Listing.getAllActiveListings = async function (req, res) {
     return listing.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Returns every single listing ever
@@ -60,10 +62,11 @@ Listing.getEveryListing = async function (req, res) {
     return listing.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Return all listings by a certain borrower id
+//Takes in a borrower id
 Listing.getAllBorrowerListings = async function (req, res) {
   try {
     const listing = await sql.query('Select * from guilds.listings where borrower_id = ($1)', [req]);
@@ -71,10 +74,11 @@ Listing.getAllBorrowerListings = async function (req, res) {
     return listing.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Return all listings by a certain lender id
+//Takes in a lender id
 Listing.getAllLenderListings = async function (req, res) {
   try {
     const listing = await sql.query('Select * from guilds.listings where lender_id = ($1)', [req]);
@@ -82,7 +86,7 @@ Listing.getAllLenderListings = async function (req, res) {
     return listing.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Updates listing to add a borrower
@@ -90,12 +94,12 @@ Listing.getAllLenderListings = async function (req, res) {
 //Returns listing id
 Listing.addBorrower = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1) where id = ($2)', [req.user_id, req.listing_id]);
-    console.log('added a borrower to listing ', req.listing_id, '\n')
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1) where id = ($2)', [req[0].user_id, req[0].listing_id]);
+    console.log('added a borrower to listing ', req[0].listing_id, '\n')
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 // Updates the listing to be marked completed
@@ -103,12 +107,12 @@ Listing.addBorrower = async function (req, res) {
 // Returns listing id
 Listing.markCompleted = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3)', [req.completed, req.time_sold_expired, req.listing_id]);
+    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3)', [req[0].completed, req[0].time_sold_expired, req[0].listing_id]);
     console.log('marked listing completed \n')
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Deletes a listing

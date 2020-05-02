@@ -15,12 +15,12 @@ var User = function (user) {
 //Returns the user row
 User.updateRating = async function (req, res) {
   try {
-    const user = await sql.query('UPDATE guilds.users SET rating=($2) WHERE user_id = ($1)', [req.userid, req.rating]);
+    const user = await sql.query('UPDATE guilds.users SET rating=($2) WHERE user_id = ($1)', [req[0].userid, req[0].rating]);
     console.log('updated user rating \n')
     return user.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Updates a User's dominion
@@ -28,12 +28,12 @@ User.updateRating = async function (req, res) {
 //Returns the user row
 User.updateDominion = async function (req, res) {
   try {
-    const user = await sql.query('UPDATE guilds.users SET dominion_id=($2) WHERE user_id = ($1)', [req.userid, req.dominionid]);
+    const user = await sql.query('UPDATE guilds.users SET dominion_id=($2) WHERE user_id = ($1)', [req[0].userid, req[0].dominionid]);
     console.log('updated user dominon \n');
     return user.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Updates a User's information
@@ -41,12 +41,12 @@ User.updateDominion = async function (req, res) {
 //Returns the user row
 User.updateUserInformation = async function (req, res) {
   try {
-    const user = await sql.query("UPDATE guilds.users SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)", [req.id, req.first_name, req.last_name, req.username, req.phonenum, req.description, req.dominion_id]);
-    console.log('updated user information ', req, user.rows.length)
+    const user = await sql.query("UPDATE guilds.users SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)", [req[0].id, req[0].first_name, req[0].last_name, req[0].username, req[0].phonenum, req[0].description, req[0].dominion_id]);
+    console.log('updated user information ', req[0], user.rows.length)
     return user.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 // Updates user email used
@@ -55,7 +55,7 @@ User.updateUserInformation = async function (req, res) {
 // Returns the user row
 User.updateEmail = async function (req, res) {
   try {
-    const user = await sql.query("UPDATE guilds.users SET email=($2) WHERE email = ($1) RETURNING *", [req[0].old_email,req[0].new_email]);
+    const user = await sql.query("UPDATE guilds.users SET email=($2) WHERE email = ($1) RETURNING *", [req[0].old_email, req[0].new_email]);
     return user.rows
   } catch (error) {
     console.log(error)
@@ -73,7 +73,7 @@ User.createUser = async function (req, res) {
     return userentry.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Returns the id of the last entered user
@@ -101,7 +101,7 @@ User.getUserById = async function (req, res) {
     return user.rows;
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 // finds a user by their email and returns all of their information
@@ -116,7 +116,7 @@ User.getUserByEmail = async function (req, res) {
     return user.rows;
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Sets a user online

@@ -24,7 +24,7 @@ Login.createLogin = async function (req, res) {
     }
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 // Updates login email used
@@ -33,11 +33,11 @@ Login.createLogin = async function (req, res) {
 Login.updateEmail = async function (req, res) {
   try {
     const login = await sql.query('UPDATE guilds.login SET email =($2) WHERE email = ($1) RETURNING *', [req[0].old_email, req[0].new_email]);
-    console.log('updating login to new email \n',login.rows.length )
+    console.log('updating login to new email \n', login.rows.length)
     return login.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 // Update login password used
@@ -45,12 +45,12 @@ Login.updateEmail = async function (req, res) {
 // Returns login entry
 Login.updatePassword = async function (req, res) {
   try {
-    const login = await sql.query('UPDATE guilds.login SET password =($2) WHERE email = ($1) RETURNING *', [req.email, req.new_password]);
+    const login = await sql.query('UPDATE guilds.login SET password =($2) WHERE email = ($1) RETURNING *', [req[0].email, req[0].new_password]);
     console.log('Updated login password \n', )
     return login.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 // Set both reset tokens for a login
@@ -60,12 +60,12 @@ Login.forgotPassword = async function (req, res) {
   try {
     var curr_date = new Date();
     curr_date.setTime(req.resetPasswordExpires);
-    const login = await sql.query('UPDATE guilds.login SET reset_pw_tkn =($1), reset_pw_expires =($2) WHERE email =($3) RETURNING *', [req.resetPasswordToken, curr_date.toDateString(), req.email]);
+    const login = await sql.query('UPDATE guilds.login SET reset_pw_tkn =($1), reset_pw_expires =($2) WHERE email =($3) RETURNING *', [req.resetPasswordToken, curr_date.toDateString(), req[0].email]);
     console.log('set reset pw and reset pw expire token \n')
     return login.rows[0].id
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 // Return login entry
@@ -74,12 +74,12 @@ Login.findByToken = async function (req, res) {
   try {
     var curr_date = new Date();
     curr_date.setTime(login_info.resetPasswordExpires);
-    const login = await sql.query('Select * from guilds.login where resetPasswordToken = ($1) and resetPasswordExpires > ($2)', [req.resetPasswordToken, curr_date.toDateString()])
+    const login = await sql.query('Select * from guilds.login where resetPasswordToken = ($1) and resetPasswordExpires > ($2)', [req[0].resetPasswordToken, curr_date.toDateString()])
     console.log('found login with token \n')
     return login.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 //Return login entry
@@ -91,7 +91,7 @@ Login.getLoginByEmail = async function (req, res) {
     return login.rows
   } catch (error) {
     console.log(error)
-    res.status(400);    
+    res.status(400);
   }
 };
 

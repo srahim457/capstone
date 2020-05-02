@@ -17,19 +17,57 @@ let Item = require('../../models/Item').Item;
 router.post('/:itemid', async (req, res) => {
   try {
     var newListing = {
-      item_id: req.params.itemid
+      item_id: req.params.itemid,
+      total_price: req.body.total_price,
+      rent_amount: req.body.rent_amount,
+      insurance_amount: req.body.insurance_amount,
+      lender_id: req.lender_id
     }
-    const listing = await Listing.createListing(req.listing);
-    res.send(listing);
+    const createdlistingid = await Listing.createListing([newListing], res);
+    res.send(createdlistingid);
   } catch (err) {
     console.err('error posting to marketplace');
   }
   console.log('called post request at market');
 });
+//Gets a listing matching the passed listing id
+router.get('/:listingid', async (req, res, next) => {
+  if (req.params.listing === undefined) {
+    next()
+  }
+  try {
+    const listing = await Listing.getListingByListingID([req.params.listingid], res);
+    res.send(listing);
+  } catch (err) {
+    console.err('error retrieving lisiting by id');
+  }
+  console.log('called get listing request by listing id');
+});
+//Gets all active listings
+router.get('/active', async (req, res) => {
+  try {
+    const activelistings = await Listing.getAllActiveListings(req, res);
+    res.send(activelistings);
+  } catch (err) {
+    console.err('error getting all active listings');
+  }
+  console.log('called get active listings');
+});
+//Gets all listings
+router.get('/', async (req, res) => {
+  try {
+    const alllistings = await Listing.getEveryListing(req, res);
+    res.send(alllistings);
+  } catch (err) {
+    console.err('error getting all listings');
+  }
+  console.log('called get all listings');
+});
+
+
 
 //example;
-const item = [
-  {
+const item = [{
     id: 1,
     name: 'Ball',
     cost: 2.3,
