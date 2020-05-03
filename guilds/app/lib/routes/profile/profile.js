@@ -69,20 +69,21 @@ router.put(
     //console.log('Reqbody', email);
 
     try {
-      console.log('USERID', userID);
+      // console.log('USERID', userID);
       let profile = await User.getUserById([49], res);
       //console.log('id:', profile[0]);
-      console.log('emaill', email);
+      console.log('new email', email);
       //let profile = await User.getUserByEmail([email], res);
 
-      // //console.log('profile', profile);
-      let newProfile;
+      console.log('old email', profile[0].email);
+      let newEmail = profile[0].email;
+      //let newProfile;
       if (profile) {
         //UPDATE
         console.log('in here!!');
-        newProfile = await User.updateEmail(email, res); //update profile here
-        console.log(newProfile);
-        //return res.json(profile[0].email);
+        await User.updateEmail([email, newEmail], res); //update profile here
+        //console.log(newProfile);
+        return res.json(profile[0].email);
       }
     } catch (err) {
       console.error(err.message);
