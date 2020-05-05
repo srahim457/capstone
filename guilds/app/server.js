@@ -47,19 +47,19 @@ app.use('/market-place', require('./lib/routes/marketplace/marketplace'));
 app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users'));
-//app.use('/auth', require('./lib/routes/auth'));
+app.use('/auth', require('./lib/routes/auth'));
 
-app.get('/auth', async (req, res) => {
-  //res.send('API running');
-  try {
-    console.log(req.user.id);
-    const user = await User.getUserById(req.user.id); //gets firstname lastname email
-    res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-});
+// app.get('/auth', async (req, res) => {
+//   //res.send('API running');
+//   try {
+//     console.log(req.user.id);
+//     const user = await User.getUserById(req.user.id); //gets firstname lastname email
+//     res.json(user);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send('Server error');
+//   }
+// });
 
 app.listen(PORT);
 console.log('Node listening on port %s', PORT);
