@@ -21,25 +21,28 @@ router.post('/:itemid', async (req, res) => {
       total_price: req.body.total_price,
       rent_amount: req.body.rent_amount,
       insurance_amount: req.body.insurance_amount,
-      lender_id: req.lender_id
+      lender_id: req.body.lender_id
     }
     const createdlistingid = await Listing.createListing([newListing], res);
-    res.send(createdlistingid);
-  } catch (err) {
-    console.err('error posting to marketplace');
+    console.log('listing result',createdlistingid)
+    res.sendStatus(createdlistingid);
+  } catch (error) {
+    console.error('error posting to marketplace');    
   }
   console.log('called post request at market');
 });
 //Gets a listing matching the passed listing id
 router.get('/:listingid', async (req, res, next) => {
-  if (req.params.listing === undefined) {
+  console.log(req.params.listingid)
+  if (req.params.listingid === undefined) {
     next()
   }
   try {
     const listing = await Listing.getListingByListingID([req.params.listingid], res);
+    console.log('listing result',listing)
     res.send(listing);
-  } catch (err) {
-    console.err('error retrieving lisiting by id');
+  } catch (error) {
+    console.error('error retrieving listing by id');
   }
   console.log('called get listing request by listing id');
 });

@@ -23,7 +23,8 @@ var Listing = function (listing) {
 Listing.createListing = async function (req, res) {
   try {
     var d = new Date();
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,rent_amount,insurance_amount,lender_id) VALUES($1,$2,$3,$4,$5,$6) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].rent_amount, req[0].insurance_amount, req[0].lender_id]);
+    console.log('creating listing with ',req[0])
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,rent_amount,insurance_amount,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].rent_amount, req[0].insurance_amount, req[0].lender_id,'F','F']);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -34,7 +35,7 @@ Listing.createListing = async function (req, res) {
 //Only takes in the listing id as a parameter
 Listing.getListingByListingID = async function (req, res) {
   try {
-    const listing = await sql.query('Select * from guilds.listings where id =($1)', [req]);
+    const listing = await sql.query('Select * from guilds.listings where id =ANY($1)', [req]);
     console.log('Listing found by listing id ', req, listing.rows.length)
     return listing.rows
   } catch (error) {
@@ -46,7 +47,7 @@ Listing.getListingByListingID = async function (req, res) {
 // Shows the newests listings first 
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select * from guilds.listings where completed <> 'F' AND expired <> 'T' ORDER by date DESC");
+    const listing = await sql.query("Select * from guilds.listings where completed = 'F' AND expired = 'F' ORDER by time_posted DESC");
     console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
