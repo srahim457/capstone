@@ -19,6 +19,7 @@ let sql = require('../../db').pool;
 // @desc Register user
 // @access Private
 
+
 router.post(
   '/',
   [
@@ -142,8 +143,15 @@ router.post(
 // @route GET api/users
 // @desc Register user
 // @access Private
-router.get('/', (req, res) => {
-  res.send('User route');
+router.get('/', auth, async (req, res) => {
+  res.send('Auth route');
+  try {
+    const user = await User.getUserById([req.user.id], res); // gets firstname lastname email
+    res.status(200).json(user[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Server error')
+  }
 });
 
 // @route DELETE api/users
