@@ -5,7 +5,7 @@ let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
 let Item = require('../../models/Item').Item;
-
+const auth = require('../../middleware/auth');
 const config = require('config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -15,7 +15,6 @@ let sql = require('../../db').pool;
 // @route Post /
 // @desc Register user
 // @access Private
-
 
 router.post(
   '/',
@@ -136,16 +135,16 @@ router.post(
 // @route GET api/users
 // @desc Register user
 // @access Private
-router.get('/', auth, async (req, res) => {
-  res.send('Auth route');
-  try {
-    const user = await User.getUserById([req.user.id], res); // gets firstname lastname email
-    res.status(200).json(user[0]);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Server error')
-  }
-});
+// router.get('/', auth, async (req, res) => {
+//   res.send('Auth route');
+//   try {
+//     const user = await User.getUserById([req.user.id], res); // gets firstname lastname email
+//     res.status(200).json(user[0]);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send('Server error');
+//   }
+// });
 
 // @route DELETE api/users
 // @desc Register user

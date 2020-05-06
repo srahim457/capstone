@@ -53,8 +53,8 @@ const Routes = (props) => {
   return (
     <section className='container'>
       <Switch>
-        <Route exact path='/signup' component={Signup} />
-        <Route exact path='/login' component={Login} />
+        <Route exact path='/' component={Signup} />
+        <Route exact path='/' component={Login} />
         <PrivateRoute path='/profile' component={Profile} />
         <PrivateRoute path='/market-place' component={MarketPlace} />
         <PrivateRoute path='/all-guilds' component={AllGuilds} />
