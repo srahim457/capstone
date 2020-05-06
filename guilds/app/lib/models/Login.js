@@ -100,22 +100,9 @@ Login.findByToken = async function (req, res) {
     res.status(400);
   }
 };
+
 //Return login entry
 //Takes email
-Login.getLoginByEmail = async function (req, res) {
-  try {
-    const login = await sql.query(
-      'Select * from guilds.login where email =  ($1)',
-      [req]
-    );
-    console.log('login exists with this email \n');
-    return login.rows;
-  } catch (error) {
-    console.log(error);
-    res.status(400);
-  }
-};
-
 Login.getUserByEmail = async function (req, res) {
   try {
     const user = await sql.query(

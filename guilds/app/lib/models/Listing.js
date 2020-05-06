@@ -95,12 +95,12 @@ Listing.getAllLenderListings = async function (req, res) {
 //Returns listing id
 Listing.addBorrower = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1) where id = ($2)', [req[0].user_id, req[0].listing_id]);
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1) where id = ($2) RETURNING *', [req[0].user_id, req[0].listing_id]);
     console.log('added a borrower to listing ', req[0].listing_id, '\n')
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
-    res.status(400);
+    res.status(400);;
   }
 };
 // Updates the listing to be marked completed
@@ -108,8 +108,10 @@ Listing.addBorrower = async function (req, res) {
 // Returns listing id
 Listing.markCompleted = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3)', [req[0].completed, req[0].time_sold_expired, req[0].listing_id]);
-    console.log('marked listing completed \n')
+    var d = new Date();
+    console.log('marking complete',req[0])
+    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, d, req[0].listing_id]);
+    console.log('marked listing completed \n',listing.rows[0])
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -121,9 +123,9 @@ Listing.markCompleted = async function (req, res) {
 //Returns listing entry
 Listing.delete = async function (req, res) {
   try {
-    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T' where id = ($1)" [req]);
+    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T' where id = ($1) RETURNING *" [req]);
     console.log('Deleted listing \n ')
-    return listing
+    return listing.rows
   } catch (error) {
     res.status(400)
   }
