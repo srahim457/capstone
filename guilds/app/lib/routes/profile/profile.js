@@ -10,16 +10,20 @@ let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
 let Item = require('../../models/Item').Item;
 
-let userID;
 // @route GET profile/me
 // @desc  Get logged in user profile
 // @access private
 router.get('/me', auth, async (req, res) => {
+  //route profile/me ?
   try {
     const { email, password } = req.body;
-    const profile = await User.getUserByEmail([email], res); //finds user using email instead of id
-    userID = profile[0].id;
-    //console.log(profile[0].id);
+    //console.log(email, 'EMAL');
+    //const profile = await User.getUserByEmail([email], res); //finds user using email instead of id
+    profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
+
+    userID = req.user.id;
+
+    console.log('Print profile', profile[0]);
     if (profile == 0) {
       return res
         .status(400)
@@ -70,7 +74,7 @@ router.put(
 
     try {
       // console.log('USERID', userID);
-      let profile = await User.getUserById([49], res);
+      let profile = await User.getUserById([req.user.id], res);
       //console.log('id:', profile[0]);
       console.log('new email', email);
       //let profile = await User.getUserByEmail([email], res);

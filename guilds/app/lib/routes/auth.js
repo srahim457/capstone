@@ -17,7 +17,7 @@ let sql = require('../db').pool;
 router.get('/', auth, async (req, res) => {
   //res.send('Auth route');
   try {
-    const user = await User.getUserById([req.user.id]); //gets firstname lastname email
+    const user = await User.getUserById([req.user.id]); //gets user by id from token
     res.status(200).json(user[0]);
   } catch (err) {
     console.error(err.message);
@@ -25,6 +25,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+//THIS IS FOR LOGIN
 // @route Post /auth
 // @desc Authenticate user & get token
 // @access Public
@@ -46,7 +47,7 @@ router.post(
 
     try {
       let user = await Login.getUserByEmail([email], res); //changed from user to login
-
+      console.log('LOOGGIN', user[0]);
       if (user == 0) {
         return res
           .status(400)
@@ -65,6 +66,7 @@ router.post(
       }
 
       user = await User.getUserByEmail([email], res);
+      console.log('2nd User', user);
 
       const payload = {
         user: {

@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 4000;
 var flash = require('connect-flash');
 
 var session = require('express-session');
-var passport = require('passport');
+//var passport = require('passport');
 var request = require('request');
 
 var app = express();
@@ -46,8 +46,8 @@ app.use(express.json({ extended: false }));
 app.use('/market-place', require('./lib/routes/marketplace/marketplace'));
 app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
-app.use('/signup', require('./lib/routes/users/users'));
-app.use('/auth', require('./lib/routes/auth'));
+app.use('/', require('./lib/routes/users/users')); //signup
+app.use('/login', require('./lib/routes/auth')); //orig auth but to login
 
 // app.get('/auth', async (req, res) => {
 //   //res.send('API running');
