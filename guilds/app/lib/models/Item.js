@@ -53,7 +53,7 @@ Item.getItemByName = async function (req, res) {
 Item.updateItemInformation = async function (req, res) {
   try {
     console.log('updating item information with this new information', req);
-    const item = await sql.query('UPDATE guilds.item_info SET item_name=($1), item_desc =($2),image = ($3) WHERE item_id = ($4)', [req[0].item_name, req[0].item_desc, req[0].item_image, req[0].id])
+    const item = await sql.query('UPDATE guilds.item_info SET item_name=($1), item_desc =($2),image = ($3) WHERE item_id = ($4) RETURNING *', [req[0].item_name, req[0].item_desc, req[0].item_image, req[0].id])
     return item.rows[0].id
   } catch (error) {
     console.log(error)
@@ -66,7 +66,7 @@ Item.updateItemInformation = async function (req, res) {
 Item.updateAvailability = async function (req, res) {
   try {
     console.log('updating item Availability with ', req);
-    const item = await sql.query('UPDATE guilds.item_info SET is_available=($1) WHERE item_id = ($2)', [req[0].is_available, req[0].id])
+    const item = await sql.query('UPDATE guilds.item_info SET is_available=($1) WHERE item_id = ($2) RETURNING *', [req[0].is_available, req[0].id])
     return item.rows[0].is_available
   } catch (error) {
     console.log(error)
@@ -79,7 +79,7 @@ Item.updateAvailability = async function (req, res) {
 Item.deleteItem = async function (req, res) {
   try {
     console.log('deleting an item with id ', req)
-    const item = await sql.query("UPDATE guilds.item_info SET delete = 'T' where id = ($1)", [req])
+    const item = await sql.query("UPDATE guilds.item_info SET delete = 'T' where id = ($1) RETURNING *", [req])
     return item.rows[0].delete
   } catch (error) {
     console.log(error)
