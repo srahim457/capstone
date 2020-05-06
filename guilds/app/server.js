@@ -47,7 +47,7 @@ app.use('/market-place', require('./lib/routes/marketplace/marketplace'));
 app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users')); //signup
-app.use('/login', require('./lib/routes/auth')); //orig auth but to login
+app.use('/auth', require('./lib/routes/auth')); //orig auth but to login
 
 // app.get('/auth', async (req, res) => {
 //   //res.send('API running');

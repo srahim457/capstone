@@ -13,7 +13,7 @@ let Item = require('../../models/Item').Item;
 // @route GET profile/me
 // @desc  Get logged in user profile
 // @access private
-router.get('/me', auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {
   //route profile/me ?
   try {
     const { email, password } = req.body;
@@ -21,7 +21,7 @@ router.get('/me', auth, async (req, res) => {
     //const profile = await User.getUserByEmail([email], res); //finds user using email instead of id
     profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
 
-    userID = req.user.id;
+    //const userID = req.user.id;
 
     console.log('Print profile', profile[0]);
     if (profile == 0) {

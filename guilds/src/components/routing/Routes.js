@@ -49,6 +49,8 @@ import AllGuilds from '../AllGuilds';
 import PrivateRoute from '../routing/PrivateRoute';
 import Messages from '../Messages';
 
+//Might import Navbar in here instead
+
 const Routes = (props) => {
   return (
     <section className='container'>
