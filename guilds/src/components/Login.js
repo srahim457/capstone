@@ -226,8 +226,9 @@ const Login = ({ login, isAuthenticated }) => {
   };
 
   if (isAuthenticated) {
-    return <Redirect to='/profile' />;
-    window.location.reload();
+    return (
+      (<Redirect exact to='/profile'></Redirect>), window.location.reload()
+    );
   }
 
   return (
@@ -269,11 +270,12 @@ const Login = ({ login, isAuthenticated }) => {
 
           <div className='FormField'>
             <button className='FormField__Button mr-20'>Sign In</button>{' '}
-            <Link to='/' className='FormField__Link'>
+            {/*  <Link to='/' className='FormField__Link'>
               <strong>Create an account</strong>
             </Link>
             <br />
             <br />
+  */}
             <Route path='/forgot-password' component={ForgotPassword}></Route>
             <Link to='/forgot-password' className='FormField__Link'>
               <strong>Forgot your password?</strong>

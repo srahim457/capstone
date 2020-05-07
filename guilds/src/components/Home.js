@@ -5,7 +5,7 @@ import {
   Route,
   Link,
   NavLink,
-  Switch
+  Switch,
 } from 'react-router-dom';
 
 import Login from './Login';
@@ -43,7 +43,6 @@ class Home extends Component {
                 Sign Up
               </NavLink>
             </div>
-
             <div className='FormTitle'>
               <NavLink
                 to='/sign-in'
@@ -62,9 +61,9 @@ class Home extends Component {
                 Sign Up
               </NavLink>
             </div>
-
             <Route exact path='/' component={Signup}></Route>
-            <Route path='/sign-in' component={Login}></Route>
+            <Route path='/sign-in' component={Login}></Route>{' '}
+            {/* changed Login from '/sign-in' to '/' */}
             <Route path='/forgot-password' component={ForgotPassword}></Route>
           </div>
         </div>

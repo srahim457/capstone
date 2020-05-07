@@ -56,7 +56,7 @@ const Routes = (props) => {
     <section className='container'>
       <Switch>
         <Route exact path='/' component={Signup} />
-        <Route exact path='/' component={Login} />
+        <Route path='/' component={Login} />
         <PrivateRoute path='/profile' component={Profile} />
         <PrivateRoute path='/market-place' component={MarketPlace} />
         <PrivateRoute path='/all-guilds' component={AllGuilds} />

@@ -109,7 +109,7 @@ class SignUp extends Component {
 
           <div className='FormField'>
             <button className='FormField__Button mr-20'>Sign Up</button>{' '}
-            <Link exact to='sign-in' className='FormField__Link'>
+            <Link to='/sign-in' className='FormField__Link'>
               I'm already a member
             </Link>
           </div>
