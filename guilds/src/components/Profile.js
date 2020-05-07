@@ -7,6 +7,7 @@ import {
   NavLink,
   Switch,
 } from 'react-router-dom';
+import axios from 'axios';
 
 import './styles/profile.css';
 import Profile_Borrowed from './Profile_Borrowed';
@@ -28,6 +29,14 @@ class Profile extends Component {
   constructor() {
     super();
     this.state = {
+      firstname: '',
+      lastname: '',
+      phonenum: null,
+      email: '',
+      description: '',
+      online: null,
+      rating: '',
+      profile: {},
       click: false, //added to see if it respond on click
       testToken: false,
     };
@@ -41,15 +50,29 @@ class Profile extends Component {
   displayBorrowed() {
     return <Profile_Borrowed />;
   }
-  displayListings(){
+  displayListings() {
     return <Profile_Listed />;
   }
 
-  listings(){
-    this.setState({ testToken: false })
+  listings() {
+    this.setState({ testToken: false });
   }
-  borrowed(){
-    this.setState({ testToken: true })
+  borrowed() {
+    this.setState({ testToken: true });
+  }
+
+  componentDidMount() {
+    let response = {};
+    let email;
+    axios.get('http://localhost:4000/profile').then((res) => {
+      const profile = res.data;
+      this.setState({ profile });
+      console.log(res.data.email);
+      // console.log(res.data.email);
+      response = res.data;
+      email = JSON.stringify(res.data.email);
+    });
+    console.log('copy of profile', response);
   }
 
   render() {
@@ -72,7 +95,7 @@ class Profile extends Component {
             <div className='button-container'>
               {' '}
               {/*the button that change the page to edit profile information*/}
-              <button class='edit-button' onClick={this.onClickHandler}>
+              <button className='edit-button' onClick={this.onClickHandler}>
                 Edit
               </button>
             </div>
@@ -115,20 +138,22 @@ class Profile extends Component {
             {/*the button that switched tabs between items listed and borrowed*/}
             <div className='PageSwitcher_profile'>
               <button
-                onClick = {this.listings.bind(this)}
-                className={this.state.testToken === false
-                            ? 'PageSwitcher__Item_profile_active'
-                            : 'PageSwitcher__Item_profile'
-                          }
+                onClick={this.listings.bind(this)}
+                className={
+                  this.state.testToken === false
+                    ? 'PageSwitcher__Item_profile_active'
+                    : 'PageSwitcher__Item_profile'
+                }
               >
                 Listed Items
               </button>
               <button
-                onClick = {this.borrowed.bind(this)}
-                className={this.state.testToken === true
-                            ? 'PageSwitcher__Item_profile_active'
-                            : 'PageSwitcher__Item_profile'
-                          }
+                onClick={this.borrowed.bind(this)}
+                className={
+                  this.state.testToken === true
+                    ? 'PageSwitcher__Item_profile_active'
+                    : 'PageSwitcher__Item_profile'
+                }
               >
                 Borrowed Items
               </button>
@@ -136,14 +161,12 @@ class Profile extends Component {
             {/*these components can be found in Profile_Borrowed.js and Profile_Listed.js*/}
             {this.state.testToken === true
               ? this.displayBorrowed()
-              : this.displayListings()
-            }
+              : this.displayListings()}
             {/*
             <Route path='/profile-listed' component={Profile_Listed}></Route>
             <Route path='/profile' component={Profile_Borrowed}></Route>
             */}
           </div>
-
         </div>
       </BrowserRouter>
     );
