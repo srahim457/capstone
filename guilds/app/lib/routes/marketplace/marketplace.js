@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
 });
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-router.get('/', async (req, res) => {
+router.get('/borrowed', async (req, res) => {
   try {
     const alllistings = await Listing.getAllBorrowerListings(req.user.id, res);
     res.send(alllistings);
@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {
 });
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-router.get('/', async (req, res) => {
+router.get('/listed', async (req, res) => {
   try {
     const alllistings = await Listing.getAllLenderListings(req.user.id, res);
     res.send(alllistings);
