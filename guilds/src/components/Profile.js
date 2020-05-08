@@ -129,7 +129,9 @@ class Profile extends Component {
                 {/*the guild ranking*/}
                 <h1>My Rank: </h1>
                 <div className='UserField'>
-                  <h1>{this.state.rating}</h1>
+                  <h1>
+                    {this.state.rating == null ? 'N/A' : this.state.rating}
+                  </h1>
                 </div>
               </div>
             </div>
@@ -144,7 +146,9 @@ class Profile extends Component {
                 <h2>Phone: </h2>
               </div>
               <div className='UserSubfield'>
-                <h2>{this.state.phonenum} </h2>
+                <h2>
+                  {this.state.phonenum == null ? 'N/A' : this.state.phonenum}{' '}
+                </h2>
               </div>
             </div>
           </div>
