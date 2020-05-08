@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './styles/EditProfile.css';
 
 /* !!! not pretty, did not edit all the change handlers*/
-class CreateListing extends Component {
+class EditProfile extends Component {
   constructor(props) {
     super(props);
 
@@ -10,27 +10,31 @@ class CreateListing extends Component {
       name: '',
       number: '',
       email: '',
+      picture: null,
     };
   }
 
-  itemNameChangeHandler = (e) => {
-    e.preventDefault();
+  nameChangeHandler = (e) => {
     this.setState({
       name: e.currentTarget.value,
     });
   };
 
   emailChangeHandler = (e) => {
-    e.preventDefault();
     this.setState({
       email: e.currentTarget.value,
     });
   };
 
-  handleOptionChange = (e) => {
-    e.preventDefault();
+  numberChangeHandler = (e) => {
     this.setState({
-      option: e.currentTarget.value,
+      number: e.currentTarget.value,
+    });
+  };
+
+  pictureChangeHandler = (e) => {
+    this.setState({
+      picture: e.currentTarget.value,
     });
   };
 
@@ -53,13 +57,13 @@ class CreateListing extends Component {
                 placeholder='username'
                 maxLength='100'
                 value={this.state.name}
-                onChange={this.itemNameChangeHandler}
+                onChange={this.nameChangeHandler}
               ></input>
             </div>
             <div>
               <label>User's Email: </label>
               <input
-                type='text'
+                type='email'
                 className='form-input'
                 placeholder='example@myuniversity.edu'
                 maxlength='180'
@@ -70,12 +74,12 @@ class CreateListing extends Component {
             <div>
               <label>User's Phone: </label>
               <input
-                type='number'
+                type='tel'
                 className='form-input'
                 placeholder='only supply numbers'
                 maxlength='10'
-                value={this.state.email}
-                onChange={this.emailChangeHandler}
+                value={this.state.number}
+                onChange={this.numberChangeHandler}
               />
             </div>
             <div>
@@ -84,8 +88,7 @@ class CreateListing extends Component {
                 type='file'
                 name='images'
                 id='images'
-                value={this.state.email}
-                onChange={this.emailChangeHandler}
+                value={this.state.picture}
               />
             </div>
           </form>
@@ -96,4 +99,4 @@ class CreateListing extends Component {
   }
 }
 
-export default CreateListing;
+export default EditProfile;
