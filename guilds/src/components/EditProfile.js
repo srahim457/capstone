@@ -11,6 +11,7 @@ class EditProfile extends Component {
       number: '',
       email: '',
       picture: null,
+      description: '',
     };
   }
 
@@ -38,6 +39,12 @@ class EditProfile extends Component {
     });
   };
 
+  descriptionChangeHandler = (e) => {
+    this.setState({
+      description: e.currentTarget.value,
+    });
+  };
+
   render() {
     return (
       // <div>{this.props.children}</div>
@@ -50,7 +57,7 @@ class EditProfile extends Component {
               <div className='button-wrapper'>
                 <button className='close-button'>X</button>
               </div>
-              <label>User's Name: </label>
+              {/* <label>User's Name: </label>
               <input
                 type='text'
                 className='form-input'
@@ -58,7 +65,7 @@ class EditProfile extends Component {
                 maxLength='100'
                 value={this.state.name}
                 onChange={this.nameChangeHandler}
-              ></input>
+    ></input> */}
             </div>
             {/* <div>
               <label>User's Email: </label>
@@ -73,6 +80,7 @@ class EditProfile extends Component {
             </div> */}
             <div>
               <label>User's Phone: </label>
+              <br />
               <input
                 type='tel'
                 className='form-input'
@@ -80,6 +88,21 @@ class EditProfile extends Component {
                 maxlength='10'
                 value={this.state.number}
                 onChange={this.numberChangeHandler}
+              />
+            </div>
+            <div>
+              {/* make into a description box */}
+              <label>Bio Description</label>
+              <br />
+              <textarea
+                className='form-input'
+                autofocus
+                placeholder='Type your description'
+                maxlength='180'
+                rows='5'
+                cols='40'
+                value={this.state.description}
+                onChange={this.descriptionChangeHandler}
               />
             </div>
             <div>
