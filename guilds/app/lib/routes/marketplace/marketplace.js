@@ -66,8 +66,28 @@ router.get('/', async (req, res) => {
   }
   console.log('called get all listings');
 });
-
-
+//Gets all listings with user id as the borrower
+//Looks for req.user.id as a param
+router.get('/borrowed', async (req, res) => {
+  try {
+    const alllistings = await Listing.getAllBorrowerListings(req.user.id, res);
+    res.send(alllistings);
+  } catch (err) {
+    console.err('error getting all listings');
+  }
+  console.log('called get all listings');
+});
+//Gets all listing that have the user id as a lender
+//Look for req.user.id as a param
+router.get('/listed', async (req, res) => {
+  try {
+    const alllistings = await Listing.getAllLenderListings(req.user.id, res);
+    res.send(alllistings);
+  } catch (err) {
+    console.err('error getting all listings');
+  }
+  console.log('called get all listings');
+});
 
 //example;
 const item = [{
