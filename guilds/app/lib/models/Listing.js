@@ -23,8 +23,8 @@ var Listing = function (listing) {
 Listing.createListing = async function (req, res) {
   try {
     var d = new Date();
-    console.log('creating listing with ',req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,rent_amount,insurance_amount,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].rent_amount, req[0].insurance_amount, req[0].lender_id,'F','F']);
+    console.log('creating listing with ', req[0])
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,rent_amount,insurance_amount,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].rent_amount, req[0].insurance_amount, req[0].lender_id, 'F', 'F']);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -47,7 +47,7 @@ Listing.getListingByListingID = async function (req, res) {
 // Shows the newests listings first 
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select * from guilds.listings where completed = 'F' AND expired = 'F' ORDER by time_posted DESC");
+    const listing = await sql.query("Select * from guilds.listings where completed = 'F' AND expired = 'F' AND deleted = 'F' AND reserved = 'F' ORDER by time_posted DESC");
     console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -103,15 +103,39 @@ Listing.addBorrower = async function (req, res) {
     res.status(400);;
   }
 };
+//Reserves the listing so it cant be used by two people
+//Takes in a listing id only
+Listing.reserveListing = async function (req, res) {
+  try {
+    const listing = await sql.query('UPDATE guilds.listings SET reserved = "T" where id = ($1) RETURNING *', [req]);
+    console.log('marked listing as reserved ', req, '\n')
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);;
+  }
+};
+//Unreserves the listing
+//Takes in a listing id only
+Listing.unreserveListing = async function (req, res) {
+  try {
+    const listing = await sql.query('UPDATE guilds.listings SET reserved = "F" where id = ($1) RETURNING *', [req]);
+    console.log('marked listing as unreserved ', req, '\n')
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);;
+  }
+};
 // Updates the listing to be marked completed
 // Takes in the completed status,time,listing_id
 // Returns listing id
 Listing.markCompleted = async function (req, res) {
   try {
     var d = new Date();
-    console.log('marking complete',req[0])
+    console.log('marking complete', req[0])
     const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, d, req[0].listing_id]);
-    console.log('marked listing completed \n',listing.rows[0])
+    console.log('marked listing completed \n', listing.rows[0])
     return listing.rows[0].id
   } catch (error) {
     console.log(error)

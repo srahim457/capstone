@@ -24,27 +24,50 @@ router.post('/:itemid', async (req, res) => {
       lender_id: req.body.lender_id
     }
     const createdlistingid = await Listing.createListing([newListing], res);
-    console.log('listing result',createdlistingid)
+    console.log('listing result', createdlistingid)
     res.sendStatus(createdlistingid);
   } catch (error) {
-    console.error('error posting to marketplace');    
+    console.error('error posting to marketplace');
   }
   console.log('called post request at market');
 });
 //Gets a listing matching the passed listing id
-router.get('/:listingid', async (req, res, next) => {
+router.get('/:listingid', async (req, res) => {
   console.log(req.params.listingid)
-  if (req.params.listingid === undefined) {
-    next()
-  }
   try {
     const listing = await Listing.getListingByListingID([req.params.listingid], res);
-    console.log('listing result',listing)
+    console.log('listing result', listing)
     res.send(listing);
   } catch (error) {
     console.error('error retrieving listing by id');
   }
   console.log('called get listing request by listing id');
+});
+
+//Marks a listing as reserved so only one person can see it
+router.get('/:listingid/reserve', async (req, res) => {
+  console.log(req.params.listingid)
+  try {
+    const listing = await Listing.reserveListing([req.params.listingid], res);
+    console.log('reserving listing', listing)
+    res.send(listing);
+  } catch (error) {
+    console.error('error reserving listing by id');
+  }
+  console.log('called reserve listing by listing id');
+});
+
+//Frees a reserved listing so others can click on it
+router.get('/:listingid/unreserve', async (req, res) => {
+  console.log(req.params.listingid)
+  try {
+    const listing = await Listing.unreserveListing([req.params.listingid], res);
+    console.log('reserving listing', listing)
+    res.send(listing);
+  } catch (error) {
+    console.error('error unreserving listing by id');
+  }
+  console.log('called unreserve listing by listing id');
 });
 //Gets all active listings
 router.get('/active', async (req, res) => {
