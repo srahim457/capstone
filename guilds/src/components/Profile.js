@@ -34,8 +34,9 @@ class Profile extends Component {
       phonenum: null,
       email: '',
       description: '',
-      online: null,
-      rating: '',
+      online: false,
+      rating: null,
+      picture: null,
       profile: {},
       click: false, //added to see if it respond on click
       testToken: false,
@@ -62,17 +63,32 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    let response = {};
+    let firstname;
+    let lastname;
     let email;
+    let phonenum;
+    let online;
+    let rating;
+    let picture;
+
     axios.get('http://localhost:4000/profile').then((res) => {
       const profile = res.data;
       this.setState({ profile });
-      console.log(res.data.email);
+      //console.log(res.data.email);
       // console.log(res.data.email);
-      response = res.data;
-      email = JSON.stringify(res.data.email);
+      //response = res.data;
+
+      firstname = res.data.first_name;
+      lastname = res.data.last_name;
+      email = res.data.email;
+      phonenum = res.data.phonenum;
+      online = res.data.online;
+      rating = res.data.rating;
+      picture = res.data.profile_picture;
+
+      this.setState({ email, firstname, lastname, phonenum, online, rating });
+      console.log(res.data);
     });
-    console.log('copy of profile', response);
   }
 
   render() {
@@ -105,7 +121,7 @@ class Profile extends Component {
                 {/*the username*/}
                 <h1>My Name: </h1>
                 <div className='UserField'>
-                  <h1>Rouis Lamirez</h1>
+                  <h1>{this.state.firstname + ' ' + this.state.lastname}</h1>
                 </div>
               </div>
               <div className='HeaderField'>
@@ -113,7 +129,7 @@ class Profile extends Component {
                 {/*the guild ranking*/}
                 <h1>My Rank: </h1>
                 <div className='UserField'>
-                  <h1>Most Honorable</h1>
+                  <h1>{this.state.rating}</h1>
                 </div>
               </div>
             </div>
@@ -122,13 +138,13 @@ class Profile extends Component {
                 <h2>Email: </h2>
               </div>
               <div className='UserSubfield'>
-                <h2> rouis.lamirez@myuniversity.edu </h2>
+                <h2> {this.state.email} </h2>
               </div>
               <div className='HeaderSubfield'>
                 <h2>Phone: </h2>
               </div>
               <div className='UserSubfield'>
-                <h2> ###-###-#### </h2>
+                <h2>{this.state.phonenum} </h2>
               </div>
             </div>
           </div>
