@@ -82,6 +82,7 @@ router.put(
       //   email: profile[0].email,
       //   newEmail: newEmail,
       // };
+
       if (profile) {
         //UPDATE
         console.log('in here!!');

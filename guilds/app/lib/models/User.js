@@ -42,6 +42,7 @@ User.updateDominion = async function (req, res) {
     res.status(400);
   }
 };
+/*
 //Updates a User's information
 //Takes a user object
 //Returns the user row
@@ -51,9 +52,9 @@ User.updateUserInformation = async function (req, res) {
       'UPDATE guilds.users SET first_name=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)RETURNING *',
       [
         req[0].id,
-        req[0].first_name,
-        req[0].last_name,
-        req[0].username,
+        // req[0].first_name,
+        // req[0].last_name,
+        // req[0].username,
         req[0].phonenum,
         req[0].description,
         req[0].dominion_id,
@@ -66,6 +67,33 @@ User.updateUserInformation = async function (req, res) {
     res.status(400);
   }
 };
+*/
+
+//Updates a User's information
+//Takes a user object
+//Returns the user row
+User.updateUserInformation = async function (req, res) {
+  try {
+    const user = await sql.query(
+      'UPDATE guilds.users SET phonenum=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)RETURNING *',
+      [
+        req[0].id,
+        // req[0].first_name,
+        // req[0].last_name,
+        // req[0].username,
+        req[0].phonenum,
+        req[0].description,
+        req[0].dominion_id,
+      ]
+    );
+    console.log('updated user information ', req[0], user.rows.length);
+    return user.rows[0];
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
 // Updates user email used
 // Takes array of old_email and new_email
 // MUST UPDATE LOGIN EMAIL FIRST
