@@ -13,6 +13,8 @@ import MarketPlace from './components/MarketPlace';
 import AllGuilds from './components/AllGuilds';
 import Messages from './components/Messages';
 import Payment from './components/Payment';
+import PaymentSuccess from './components/PaymentSuccess';
+
 
 class App extends Component {
   render() {
@@ -33,6 +35,9 @@ class App extends Component {
           <Navigation></Navigation>
           </Route>
           <Route path='/payment' component={Payment}>
+            <Navigation></Navigation>
+          </Route>
+          <Route path='/payment-success' component={PaymentSuccess}>
             <Navigation></Navigation>
           </Route>
         </Switch>

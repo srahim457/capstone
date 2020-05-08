@@ -60,6 +60,7 @@ class MarketPlace extends Component {
   // }
 
   componentDidMount() {
+    // axios.get();
     fetch(`/market-place/`, {
       headers: {
         'Content-Type': 'application/json',

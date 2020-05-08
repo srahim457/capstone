@@ -44,11 +44,11 @@ class DisplayListing extends Component {
             </div>
             <div>
               {/* make into a description box */}
-              <label>Item Description:</label>
+              <label>Item Description: </label>
               {description}
             </div>
             <div>
-              <label>Type of Listing:</label>
+              <label>Type of Listing: </label>
               <br />
             </div>
             <div>

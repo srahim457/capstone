@@ -17,9 +17,9 @@
     "config": "^3.3.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
+    "express-handlebars": "^4.0.4",
     "express-session": "^1.17.0",
     "express-validator": "^6.4.0",
     "jquery": "^3.5.0",
@@ -41,6 +41,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "request": "^2.88.2",
+    "require-load": "^2.2.0",
+    "stripe": "^8.49.0",
     "typescript": "^3.8.3"
   },
   "scripts": {
@@ -65,6 +67,7 @@
     ]
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.3",
     "sequelize-cli": "^5.5.1"
   },
