@@ -60,7 +60,7 @@ class EditProfile extends Component {
                 onChange={this.nameChangeHandler}
               ></input>
             </div>
-            <div>
+            {/* <div>
               <label>User's Email: </label>
               <input
                 type='email'
@@ -70,7 +70,7 @@ class EditProfile extends Component {
                 value={this.state.email}
                 onChange={this.emailChangeHandler}
               />
-            </div>
+            </div> */}
             <div>
               <label>User's Phone: </label>
               <input

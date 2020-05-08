@@ -41,12 +41,12 @@ router.get('/', auth, async (req, res) => {
 // @access Private
 router.put(
   '/',
-  [auth, [check('email', 'email is required').not().isEmpty()]],
+  [auth /*, [check('email', 'email is required').not().isEmpty()]*/],
   async (req, res) => {
-    const errors = validationResult(req);
-    if (errors.isEmpty() == 0) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    //const errors = validationResult(req);
+    // if (errors.isEmpty() == 0) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
     const {
       firstname,
       lastname,
@@ -56,7 +56,6 @@ router.put(
       phonenum,
       profilepic,
       rating,
-      id,
     } = req.body;
 
     // Build profile object
@@ -70,24 +69,25 @@ router.put(
     if (profilepic) profileFields.profilepic = profilepic;
     if (rating) profileFields.rating = rating;
 
-    //console.log('Reqbody', email);
-
     try {
-      // console.log('USERID', userID);
       let profile = await User.getUserById([req.user.id], res);
-      //console.log('id:', profile[0]);
-      console.log('new email', email);
+
+      //console.log('new email', email);
       //let profile = await User.getUserByEmail([email], res);
 
-      console.log('old email', profile[0].email);
-      let newEmail = profile[0].email;
+      //console.log('old email', profile[0].email);
+      //let newEmail = email;
       //let newProfile;
+      // emailObj = {
+      //   email: profile[0].email,
+      //   newEmail: newEmail,
+      // };
       if (profile) {
         //UPDATE
         console.log('in here!!');
-        await User.updateEmail([email, newEmail], res); //update profile here
+        await User.updateEmail([emailObj], res); //updates email here
         //console.log(newProfile);
-        return res.json(profile[0].email);
+        return res.json(profile);
       }
     } catch (err) {
       console.error(err.message);
