@@ -14,22 +14,42 @@ let Item = require('../../models/Item').Item;
 // Needs an item object and a user id
 // Assuming the parameter is the item id and we can pull the user id from the current session information
 // @access private
-router.post('/', async (req, res) => {
+router.post('/create', async (req, res) => {
   try {
-    var newListing = {
-      // item_id: req.params.itemid,
+    var newItem = {
+      item_name: req.body.item_name,
+      item_desc: req.body.item_desc,
+      image: req.body.image,
+    }
+    const createdItemId = await Item.createItem([newItem], res);
+    /*
+      Still need to implement the check if it is a sale,rental,loan
+    */
+    const newListing = {
+      item_id: createdItemId,
+      return_by: req.body.return_by,
+      policy: req.body.policy,
       total_price: req.body.total_price,
       rent_amount: req.body.rent_amount,
-      insurance_amount: req.body.insurance_amount,
-      lender_id: req.body.lender_id,
-    };
-    const createdlistingid = await Listing.createListing([newListing], res);
-    console.log('listing result', createdlistingid);
-    res.sendStatus(createdlistingid);
+      //insurance_amount: req.body.insurance_amount,
+      lender_id: req.body.lender_id
+    }
+    console.log('created Itemid is', newListing.item_id)
+    //if sale listing => 
+    const createdSaleId = await Listing.createSaleListing([newListing], res);
+    console.log('created sale listing id is ', createdSaleId)
+    res.status(200).json(createdSaleId)
+    //if loan listing => const createdLoanId = await Listing.createLoanListing([newListing],res);
+    //console.log('created loan listing id is ', createdLoanId)
+    //res.sendStatus(createdLoanId);
+    //if rent listing => const createdRentalId = await Listing.createRentalListing([newListing],res);
+    //console.log('created rental listing id is ', createdRentalId)
+    //res.sendStatus(createdRentalId);   
+
   } catch (error) {
-    console.error('error posting to marketplace');
+    console.error('error creating to marketplace', error);
   }
-  console.log('called post request at market');
+  console.log('called post request for create at market');
 });
 
 //Gets a listing matching the passed listing id
