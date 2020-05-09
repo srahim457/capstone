@@ -61,32 +61,29 @@ class CreateListing extends Component {
   };
 
   handleSubmit = (e) => {
-      if (!this.canBeSubmitted()) {
-        alert('Unable to submit: some field may be empty');
-        return;
-      }
-      else{
-        alert('submission has been completed');
-        e.preventDefault();
-        console.log(this.state); //post request with axios
-        const item = this.state;
-        axios.post(`http://localhost:4000/market-place`, { item }).then((res) => {
-          console.log(res);
-          console.log(res.data);
-        });
-        window.location.reload(false);
-      }
-    };
-
-    canBeSubmitted() {
-      const empty = validate(
-                              this.state.name,
-                              this.state.description,
-                            );
-      const isDisabled = Object.keys(empty).some(x => empty[x]);
-      return !isDisabled;
+    e.preventDefault();
+    if (!this.canBeSubmitted()) {
+      alert('Unable to submit: some field may be empty');
+      return;
+    } else {
+      alert('submission has been completed');
+      e.preventDefault();
+      console.log(this.state); //post request with axios
+      const item = this.state;
+      axios.post(`http://localhost:4000/market-place`, { item }).then((res) => {
+        console.log(res);
+        console.log(res.data);
+      });
+      // window.location.reload(false);
     }
-    
+  };
+
+  canBeSubmitted() {
+    const empty = validate(this.state.name, this.state.description);
+    const isDisabled = Object.keys(empty).some((x) => empty[x]);
+    return !isDisabled;
+  }
+
   fileSelectedHandler = (e) => {
     //console.log(e.target.files[0]);
     this.setState({
@@ -217,7 +214,6 @@ class CreateListing extends Component {
 
           <form className='form-fields'>
             <div>
-
               <label>
                 <strong>Item Name</strong>
               </label>

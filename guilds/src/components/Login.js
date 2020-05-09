@@ -226,9 +226,7 @@ const Login = ({ login, isAuthenticated }) => {
   };
 
   if (isAuthenticated) {
-    return (
-      (<Redirect exact to='/profile'></Redirect>), window.location.reload()
-    );
+    return (<Redirect to='/profile'></Redirect>), window.location.reload();
   }
 
   return (

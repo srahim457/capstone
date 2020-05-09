@@ -7,6 +7,7 @@ import {
   NavLink,
   Switch,
 } from 'react-router-dom';
+import axios from 'axios';
 
 import './styles/profile.css';
 import Profile_Borrowed from './Profile_Borrowed';
@@ -34,6 +35,15 @@ class Profile extends Component {
     }));
 
     this.state = {
+      firstname: '',
+      lastname: '',
+      phonenum: null,
+      email: '',
+      description: '',
+      online: false,
+      rating: null,
+      picture: null,
+      profile: {},
       click: false, //added to see if it respond on click
       testToken: false,
       exampleArrayGuilds: exampleArrayGuilds,
@@ -48,15 +58,44 @@ class Profile extends Component {
   displayBorrowed() {
     return <Profile_Borrowed />;
   }
-  displayListings(){
+  displayListings() {
     return <Profile_Listed />;
   }
 
-  listings(){
-    this.setState({ testToken: false })
+  listings() {
+    this.setState({ testToken: false });
   }
-  borrowed(){
-    this.setState({ testToken: true })
+  borrowed() {
+    this.setState({ testToken: true });
+  }
+
+  componentDidMount() {
+    let firstname;
+    let lastname;
+    let email;
+    let phonenum;
+    let online;
+    let rating;
+    let picture;
+
+    axios.get('http://localhost:4000/profile').then((res) => {
+      const profile = res.data;
+      this.setState({ profile });
+      //console.log(res.data.email);
+      // console.log(res.data.email);
+      //response = res.data;
+
+      firstname = res.data.first_name;
+      lastname = res.data.last_name;
+      email = res.data.email;
+      phonenum = res.data.phonenum;
+      online = res.data.online;
+      rating = res.data.rating;
+      picture = res.data.profile_picture;
+
+      this.setState({ email, firstname, lastname, phonenum, online, rating });
+      console.log(res.data);
+    });
   }
 
   render() {
@@ -70,7 +109,12 @@ class Profile extends Component {
       <BrowserRouter>
         <div className='Background'>
           {/*The user information*/}
+<<<<<<< HEAD
           <div className='profileHeader'>
+=======
+          <h1 className='title'>Profile</h1>
+          <div className='Header'>
+>>>>>>> 15fbc7d42216e2bda4afea8db6798d93e78160ef
             <div className='ProfilePic'>
               {' '}
               {/*adding the profile pic*/}
@@ -78,7 +122,7 @@ class Profile extends Component {
             </div>
             <div className='button-container'>
               {/*the button that change the page to edit profile information*/}
-              <button class='edit-button' onClick={this.onClickHandler}>
+              <button className='edit-button' onClick={this.onClickHandler}>
                 Edit
               </button>
             </div>
@@ -86,17 +130,19 @@ class Profile extends Component {
               <div className='HeaderField'>
                 {' '}
                 {/*the username*/}
-                <h1>My Name: </h1>
+                <h1>Name: </h1>
                 <div className='UserField'>
-                  <h1>Rouis Lamirez</h1>
+                  <h1>{this.state.firstname + ' ' + this.state.lastname}</h1>
                 </div>
               </div>
               <div className='HeaderField'>
                 {' '}
                 {/*the guild ranking*/}
-                <h1>My Rank: </h1>
+                <h1>Rank: </h1>
                 <div className='UserField'>
-                  <h1>Most Honorable</h1>
+                  <h1>
+                    {this.state.rating == null ? 'N/A' : this.state.rating}
+                  </h1>
                 </div>
               </div>
             </div>
@@ -105,13 +151,15 @@ class Profile extends Component {
                 <h2>Email: </h2>
               </div>
               <div className='UserSubfield'>
-                <h2> rouis.lamirez@myuniversity.edu </h2>
+                <h2> {this.state.email} </h2>
               </div>
               <div className='HeaderSubfield'>
                 <h2>Phone: </h2>
               </div>
               <div className='UserSubfield'>
-                <h2> ###-###-#### </h2>
+                <h2>
+                  {this.state.phonenum == null ? 'N/A' : this.state.phonenum}{' '}
+                </h2>
               </div>
             </div>
           </div /*profileHeader*/ >
@@ -146,20 +194,22 @@ class Profile extends Component {
             {/*the button that switched tabs between items listed and borrowed*/}
             <div className='PageSwitcher_profile'>
               <button
-                onClick = {this.listings.bind(this)}
-                className={this.state.testToken === false
-                            ? 'PageSwitcher__Item_profile_active'
-                            : 'PageSwitcher__Item_profile'
-                          }
+                onClick={this.listings.bind(this)}
+                className={
+                  this.state.testToken === false
+                    ? 'PageSwitcher__Item_profile_active'
+                    : 'PageSwitcher__Item_profile'
+                }
               >
                 Listed Items
               </button>
               <button
-                onClick = {this.borrowed.bind(this)}
-                className={this.state.testToken === true
-                            ? 'PageSwitcher__Item_profile_active'
-                            : 'PageSwitcher__Item_profile'
-                          }
+                onClick={this.borrowed.bind(this)}
+                className={
+                  this.state.testToken === true
+                    ? 'PageSwitcher__Item_profile_active'
+                    : 'PageSwitcher__Item_profile'
+                }
               >
                 Borrowed Items
               </button>
@@ -167,14 +217,12 @@ class Profile extends Component {
             {/*these components can be found in Profile_Borrowed.js and Profile_Listed.js*/}
             {this.state.testToken === true
               ? this.displayBorrowed()
-              : this.displayListings()
-            }
+              : this.displayListings()}
             {/*
             <Route path='/profile-listed' component={Profile_Listed}></Route>
             <Route path='/profile' component={Profile_Borrowed}></Route>
             */}
           </div>
-
         </div>
       </BrowserRouter>
     );

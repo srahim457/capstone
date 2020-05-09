@@ -41,53 +41,60 @@ router.get('/', auth, async (req, res) => {
 // @access Private
 router.put(
   '/',
-  [auth, [check('email', 'email is required').not().isEmpty()]],
+  [auth /*, [check('email', 'email is required').not().isEmpty()]*/],
   async (req, res) => {
-    const errors = validationResult(req);
-    if (errors.isEmpty() == 0) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    //const errors = validationResult(req);
+    // if (errors.isEmpty() == 0) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
     const {
-      firstname,
-      lastname,
+      first_name,
+      last_name,
       username,
+      phonenum,
+      description,
       email,
       online,
-      phonenum,
-      profilepic,
+      profile_picture,
       rating,
       id,
     } = req.body;
 
     // Build profile object
     const profileFields = {};
-    if (firstname) profileFields.firstname = firstname;
-    if (lastname) profileFields.lastname = lastname;
+    if (first_name) profileFields.first_name = first_name;
+    if (last_name) profileFields.last_name = last_name;
     if (username) profileFields.username = username;
     if (email) profileFields.email = email;
     if (online) profileFields.online = online;
     if (phonenum) profileFields.phonenum = phonenum;
-    if (profilepic) profileFields.profilepic = profilepic;
+    if (profile_picture) profileFields.profile_picture = profile_picture;
     if (rating) profileFields.rating = rating;
-
-    //console.log('Reqbody', email);
-
+    if (description) profileFields.description = description;
+    if (req.user.id) profileFields.id = req.user.id;
     try {
-      // console.log('USERID', userID);
       let profile = await User.getUserById([req.user.id], res);
-      //console.log('id:', profile[0]);
-      console.log('new email', email);
+      //let description = req.body.description;
+      //let phonenum = req.body.phonenum;
+      //let id = req.user.id;
+      console.log(profileFields, 'fieldss');
+      //console.log('new email', email);
       //let profile = await User.getUserByEmail([email], res);
 
-      console.log('old email', profile[0].email);
-      let newEmail = profile[0].email;
+      //console.log('old email', profile[0].email);
+      //let newEmail = email;
       //let newProfile;
+      // emailObj = {
+      //   email: profile[0].email,
+      //   newEmail: newEmail,
+      // };
+
       if (profile) {
         //UPDATE
-        console.log('in here!!');
-        await User.updateEmail([email, newEmail], res); //update profile here
+        //await User.updateEmail([emailObj], res); //updates email here
         //console.log(newProfile);
-        return res.json(profile[0].email);
+        await User.updateUserInformation([profileFields], res);
+        return res.json(profileFields);
       }
     } catch (err) {
       console.error(err.message);
