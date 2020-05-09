@@ -27,9 +27,16 @@ function Rango(props) {
 class Profile extends Component {
   constructor() {
     super();
+
+    const exampleArrayGuilds = [...Array(10).keys()].map((i) => ({
+      id: i + 1,
+      name: 'Guild ' + (i+1),
+    }));
+
     this.state = {
       click: false, //added to see if it respond on click
       testToken: false,
+      exampleArrayGuilds: exampleArrayGuilds,
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -63,14 +70,13 @@ class Profile extends Component {
       <BrowserRouter>
         <div className='Background'>
           {/*The user information*/}
-          <div className='Header'>
+          <div className='profileHeader'>
             <div className='ProfilePic'>
               {' '}
               {/*adding the profile pic*/}
               <img src={LaserLouis} alt=''></img>
             </div>
             <div className='button-container'>
-              {' '}
               {/*the button that change the page to edit profile information*/}
               <button class='edit-button' onClick={this.onClickHandler}>
                 Edit
@@ -108,7 +114,32 @@ class Profile extends Component {
                 <h2> ###-###-#### </h2>
               </div>
             </div>
-          </div>
+          </div /*profileHeader*/ >
+
+          <div className='additionalUserInfoPortion'>
+          {/*contains the list of the guilds the user is apart of and user bio*/}
+            <h1>Bio:</h1>
+            <div className='userBioSection'>
+              <h1> Hi I like anime and having fun. I'm a fullstack developer :)
+              testing testing testing testing testing testing testing testing testing testing testing
+              testing testing testing testing testing testing testing testing testing testing testing
+              testing testing testing testing testing testing testing testing testing testing testing
+              testing testing testing testing testing testing testing testing testing testing testing
+              </h1>
+            </div>
+            <div className='userGuildListTitle'>
+              <div className='centerText'>
+                <h1>Affiliated Guilds</h1>
+              </div>
+            </div>
+            <div className='guildnamelistcontainer'>
+              {this.state.exampleArrayGuilds.map((guild) => (
+                <div className='guildnamecontainer' key={guild.id}>
+                    <h2> Guild {guild.id} </h2>
+                </div>
+              ))}
+            </div>
+          </div /*Listings*/>
 
           {/*The user's listings*/}
           <div className='Listings'>
