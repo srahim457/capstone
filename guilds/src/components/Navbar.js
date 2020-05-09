@@ -51,6 +51,9 @@ import PropTypes from 'prop-types';
 import { logout } from '../actions/auth';
 import NotFound from './layout/NotFound';
 
+import Payment from './Payment';
+import PaymentSuccess from './PaymentSuccess';
+
 import './styles/Navigation.css';
 
 //add & import routes within content div
@@ -71,6 +74,9 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <Route path='/market-place' component={MarketPlace} />
         <Route path='/messages' component={Messages} />
         <Route path='/all-guilds' component={AllGuilds} />
+        <Route path='/payment' component={Payment} />
+        <Route path='/payment-success' component={PaymentSuccess} />
+        
       </div>
     </BrowserRouter>
   );
