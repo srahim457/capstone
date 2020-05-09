@@ -53,16 +53,18 @@ class EditProfile extends Component {
 
     console.log(this.state); //post request with axios
     const state = this.state;
-    axios.put(`http://localhost:4000/profile`, { state }).then((res) => {
-      console.log(res);
-      console.log(res.data);
-    });
-    window.location.reload(false);
+    // axios.put(`http://localhost:4000/profile`, { state }).then((res) => {
+    //   console.log(res);
+    //   console.log(res.data);
+    // });
+    //window.location.reload(false);
   };
 
-  closeButton() {
+  closeButton(e) {
+    e.preventDefault();
     //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
     window.location.reload(false);
+    console.log('called button');
   }
   render() {
     return (
@@ -136,7 +138,7 @@ class EditProfile extends Component {
               />
             </div>
           </form>
-          <button>Submit</button>
+          <button onClick={this.handleSubmit}>Submit</button>
         </div>
       </div>
     );
