@@ -82,7 +82,7 @@ class Profile extends Component {
       const profile = res.data;
       this.setState({ profile });
       //console.log(res.data.email);
-      // console.log(res.data.email);
+      //console.log(res.data.email);
       //response = res.data;
 
       firstname = res.data.first_name;

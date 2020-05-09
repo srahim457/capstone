@@ -10,7 +10,7 @@ relevant files: Profile.js
   padding-bottom: 50px;
 }
 
-.profileHeader { /*the background of the top part with the name and image*/
+.Header { /*the background of the top part with the name and image*/
   background-image: url(../../images/parchment_background.jpg);
   display: block;
   margin-left: auto;
