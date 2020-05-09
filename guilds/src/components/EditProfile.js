@@ -38,7 +38,7 @@ class EditProfile extends Component {
 
   pictureChangeHandler = (e) => {
     this.setState({
-      profile_picture: e.target.value,
+      profile_picture: e.target.file,
     });
   };
 
@@ -126,6 +126,7 @@ class EditProfile extends Component {
                 className='form-input'
                 placeholder='only supply numbers'
                 maxLength='10'
+                minLength='10'
                 value={this.state.number}
                 onChange={this.numberChangeHandler}
               />

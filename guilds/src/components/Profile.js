@@ -15,13 +15,13 @@ import Profile_Listed from './Profile_Listed';
 import EditProfile from './EditProfile';
 import LaserLouis from '../images/LaserLouis.jpg';
 
-function Nombre(props) {
-  return <h1>{props.name}</h1>;
-}
+// function Nombre(props) {
+//   return <h1>{props.name}</h1>;
+// }
 
-function Rango(props) {
-  return <h1>{props.status}</h1>;
-}
+// function Rango(props) {
+//   return <h1>{props.status}</h1>;
+// }
 
 // const element = <Nombre name='Profile' />;
 
