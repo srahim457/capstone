@@ -17,14 +17,43 @@ var Listing = function (listing) {
 
 //Listing
 
-//Create a new listing entry
+//Create a new sale listing entry
 //Takes in a listing object
 //Returns listing id
-Listing.createListing = async function (req, res) {
+Listing.createSaleListing = async function (req, res) {
   try {
     var d = new Date();
-    console.log('creating listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,rent_amount,insurance_amount,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].rent_amount, req[0].insurance_amount, req[0].lender_id, 'F', 'F']);
+    console.log('creating sale listing with ', req[0])
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].lender_id, 'F', 'F']);
+    return listing.rows[0].id
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+
+//Create a new loan listing entry
+//Takes in a listing object
+//Returns listing id
+Listing.createLoanListing = async function (req, res) {
+  try {
+    var d = new Date();
+    console.log('creating loan listing with ', req[0])
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *', [req[0].item_id, d, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F']);
+    return listing.rows[0].id
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Create a new loan listing entry
+//Takes in a listing object
+//Returns listing id
+Listing.createRentalListing = async function (req, res) {
+  try {
+    var d = new Date();
+    console.log('creating rental listing with ', req[0])
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F']);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)

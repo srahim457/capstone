@@ -15,7 +15,7 @@ var Item = function (item) {
 Item.createItem = async function (req, res) {
   try {
     console.log('creating item', req[0])
-    const item = await sql.query('INSERT INTO guilds.item_info (item_name,item_desc,image,is_available) VALUES($1,$2,$3,$4)', [req[0].item_name, req[0].item_desc, req[0].item_image, 'T'])
+    const item = await sql.query('INSERT INTO guilds.item_info (item_name,item_desc,image,is_available) VALUES($1,$2,$3,$4) RETURNING *', [req[0].item_name, req[0].item_desc, req[0].item_image, 'T'])
     return item.rows[0].id
   } catch (error) {
     console.log(error)
