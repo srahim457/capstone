@@ -61,14 +61,14 @@ router.put(
     } = req.body;
 
     // Build profile object
-    let profileFields = {};
+    const profileFields = {};
     if (first_name) profileFields.first_name = first_name;
     if (last_name) profileFields.last_name = last_name;
     if (username) profileFields.username = username;
     if (email) profileFields.email = email;
     if (online) profileFields.online = online;
     if (phonenum) profileFields.phonenum = phonenum;
-    if (profile_picture) profileFields.profilepic = profile_picture;
+    if (profile_picture) profileFields.profile_picture = profile_picture;
     if (rating) profileFields.rating = rating;
     if (description) profileFields.description = description;
     if (req.user.id) profileFields.id = req.user.id;

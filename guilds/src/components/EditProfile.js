@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import MarketPlace from './MarketPlace';
 import axios from 'axios';
 import './styles/EditProfile.css';
 
@@ -9,10 +11,10 @@ class EditProfile extends Component {
 
     this.state = {
       name: '',
-      number: '',
+      phonenum: null,
       email: '',
       picture: null,
-      description: '',
+      description: null,
     };
   }
 
@@ -30,13 +32,13 @@ class EditProfile extends Component {
 
   numberChangeHandler = (e) => {
     this.setState({
-      number: e.target.value,
+      phonenum: e.target.value,
     });
   };
 
   pictureChangeHandler = (e) => {
     this.setState({
-      picture: e.target.value,
+      profile_picture: e.target.value,
     });
   };
 
@@ -49,15 +51,30 @@ class EditProfile extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
+    console.log(this.state, 'the state /n'); //post request with axios
+    const state = this.state;
+    const phonenum = this.state.phonenum;
+    const description = this.state.description;
+    const profile_picture = this.state.picture;
+    console.log(phonenum, description, profile_picture);
+    // const stateObj = {
+    //   phonenum: this.phonenum,
+    //   description: description,
+    //   profile_picture: profile_picture,
+    // };
+    //console.log('stateobj', stateObj.phonenum);
+    axios
+      .put(`http://localhost:4000/profile`, {
+        phonenum,
+        description,
+        profile_picture,
+      })
+      .then((res) => {
+        console.log(res.data, 'this is res.data');
+      });
     alert('submission has been completed');
 
-    console.log(this.state); //post request with axios
-    const state = this.state;
-    // axios.put(`http://localhost:4000/profile`, { state }).then((res) => {
-    //   console.log(res);
-    //   console.log(res.data);
-    // });
-    //window.location.reload(false);
+    window.location.reload(true);
   };
 
   closeButton(e) {
@@ -108,7 +125,7 @@ class EditProfile extends Component {
                 type='tel'
                 className='form-input'
                 placeholder='only supply numbers'
-                maxlength='10'
+                maxLength='10'
                 value={this.state.number}
                 onChange={this.numberChangeHandler}
               />
@@ -119,7 +136,7 @@ class EditProfile extends Component {
               <br />
               <textarea
                 className='form-input'
-                autofocus
+                autoFocus
                 placeholder='Type your description'
                 maxlength='180'
                 rows='5'
