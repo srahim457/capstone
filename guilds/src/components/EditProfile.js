@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './styles/EditProfile.css';
 
 /* !!! not pretty, did not edit all the change handlers*/
@@ -17,34 +18,52 @@ class EditProfile extends Component {
 
   nameChangeHandler = (e) => {
     this.setState({
-      name: e.currentTarget.value,
+      name: e.target.value,
     });
   };
 
   emailChangeHandler = (e) => {
     this.setState({
-      email: e.currentTarget.value,
+      email: e.target.value,
     });
   };
 
   numberChangeHandler = (e) => {
     this.setState({
-      number: e.currentTarget.value,
+      number: e.target.value,
     });
   };
 
   pictureChangeHandler = (e) => {
     this.setState({
-      picture: e.currentTarget.value,
+      picture: e.target.value,
     });
   };
 
   descriptionChangeHandler = (e) => {
     this.setState({
-      description: e.currentTarget.value,
+      description: e.target.value,
     });
   };
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    alert('submission has been completed');
+
+    console.log(this.state); //post request with axios
+    const state = this.state;
+    axios.put(`http://localhost:4000/profile`, { state }).then((res) => {
+      console.log(res);
+      console.log(res.data);
+    });
+    window.location.reload(false);
+  };
+
+  closeButton() {
+    //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    window.location.reload(false);
+  }
   render() {
     return (
       // <div>{this.props.children}</div>
@@ -55,7 +74,9 @@ class EditProfile extends Component {
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
               <div className='button-wrapper'>
-                <button className='close-button'>X</button>
+                <button className='close-button' onClick={this.closeButton}>
+                  X
+                </button>
               </div>
               {/* <label>User's Name: </label>
               <input
@@ -106,7 +127,7 @@ class EditProfile extends Component {
               />
             </div>
             <div>
-              <label>User's Profile Picture: </label>
+              <label>Profile Picture: </label>
               <input
                 type='file'
                 name='images'

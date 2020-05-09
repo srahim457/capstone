@@ -74,7 +74,7 @@ class CreateListing extends Component {
         console.log(res);
         console.log(res.data);
       });
-      window.location.reload(false);
+      // window.location.reload(false);
     }
   };
 

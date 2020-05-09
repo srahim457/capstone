@@ -102,6 +102,7 @@ class Profile extends Component {
       <BrowserRouter>
         <div className='Background'>
           {/*The user information*/}
+          <h1 className='title'>Profile</h1>
           <div className='Header'>
             <div className='ProfilePic'>
               {' '}
@@ -119,7 +120,7 @@ class Profile extends Component {
               <div className='HeaderField'>
                 {' '}
                 {/*the username*/}
-                <h1>My Name: </h1>
+                <h1>Name: </h1>
                 <div className='UserField'>
                   <h1>{this.state.firstname + ' ' + this.state.lastname}</h1>
                 </div>
@@ -127,7 +128,7 @@ class Profile extends Component {
               <div className='HeaderField'>
                 {' '}
                 {/*the guild ranking*/}
-                <h1>My Rank: </h1>
+                <h1>Rank: </h1>
                 <div className='UserField'>
                   <h1>
                     {this.state.rating == null ? 'N/A' : this.state.rating}

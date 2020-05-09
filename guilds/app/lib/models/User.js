@@ -74,8 +74,9 @@ User.updateUserInformation = async function (req, res) {
 //Returns the user row
 User.updateUserInformation = async function (req, res) {
   try {
+    console.log(req[0], '  request !! ');
     const user = await sql.query(
-      'UPDATE guilds.users SET phonenum=($2), last_name =($3),username = ($4),phonenum = ($5), description = ($6), dominion_id = ($7) WHERE user_id = ($1)RETURNING *',
+      'UPDATE guilds.users SET phonenum=($2), description =($3) WHERE id = ($1)RETURNING *',
       [
         req[0].id,
         // req[0].first_name,
@@ -83,7 +84,7 @@ User.updateUserInformation = async function (req, res) {
         // req[0].username,
         req[0].phonenum,
         req[0].description,
-        req[0].dominion_id,
+        //req[0].dominion_id,
       ]
     );
     console.log('updated user information ', req[0], user.rows.length);

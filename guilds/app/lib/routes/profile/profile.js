@@ -48,30 +48,36 @@ router.put(
     //   return res.status(400).json({ errors: errors.array() });
     // }
     const {
-      firstname,
-      lastname,
+      first_name,
+      last_name,
       username,
+      phonenum,
+      description,
       email,
       online,
-      phonenum,
-      profilepic,
+      profile_picture,
       rating,
+      id,
     } = req.body;
 
     // Build profile object
-    const profileFields = {};
-    if (firstname) profileFields.firstname = firstname;
-    if (lastname) profileFields.lastname = lastname;
+    let profileFields = {};
+    if (first_name) profileFields.first_name = first_name;
+    if (last_name) profileFields.last_name = last_name;
     if (username) profileFields.username = username;
     if (email) profileFields.email = email;
     if (online) profileFields.online = online;
     if (phonenum) profileFields.phonenum = phonenum;
-    if (profilepic) profileFields.profilepic = profilepic;
+    if (profile_picture) profileFields.profilepic = profile_picture;
     if (rating) profileFields.rating = rating;
-
+    if (description) profileFields.description = description;
+    if (req.user.id) profileFields.id = req.user.id;
     try {
       let profile = await User.getUserById([req.user.id], res);
-
+      //let description = req.body.description;
+      //let phonenum = req.body.phonenum;
+      //let id = req.user.id;
+      console.log(profileFields, 'fieldss');
       //console.log('new email', email);
       //let profile = await User.getUserByEmail([email], res);
 
@@ -85,10 +91,10 @@ router.put(
 
       if (profile) {
         //UPDATE
-        console.log('in here!!');
-        await User.updateEmail([emailObj], res); //updates email here
+        //await User.updateEmail([emailObj], res); //updates email here
         //console.log(newProfile);
-        return res.json(profile);
+        await User.updateUserInformation([profileFields], res);
+        return res.json(profileFields);
       }
     } catch (err) {
       console.error(err.message);
