@@ -109,12 +109,8 @@ class Profile extends Component {
       <BrowserRouter>
         <div className='Background'>
           {/*The user information*/}
-<<<<<<< HEAD
-          <div className='profileHeader'>
-=======
           <h1 className='title'>Profile</h1>
           <div className='Header'>
->>>>>>> 15fbc7d42216e2bda4afea8db6798d93e78160ef
             <div className='ProfilePic'>
               {' '}
               {/*adding the profile pic*/}
