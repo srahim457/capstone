@@ -19,13 +19,13 @@ var Listing = function (listing) {
 
 //Create a new sale listing entry
 //Takes in a listing object
-//Returns listing id
+//Returns created id
 Listing.createSaleListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating sale listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].lender_id, 'F', 'F']);
-    return listing.rows[0].id
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,lender_id,completed,expired,type) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].lender_id, 'F', 'F','sale']);
+    return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);
@@ -34,13 +34,13 @@ Listing.createSaleListing = async function (req, res) {
 
 //Create a new loan listing entry
 //Takes in a listing object
-//Returns listing id
+//Returns created listing 
 Listing.createLoanListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating loan listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *', [req[0].item_id, d, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F']);
-    return listing.rows[0].id
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired,type) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [req[0].item_id, d, req[0].return_by,req[0].policy, req[0].lender_id, 'F', 'F','loan']);
+    return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);
@@ -48,13 +48,13 @@ Listing.createLoanListing = async function (req, res) {
 };
 //Create a new loan listing entry
 //Takes in a listing object
-//Returns listing id
+//Returns created listing
 Listing.createRentalListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating rental listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F']);
-    return listing.rows[0].id
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired,type) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F','rental']);
+    return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);
@@ -125,6 +125,19 @@ Listing.getAllLenderListings = async function (req, res) {
 Listing.addBorrower = async function (req, res) {
   try {
     const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1) where id = ($2) RETURNING *', [req[0].user_id, req[0].listing_id]);
+    console.log('added a borrower to listing ', req[0].listing_id, '\n')
+    return listing.rows[0].id
+  } catch (error) {
+    console.log(error)
+    res.status(400);;
+  }
+};
+//Updates listing to remove a borrower
+//Takes in just a listing id
+//Returns listing id
+Listing.removeBorrower = async function (req, res) {
+  try {
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = "null" where id = ($1) RETURNING *', [req]);
     console.log('added a borrower to listing ', req[0].listing_id, '\n')
     return listing.rows[0].id
   } catch (error) {
