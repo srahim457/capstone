@@ -120,8 +120,10 @@ router.post('/', auth, async (req, res) => {
     console.log('Request ---', req.body);
     console.log('Request file ---', req.file); //Here you get file.
     /*Now do where ever you want to do*/
+    console.log('Image path', req.file.path);
+    let path = req.file.path;
     if (!err) {
-      return res.send(200).end();
+      return res.sendStatus(200).end();
     }
   });
 });
