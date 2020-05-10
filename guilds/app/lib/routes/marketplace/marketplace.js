@@ -22,7 +22,7 @@ router.post('/create', async (req, res) => {
       item_name: req.body.item.name,
       item_desc: req.body.item.description,
       image: req.body.item.image,
-    }
+    };
     const createdItemId = await Item.createItem([newItem], res);
     /*
       Still need to implement the check if it is a sale,rental,loan
@@ -34,25 +34,27 @@ router.post('/create', async (req, res) => {
       total_price: req.body.item.price,
       rent_amount: req.body.rent_amount,
       //insurance_amount: req.body.insurance_amount,
-      lender_id: req.user.id
-    }
-    console.log('created Itemid is', newListing.item_id)
+      lender_id: req.user.id,
+    };
+    console.log('created Itemid is', newListing.item_id);
     if (req.body.item.option === 'sale') {
       const createdSale = await Listing.createSaleListing([newListing], res);
-      console.log('created sale listing is \n ', createdSale)
-      res.status(200).json(createdSale)
+      console.log('created sale listing is \n ', createdSale);
+      res.status(200).json(createdSale);
     }
     if (req.body.item.option === 'loan') {
       const createdLoan = await Listing.createLoanListing([newListing], res);
-      console.log('created loan listing is \n', createdLoan)
-      res.status(200).json(createdLoan)
+      console.log('created loan listing is \n', createdLoan);
+      res.status(200).json(createdLoan);
     }
     if (req.body.item.option === 'rental') {
-      const createdRental = await Listing.createRentalListing([newListing], res);
-      console.log('created rental listing is \n', createdRental)
-      res.status(200).json(createdRental)
+      const createdRental = await Listing.createRentalListing(
+        [newListing],
+        res
+      );
+      console.log('created rental listing is \n', createdRental);
+      res.status(200).json(createdRental);
     }
-
   } catch (error) {
     console.error('error creating to marketplace \n', error);
   }
@@ -80,9 +82,9 @@ router.get('/:listingid/borrow', async (req, res) => {
   console.log(req.params.listingid);
   try {
     var ids = {
-      user_id = req.user.id,
-      listing_id = req.params.listingid
-    }
+      user_id: req.user.id,
+      listing_id: req.params.listingid,
+    };
     const listing = await Listing.addBorrower([ids], res);
     console.log('borrowing listing', listing);
     res.status(200).json(listing);
@@ -178,7 +180,8 @@ router.get('/listed', async (req, res) => {
 });
 
 //example;
-const item = [{
+const item = [
+  {
     id: 1,
     name: 'Ball',
     cost: 2.3,

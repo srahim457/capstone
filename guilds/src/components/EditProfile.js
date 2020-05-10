@@ -14,7 +14,7 @@ class EditProfile extends Component {
       phonenum: null,
       email: '',
       picture: null,
-      description: null,
+      description: '',
     };
   }
 
@@ -38,8 +38,10 @@ class EditProfile extends Component {
 
   pictureChangeHandler = (e) => {
     this.setState({
-      profile_picture: e.target.file,
+      picture: e.target.files[0],
     });
+    //console.log(this.state.picture, '$$$$');
+    //console.log(e.target.files[0], '$$$$');
   };
 
   descriptionChangeHandler = (e) => {
@@ -51,18 +53,27 @@ class EditProfile extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(this.state, 'the state /n'); //post request with axios
+    //console.log(this.state, 'the state /n'); //post request with axios
     const state = this.state;
     const phonenum = this.state.phonenum;
     const description = this.state.description;
-    const profile_picture = this.state.picture;
-    console.log(phonenum, description, profile_picture);
+    const picture = this.state.picture;
+    console.log(picture.name, ' in handle submit');
+    //console.log(phonenum, description, profile_picture);
     // const stateObj = {
     //   phonenum: this.phonenum,
     //   description: description,
     //   profile_picture: profile_picture,
     // };
     //console.log('stateobj', stateObj.phonenum);
+
+    const profile_picture = new FormData();
+    profile_picture.append(
+      'image',
+      this.state.picture,
+      this.state.picture.name
+    );
+    console.log(this.state.picture, 'name of file');
     axios
       .put(`http://localhost:4000/profile`, {
         phonenum,
@@ -74,7 +85,7 @@ class EditProfile extends Component {
       });
     alert('submission has been completed');
 
-    window.location.reload(true);
+    //window.location.reload(true);
   };
 
   closeButton(e) {
@@ -139,7 +150,7 @@ class EditProfile extends Component {
                 className='form-input'
                 autoFocus
                 placeholder='Type your description'
-                maxlength='180'
+                maxLength='180'
                 rows='5'
                 cols='40'
                 value={this.state.description}
@@ -150,9 +161,9 @@ class EditProfile extends Component {
               <label>Profile Picture: </label>
               <input
                 type='file'
-                name='images'
-                id='images'
-                value={this.state.picture}
+                name='image'
+                id='image'
+                onChange={this.pictureChangeHandler}
               />
             </div>
           </form>
