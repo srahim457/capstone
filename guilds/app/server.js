@@ -48,8 +48,11 @@ app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users')); //signup
 app.use('/auth', require('./lib/routes/auth')); //orig auth but to login
+<<<<<<< HEAD
 //app.use('/item',require('./lib/routes/item/item'))
 
+=======
+>>>>>>> 647a73c8c5b75cc4790bf236d1a7f0f15fc67ecb
 app.locals.user = {};
 
 // app.get('/auth', async (req, res) => {
