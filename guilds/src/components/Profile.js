@@ -31,7 +31,7 @@ class Profile extends Component {
 
     const exampleArrayGuilds = [...Array(10).keys()].map((i) => ({
       id: i + 1,
-      name: 'Guild ' + (i+1),
+      name: 'Guild ' + (i + 1),
     }));
 
     this.state = {
@@ -158,17 +158,21 @@ class Profile extends Component {
                 </h2>
               </div>
             </div>
-          </div /*profileHeader*/ >
+          </div /*profileHeader*/>
 
           <div className='additionalUserInfoPortion'>
-          {/*contains the list of the guilds the user is apart of and user bio*/}
+            {/*contains the list of the guilds the user is apart of and user bio*/}
             <h1>Bio:</h1>
             <div className='userBioSection'>
-              <h1> Hi I like anime and having fun. I'm a fullstack developer :)
-              testing testing testing testing testing testing testing testing testing testing testing
-              testing testing testing testing testing testing testing testing testing testing testing
-              testing testing testing testing testing testing testing testing testing testing testing
-              testing testing testing testing testing testing testing testing testing testing testing
+              <h1>
+                {' '}
+                Hi I like anime and having fun. I'm a fullstack developer :)
+                testing testing testing testing testing testing testing testing
+                testing testing testing testing testing testing testing testing
+                testing testing testing testing testing testing testing testing
+                testing testing testing testing testing testing testing testing
+                testing testing testing testing testing testing testing testing
+                testing testing testing testing
               </h1>
             </div>
             <div className='userGuildListTitle'>
@@ -179,7 +183,7 @@ class Profile extends Component {
             <div className='guildnamelistcontainer'>
               {this.state.exampleArrayGuilds.map((guild) => (
                 <div className='guildnamecontainer' key={guild.id}>
-                    <h2> Guild {guild.id} </h2>
+                  <h2> Guild {guild.id} </h2>
                 </div>
               ))}
             </div>
@@ -221,9 +225,7 @@ class Profile extends Component {
           </div>
         </div>
       </BrowserRouter>
-
     );
   }
 }
-
 export default Profile;
