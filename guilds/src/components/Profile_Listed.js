@@ -32,30 +32,29 @@ class Profile_Listed extends Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
   async componentDidMount(){
-    let itemname;
-    let itemdesc
-    let itemimg;
-    let itemcost;
-    let itempolicy;
-    let rentaltype;
-    let rentprice;
-    let insurance;
+    let listeditemname;
+    let listeditemdesc
+    let listeditemimg;
+    let listeditemcost;
+    let listeditempolicy;
+    let listedrentaltype;
+    let listedrentprice;
+    let listedinsurance;
 
     axios.get('http://localhost:4000/market-place/listed').then((res) => {
-      const listings = res.data;
-      console.log('listing data \n',listings)
-      this.setState({ listings });
+      const listedlistings = res.data;
+      this.setState({ listedlistings });
 
-      itemname = res.data.item_name;
-      itemdesc = res.data.item_desc;
-      itemimg = res.data.image;
-      itemcost = res.data.total_price;
-      itempolicy = res.data.policy;
-      rentaltype = res.data.type;
-      rentprice = res.data.rent_amount;
-      insurance = res.data.insurance_amount;
+      listeditemname = res.data.item_name;
+      listeditemdesc = res.data.item_desc;
+      listeditemimg = res.data.image;
+      listeditemcost = res.data.total_price;
+      listeditempolicy = res.data.policy;
+      listedrentaltype = res.data.type;
+      listedrentprice = res.data.rent_amount;
+      listedinsurance = res.data.insurance_amount;
 
-      this.setState({itemname,itemdesc,itemimg,itemcost,itempolicy,rentaltype,rentprice,insurance})
+      this.setState({listeditemname,listeditemdesc,listeditemimg,listeditemcost,listeditempolicy,listedrentaltype,listedrentprice,listedinsurance})
   
      console.log(res.data);
   
@@ -83,6 +82,7 @@ class Profile_Listed extends Component {
 }
 
   testClick(item) {
+    //window.location.reload(false)
     this.setState({ name: item.name });
     this.setState({ click: true });
   }
