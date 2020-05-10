@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 //import Navigation from './Navigation';
 import {
   BrowserRouter,
@@ -29,6 +30,27 @@ class Profile_Listed extends Component {
       click: false, //added to see if it respond on click
     };
     this.onClickHandler = this.onClickHandler.bind(this);
+  }
+  componentDidMount(){
+    let itemname;
+    let itemimg;
+    let itemcost;
+
+    axios.get('http://localhost:4000/market-place/listed').then((res) => {
+      const listeditems = res.data;
+      this.setState({ listeditems });
+      //console.log(res.data.email);
+      // console.log(res.data.email);
+      //response = res.data;
+      axios.get('http://localhost:4000/market-place/'+res.data.item_id).then((res)=>{
+        
+      })
+      itemname = res.data.id;
+      itemimg = res.data.lender_id;
+      itemcost = res.total_price;
+      this.setState({ itemname, itemimg, itemcost });
+      console.log('res data \n', res.data);
+    });
   }
 
   testClick(item) {

@@ -62,8 +62,12 @@ router.post('/create', async (req, res) => {
 });
 
 //Gets a listing matching the passed listing id
-router.get('/:listingid', async (req, res) => {
+router.get('/:listingid', async (req, res,next) => {
   console.log(req.params.listingid);
+  if(!Number.isInteger(req.params.listingid)){
+    console.log('not a number')
+    next()
+  }
   try {
     const listing = await Listing.getListingByListingID(
       [req.params.listingid],
@@ -74,7 +78,7 @@ router.get('/:listingid', async (req, res) => {
   } catch (error) {
     console.error('error retrieving listing by id \n', error);
   }
-  console.log('called get listing request by listing id');
+  console.log('called get listing request by listing id',req.params);
 });
 
 //Borrows a listing
@@ -162,21 +166,22 @@ router.get('/borrowed', async (req, res) => {
     const alllistings = await Listing.getAllBorrowerListings(req.user.id, res);
     res.status(200).json(alllistings);
   } catch (err) {
-    console.error('error getting all listings\n ', error);
+    console.error('error getting all listings \n ', error);
   }
-  console.log('called get all listings');
+  console.log('called get all listings with borrower id');
 });
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
 router.get('/listed', async (req, res) => {
   try {
-    const alllistings = await Listing.getAllLenderListings(req.user.id, res);
+    console.log('getting all listed items \n',req.app.locals.user[0])
+    const alllistings = await Listing.getAllLenderListings(req.app.locals.user[0].id, res);
     res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all listings', error);
   }
-  console.log('called get all listings');
+  console.log('called get all listings with lender listings');
 });
 
 //example;
