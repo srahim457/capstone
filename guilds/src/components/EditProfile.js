@@ -4,7 +4,6 @@ import MarketPlace from './MarketPlace';
 import axios from 'axios';
 import './styles/EditProfile.css';
 
-/* !!! not pretty, did not edit all the change handlers*/
 class EditProfile extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +15,12 @@ class EditProfile extends Component {
       picture: null,
       description: '',
     };
+    this.nameChangeHandler = this.nameChangeHandler.bind(this);
+    this.emailChangeHandler = this.emailChangeHandler.bind(this);
+    this.numberChangeHandler = this.numberChangeHandler.bind(this);
+    this.pictureChangeHandler = this.pictureChangeHandler.bind(this);
+    this.descriptionChangeHandler = this.descriptionChangeHandler.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   nameChangeHandler = (e) => {
@@ -39,6 +44,7 @@ class EditProfile extends Component {
   pictureChangeHandler = (e) => {
     this.setState({
       picture: e.target.files[0],
+      loaded: 0,
     });
     //console.log(this.state.picture, '$$$$');
     //console.log(e.target.files[0], '$$$$');
@@ -50,7 +56,7 @@ class EditProfile extends Component {
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
 
     //console.log(this.state, 'the state /n'); //post request with axios
@@ -58,30 +64,46 @@ class EditProfile extends Component {
     const phonenum = this.state.phonenum;
     const description = this.state.description;
     const picture = this.state.picture;
-    console.log(picture.name, ' in handle submit');
+    console.log(picture, ' in handle submit');
     //console.log(phonenum, description, profile_picture);
-    // const stateObj = {
-    //   phonenum: this.phonenum,
-    //   description: description,
-    //   profile_picture: profile_picture,
-    // };
-    //console.log('stateobj', stateObj.phonenum);
 
     const profile_picture = new FormData();
+
     profile_picture.append(
-      'image',
+      'myImage',
       this.state.picture,
       this.state.picture.name
     );
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
     console.log(this.state.picture, 'name of file');
-    axios
-      .put(`http://localhost:4000/profile`, {
-        phonenum,
-        description,
+    await axios
+      .put(
+        `http://localhost:4000/profile`,
+        //{
+        // phonenum,
+        // description,
+        //profile_picture,
+        //},
         profile_picture,
-      })
+        config
+        // {
+        //   onUploadProgress: (progressEvent) => {
+        //     console.log(
+        //       'Upload progress ' +
+        //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+        //         '%'
+        //     );
+        //   },
+        // }
+      )
       .then((res) => {
+        console.log(res, 'this is the response');
         console.log(res.data, 'this is res.data');
+        console.log(res.statusText);
       });
     alert('submission has been completed');
 
@@ -92,7 +114,7 @@ class EditProfile extends Component {
     e.preventDefault();
     //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
     window.location.reload(false);
-    console.log('called button');
+    console.log('called close button');
   }
   render() {
     return (
@@ -157,12 +179,13 @@ class EditProfile extends Component {
                 onChange={this.descriptionChangeHandler}
               />
             </div>
-            <div>
+            <div className='class="form-group files '>
               <label>Profile Picture: </label>
               <input
+                className='form-control'
                 type='file'
-                name='image'
-                id='image'
+                multiple=''
+                name='myImage'
                 onChange={this.pictureChangeHandler}
               />
             </div>
