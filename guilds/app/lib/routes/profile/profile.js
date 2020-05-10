@@ -10,7 +10,6 @@ let pool = require('../../db').pool;
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
-let Item = require('../../models/Item').Item;
 
 const storage = multer.diskStorage({
   destination: '../public/uploads',
