@@ -4,7 +4,6 @@ const { check, validationResult } = require('express-validator');
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
-let Item = require('../../models/Item').Item;
 const auth = require('../../middleware/auth');
 const config = require('config');
 const bcrypt = require('bcrypt');

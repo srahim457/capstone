@@ -31,27 +31,56 @@ class Profile_Listed extends Component {
     };
     this.onClickHandler = this.onClickHandler.bind(this);
   }
-  componentDidMount(){
+  async componentDidMount(){
     let itemname;
+    let itemdesc
     let itemimg;
     let itemcost;
+    let itempolicy;
+    let rentaltype;
+    let rentprice;
+    let insurance;
 
     axios.get('http://localhost:4000/market-place/listed').then((res) => {
-      const listeditems = res.data;
-      this.setState({ listeditems });
-      //console.log(res.data.email);
-      // console.log(res.data.email);
-      //response = res.data;
-      axios.get('http://localhost:4000/market-place/'+res.data.item_id).then((res)=>{
-        
-      })
-      itemname = res.data.id;
-      itemimg = res.data.lender_id;
-      itemcost = res.total_price;
-      this.setState({ itemname, itemimg, itemcost });
-      console.log('res data \n', res.data);
-    });
-  }
+      const listings = res.data;
+      console.log('listing data \n',listings)
+      this.setState({ listings });
+
+      itemname = res.data.item_name;
+      itemdesc = res.data.item_desc;
+      itemimg = res.data.image;
+      itemcost = res.data.total_price;
+      itempolicy = res.data.policy;
+      rentaltype = res.data.type;
+      rentprice = res.data.rent_amount;
+      insurance = res.data.insurance_amount;
+
+      this.setState({itemname,itemdesc,itemimg,itemcost,itempolicy,rentaltype,rentprice,insurance})
+  
+     console.log(res.data);
+  
+    /*
+    // dont need to do two seperate requests
+    // kept here for future ref in case needed
+    const[firstResp] = await Promise.all([
+      axios.get('http://localhost:4000/market-place/listed')  
+    ]);
+    const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
+    
+    // Will need to loop and get request on every item for information for every item user has
+    console.log('first \n', firstResp, 'second \n', secondResp);
+
+    this.setState({
+      itemname: secondResp.data.item_name,
+      itemdesc: secondResp.data.item_desc,
+      itemimg: secondResp.data.image,
+      totalprice: firstResp.data.total_price,
+      rentaltype: firstResp.data.type
+    })
+    */
+
+  });
+}
 
   testClick(item) {
     this.setState({ name: item.name });
