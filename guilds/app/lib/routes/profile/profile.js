@@ -61,61 +61,61 @@ router.get('/', auth, async (req, res) => {
 // @route UPDATE /profile
 // @desc Update users profile
 // @access Private
-// router.put(
-//   '/',
-//   [auth /*, [check('email', 'email is required').not().isEmpty()]*/],
-//   async (req, res) => {
-//     //const errors = validationResult(req);
-//     // if (errors.isEmpty() == 0) {
-//     //   return res.status(400).json({ errors: errors.array() });
-//     // }
-//     const {
-//       first_name,
-//       last_name,
-//       username,
-//       phonenum,
-//       description,
-//       email,
-//       online,
-//       profile_picture,
-//       rating,
-//       id,
-//     } = req.body;
+router.put(
+  '/',
+  [auth /*, [check('email', 'email is required').not().isEmpty()]*/],
+  async (req, res) => {
+    //const errors = validationResult(req);
+    // if (errors.isEmpty() == 0) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
+    const {
+      first_name,
+      last_name,
+      username,
+      phonenum,
+      description,
+      email,
+      online,
+      profile_picture,
+      rating,
+      id,
+    } = req.body;
 
-//     // Build profile object
-//     const profileFields = {};
-//     if (first_name) profileFields.first_name = first_name;
-//     if (last_name) profileFields.last_name = last_name;
-//     if (username) profileFields.username = username;
-//     if (email) profileFields.email = email;
-//     if (online) profileFields.online = online;
-//     if (phonenum) profileFields.phonenum = phonenum;
-//     if (profile_picture) profileFields.profile_picture = profile_picture;
-//     if (rating) profileFields.rating = rating;
-//     if (description) profileFields.description = description;
-//     if (req.user.id) profileFields.id = req.user.id;
-//     try {
-//       let profile = await User.getUserById([req.user.id], res);
-//       //let description = req.body.description;
-//       //let phonenum = req.body.phonenum;
-//       //let id = req.user.id;
-//       console.log(profileFields, 'fieldss');
+    // Build profile object
+    const profileFields = {};
+    if (first_name) profileFields.first_name = first_name;
+    if (last_name) profileFields.last_name = last_name;
+    if (username) profileFields.username = username;
+    if (email) profileFields.email = email;
+    if (online) profileFields.online = online;
+    if (phonenum) profileFields.phonenum = phonenum;
+    //if (profile_picture) profileFields.profile_picture = profile_picture;
+    if (rating) profileFields.rating = rating;
+    if (description) profileFields.description = description;
+    if (req.user.id) profileFields.id = req.user.id;
+    try {
+      let profile = await User.getUserById([req.user.id], res);
+      //let description = req.body.description;
+      //let phonenum = req.body.phonenum;
+      //let id = req.user.id;
+      console.log(profileFields, 'fieldss');
 
-//       if (profile) {
-//         //UPDATE
-//         //await User.updateEmail([emailObj], res); //updates email here
-//         //console.log(newProfile);
-//         await User.updateUserInformation([profileFields], res);
-//         return res.json(profileFields);
-//       }
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send('Server Error');
-//     }
-//   }
-// );
+      if (profile) {
+        //UPDATE
+        //await User.updateEmail([emailObj], res); //updates email here
+        //console.log(newProfile);
+        await User.updateUserInformation([profileFields], res);
+        return res.json(profileFields);
+      }
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
 
-router.put('/', auth, async (req, res) => {
+router.post('/', auth, async (req, res) => {
   await upload(req, res, (err) => {
     console.log('Request ---', req.body);
     console.log('Request file ---', req.file); //Here you get file.

@@ -81,10 +81,9 @@ router.post(
         (err, token) => {
           if (err) throw err;
           console.log('token \n', token);
-          req.app.locals.user = user;
+          req.app.locals.user = user; //Rich
           res.status(200).json({ token }); //console logs the token but it doesnt senf it to the server
         }
-        
       ); //3600 = 1hr;
     } catch (err) {
       console.error(err.message);

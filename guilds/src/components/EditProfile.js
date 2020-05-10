@@ -63,33 +63,31 @@ class EditProfile extends Component {
     const state = this.state;
     const phonenum = this.state.phonenum;
     const description = this.state.description;
-    const picture = this.state.picture;
-    console.log(picture, ' in handle submit');
+    //const picture = this.state.picture;
+    //console.log(picture, ' in handle submit');
     //console.log(phonenum, description, profile_picture);
 
-    const profile_picture = new FormData();
+    //const profile_picture = new FormData();
 
-    profile_picture.append(
-      'myImage',
-      this.state.picture,
-      this.state.picture.name
-    );
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
-    console.log(this.state.picture, 'name of file');
+    // profile_picture.append(
+    //   'myImage',
+    //   this.state.picture,
+    //   this.state.picture.name
+    // );
+    // const config = {
+    //   headers: {
+    //     'content-type': 'multipart/form-data',
+    //   },
+    // };
+    //console.log(this.state.picture, 'name of file');
     await axios
       .put(
         `http://localhost:4000/profile`,
-        //{
-        // phonenum,
-        // description,
+
+        { phonenum, description }
+
         //profile_picture,
-        //},
-        profile_picture,
-        config
+        //config
         // {
         //   onUploadProgress: (progressEvent) => {
         //     console.log(
@@ -105,9 +103,51 @@ class EditProfile extends Component {
         console.log(res.data, 'this is res.data');
         console.log(res.statusText);
       });
-    alert('submission has been completed');
 
-    //window.location.reload(true);
+    if (this.state.picture != null) {
+      const picture = this.state.picture;
+      console.log(picture, ' in handle submit');
+      //console.log(phonenum, description, profile_picture);
+
+      const profile_picture = new FormData();
+
+      profile_picture.append(
+        'myImage',
+        this.state.picture,
+        this.state.picture.name
+      );
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+      console.log(this.state.picture, 'name of file');
+      await axios
+        .post(
+          `http://localhost:4000/profile`,
+
+          //{ phonenum, description, profile_picture },
+
+          profile_picture,
+          config
+          // {
+          //   onUploadProgress: (progressEvent) => {
+          //     console.log(
+          //       'Upload progress ' +
+          //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+          //         '%'
+          //     );
+          //   },
+          // }
+        )
+        .then((res) => {
+          console.log(res, 'this is the response');
+          console.log(res.data, 'this is res.data');
+          console.log(res.statusText);
+        });
+    }
+
+    window.location.reload(true);
   };
 
   closeButton(e) {
