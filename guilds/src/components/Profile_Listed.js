@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 //import Navigation from './Navigation';
 import {
   BrowserRouter,
@@ -30,8 +31,58 @@ class Profile_Listed extends Component {
     };
     this.onClickHandler = this.onClickHandler.bind(this);
   }
+  async componentDidMount(){
+    let listeditemname;
+    let listeditemdesc
+    let listeditemimg;
+    let listeditemcost;
+    let listeditempolicy;
+    let listedrentaltype;
+    let listedrentprice;
+    let listedinsurance;
+
+    axios.get('http://localhost:4000/market-place/listed').then((res) => {
+      const listedlistings = res.data;
+      this.setState({ listedlistings });
+
+      listeditemname = res.data.item_name;
+      listeditemdesc = res.data.item_desc;
+      listeditemimg = res.data.image;
+      listeditemcost = res.data.total_price;
+      listeditempolicy = res.data.policy;
+      listedrentaltype = res.data.type;
+      listedrentprice = res.data.rent_amount;
+      listedinsurance = res.data.insurance_amount;
+
+      this.setState({listeditemname,listeditemdesc,listeditemimg,listeditemcost,listeditempolicy,listedrentaltype,listedrentprice,listedinsurance})
+  
+     console.log(res.data);
+  
+    /*
+    // dont need to do two seperate requests
+    // kept here for future ref in case needed
+    const[firstResp] = await Promise.all([
+      axios.get('http://localhost:4000/market-place/listed')  
+    ]);
+    const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
+    
+    // Will need to loop and get request on every item for information for every item user has
+    console.log('first \n', firstResp, 'second \n', secondResp);
+
+    this.setState({
+      itemname: secondResp.data.item_name,
+      itemdesc: secondResp.data.item_desc,
+      itemimg: secondResp.data.image,
+      totalprice: firstResp.data.total_price,
+      rentaltype: firstResp.data.type
+    })
+    */
+
+  });
+}
 
   testClick(item) {
+    //window.location.reload(false)
     this.setState({ name: item.name });
     this.setState({ click: true });
   }

@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
@@ -8,7 +10,29 @@ let pool = require('../../db').pool;
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
-let Item = require('../../models/Item').Item;
+
+const storage = multer.diskStorage({
+  destination: '../public/uploads', //orig ../public/uploads
+  filename: function (req, file, cb) {
+    cb(null, 'IMAGE-' + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 },
+}).single('myImage');
+
+// let storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'public');
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + '-' + file.originalname);
+//   },
+// });
+
+//let upload = multer({ storage: storage }).single('file');
 
 // @route GET profile/me
 // @desc  Get logged in user profile
@@ -17,11 +41,8 @@ router.get('/', auth, async (req, res) => {
   //route profile/me ?
   try {
     const { email, password } = req.body;
-    //console.log(email, 'EMAL');
-    //const profile = await User.getUserByEmail([email], res); //finds user using email instead of id
-    profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
 
-    //const userID = req.user.id;
+    profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
 
     console.log('Print profile', profile[0]);
     if (profile == 0) {
@@ -68,7 +89,7 @@ router.put(
     if (email) profileFields.email = email;
     if (online) profileFields.online = online;
     if (phonenum) profileFields.phonenum = phonenum;
-    if (profile_picture) profileFields.profile_picture = profile_picture;
+    //if (profile_picture) profileFields.profile_picture = profile_picture;
     if (rating) profileFields.rating = rating;
     if (description) profileFields.description = description;
     if (req.user.id) profileFields.id = req.user.id;
@@ -78,16 +99,6 @@ router.put(
       //let phonenum = req.body.phonenum;
       //let id = req.user.id;
       console.log(profileFields, 'fieldss');
-      //console.log('new email', email);
-      //let profile = await User.getUserByEmail([email], res);
-
-      //console.log('old email', profile[0].email);
-      //let newEmail = email;
-      //let newProfile;
-      // emailObj = {
-      //   email: profile[0].email,
-      //   newEmail: newEmail,
-      // };
 
       if (profile) {
         //UPDATE
@@ -102,5 +113,39 @@ router.put(
     }
   }
 );
+
+// @route UPDATE /profile
+// @desc Update users profile picture
+// @access Private
+router.post('/', auth, async (req, res) => {
+  await upload(req, res, (err) => {
+    //console.log('Request ---', req.body);
+    //console.log('Request file ---', req.file); //Here you get file.
+    /*Now do where ever you want to do*/
+
+    let path = req.file.path;
+
+    const pictureObj = {
+      id: req.user.id,
+      profile_picture: path,
+    };
+
+    User.updateProfilePicture([pictureObj], res);
+    if (!err) {
+      return res.sendStatus(200).end();
+    }
+  });
+});
+
+// router.post('/', function (req, res) {
+//   upload(req, res, function (err) {
+//     if (err instanceof multer.MulterError) {
+//       return res.status(500).json(err);
+//     } else if (err) {
+//       return res.status(500).json(err);
+//     }
+//     return res.status(200).send(req.file);
+//   });
+// });
 
 module.exports = router;

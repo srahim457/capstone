@@ -4,13 +4,15 @@ the profile page.
 relevant files: Profile.js
 */
 
-.Background { /*background color of the entire page*/
+.Background {
+  /*background color of the entire page*/
   background-color: #570415;
   min-height: 100vh;
   padding-bottom: 50px;
 }
 
-.Header { /*the background of the top part with the name and image*/
+.Header {
+  /*the background of the top part with the name and image*/
   background-image: url(../../images/parchment_background.jpg);
   display: block;
   margin-left: auto;
@@ -23,7 +25,8 @@ relevant files: Profile.js
   padding-bottom: 30px;
 }
 
-.UserInfoContainer { /*wrapper to place user information*/
+.UserInfoContainer {
+  /*wrapper to place user information*/
   display: block;
   width: 300px;
   height: 300px;
@@ -33,20 +36,23 @@ relevant files: Profile.js
   left: 500px;
 }
 
-.HeaderField{ /*field labels*/
+.HeaderField {
+  /*field labels*/
   color: #570415;
   display: block;
   text-decoration: none;
 }
 
-.UserField{ /*fields for username and ranking*/
+.UserField {
+  /*fields for username and ranking*/
   color: black;
   display: block;
   text-decoration: none;
   left: 50px;
 }
 
-.SubfieldInfoContainer { /*wrapper to place user information*/
+.SubfieldInfoContainer {
+  /*wrapper to place user information*/
   display: block;
   width: 700px;
   height: 100px;
@@ -56,7 +62,7 @@ relevant files: Profile.js
   right: 30px;
 }
 
-.HeaderSubfield{
+.HeaderSubfield {
   color: #570415;
   display: inline-block;
   text-decoration: none;
@@ -64,7 +70,7 @@ relevant files: Profile.js
   padding-right: 10px;
 }
 
-.UserSubfield{
+.UserSubfield {
   color: black;
   display: inline-block;
   text-decoration: none;
@@ -72,11 +78,12 @@ relevant files: Profile.js
   padding-right: 10px;
 }
 
-h2{
+h2 {
   font-size: 20px;
 }
 
-.Listings { /*the background of the bottom part with the listings*/
+.Listings {
+  /*the background of the bottom part with the listings*/
   background-image: url(../../images/parchment_background.jpg);
   display: block;
   width: 950px;
@@ -89,7 +96,8 @@ h2{
   padding-bottom: 50px;
 }
 
-.ProfilePic{ /*the object holding the profile pic*/
+.ProfilePic {
+  /*the object holding the profile pic*/
   position: absolute;
   display: block;
   left: 120px;
@@ -109,7 +117,11 @@ h2{
   padding-bottom: 50px;
 }
 
+<<<<<<< HEAD
 .userBioSection{
+=======
+.userBioSection {
+>>>>>>> c24490121bc3c2e8872c1b2b0e1d73af76ec7ac8
   width: 850px;
   min-height: 50px;
   margin-left: auto;
@@ -117,7 +129,11 @@ h2{
   float: none;
 }
 
+<<<<<<< HEAD
 .userGuildListTitle{
+=======
+.userGuildListTitle {
+>>>>>>> c24490121bc3c2e8872c1b2b0e1d73af76ec7ac8
   background-color: #3b000b;
   color: yellow;
   width: 850px;
@@ -127,7 +143,11 @@ h2{
   float: none;
 }
 
+<<<<<<< HEAD
 .centerText{
+=======
+.centerText {
+>>>>>>> c24490121bc3c2e8872c1b2b0e1d73af76ec7ac8
   margin-left: auto;
   margin-right: auto;
   float: none;
@@ -135,7 +155,11 @@ h2{
   height: 100px;
 }
 
+<<<<<<< HEAD
 .guildnamelistcontainer{
+=======
+.guildnamelistcontainer {
+>>>>>>> c24490121bc3c2e8872c1b2b0e1d73af76ec7ac8
   display: block;
   margin-top: 20px;
   margin-left: auto;
@@ -145,7 +169,11 @@ h2{
   min-height: 200px;
 }
 
+<<<<<<< HEAD
 .guildnamecontainer{
+=======
+.guildnamecontainer {
+>>>>>>> c24490121bc3c2e8872c1b2b0e1d73af76ec7ac8
   display: block;
   text-align: center;
   margin-top: 10px;
@@ -193,7 +221,8 @@ h2{
 }
 
 /*-----------------editing profile stuff----------------------*/
-.edit-button { /* edit profile button*/
+.edit-button {
+  /* edit profile button*/
   color: #f3e055;
   background-color: #3b000b;
   border-color: #f3e055;
@@ -211,8 +240,9 @@ h2{
 }
 
 /*----------------the listed and borrowed item stuff------------*/
-.ItemListWrapper { /*wrapper for all the items to appear*/
-  background-color: ;
+.ItemListWrapper {
+  /*wrapper for all the items to appear*/
+  /*background-color: ;*/
   display: block;
   width: 950px;
   min-height: 400px;
@@ -235,7 +265,8 @@ h2{
   cursor: pointer;
 }
 
-.itemImageWrapper { /*space where the picture of an item will go*/
+.itemImageWrapper {
+  /*space where the picture of an item will go*/
   background-color: brown;
   color: yellow;
   display: inline-block;

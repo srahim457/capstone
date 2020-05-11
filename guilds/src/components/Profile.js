@@ -15,15 +15,21 @@ import Profile_Listed from './Profile_Listed';
 import EditProfile from './EditProfile';
 import LaserLouis from '../images/LaserLouis.jpg';
 
-function Nombre(props) {
-  return <h1>{props.name}</h1>;
-}
+// function Nombre(props) {
+//   return <h1>{props.name}</h1>;
+// }
 
-function Rango(props) {
-  return <h1>{props.status}</h1>;
-}
+// function Rango(props) {
+//   return <h1>{props.status}</h1>;
+// }
 
 // const element = <Nombre name='Profile' />;
+
+function parsePath(orig) {
+  let res = orig.substr(9);
+  res = '.' + res;
+  return res;
+}
 
 class Profile extends Component {
   constructor() {
@@ -93,8 +99,18 @@ class Profile extends Component {
       rating = res.data.rating;
       picture = res.data.profile_picture;
 
-      this.setState({ email, firstname, lastname, phonenum, online, rating });
-      console.log(res.data);
+      this.setState({
+        email,
+        firstname,
+        lastname,
+        phonenum,
+        online,
+        rating,
+        picture,
+      });
+
+      //console.log(res.data);
+      console.log(picture, 'getting PATH');
     });
   }
 
@@ -105,6 +121,7 @@ class Profile extends Component {
     if (this.state.click === true) {
       return <EditProfile />;
     }
+
     return (
       <BrowserRouter>
         <div className='Background'>
@@ -114,7 +131,22 @@ class Profile extends Component {
             <div className='ProfilePic'>
               {' '}
               {/*adding the profile pic*/}
-              <img src={LaserLouis} alt=''></img>
+              {/*<h5>{this.state.picture}</h5>*/}
+              {this.state.picture != null ? (
+                <img
+                  src={parsePath(this.state.picture)}
+                  height='200'
+                  width='200'
+                  alt=''
+                ></img>
+              ) : (
+                <img
+                  src='./uploads/noImage.png'
+                  height='200'
+                  width='200'
+                  alt=''
+                ></img>
+              )}
             </div>
             <div className='button-container'>
               {/*the button that change the page to edit profile information*/}

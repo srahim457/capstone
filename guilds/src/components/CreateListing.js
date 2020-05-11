@@ -70,7 +70,7 @@ class CreateListing extends Component {
       e.preventDefault();
       console.log(this.state); //post request with axios
       const item = this.state;
-      axios.post(`http://localhost:4000/market-place`, { item }).then((res) => {
+      axios.post(`http://localhost:4000/market-place/create`, { item }).then((res) => {
         console.log(res);
         console.log(res.data);
       });
