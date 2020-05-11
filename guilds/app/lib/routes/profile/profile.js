@@ -12,7 +12,7 @@ let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
 
 const storage = multer.diskStorage({
-  destination: '../public/uploads',
+  destination: '../public/uploads', //orig ../public/uploads
   filename: function (req, file, cb) {
     cb(null, 'IMAGE-' + Date.now() + path.extname(file.originalname));
   },
@@ -114,13 +114,23 @@ router.put(
   }
 );
 
+// @route UPDATE /profile
+// @desc Update users profile picture
+// @access Private
 router.post('/', auth, async (req, res) => {
   await upload(req, res, (err) => {
-    console.log('Request ---', req.body);
-    console.log('Request file ---', req.file); //Here you get file.
+    //console.log('Request ---', req.body);
+    //console.log('Request file ---', req.file); //Here you get file.
     /*Now do where ever you want to do*/
-    console.log('Image path', req.file.path);
+
     let path = req.file.path;
+
+    const pictureObj = {
+      id: req.user.id,
+      profile_picture: path,
+    };
+
+    User.updateProfilePicture([pictureObj], res);
     if (!err) {
       return res.sendStatus(200).end();
     }

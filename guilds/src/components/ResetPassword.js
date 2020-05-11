@@ -150,7 +150,7 @@ export default class ResetPassword extends Component {
               Your password has been successfully reset, please try logging in
               again.
             </p>
-            <link buttonStyle={loginButton} buttonText='Login' link='/' />
+            {/* <link buttonStyle={loginButton} buttonText='Login' link='/' /> */}
           </div>
         )}
         <Link text='Go Home' link='/' />

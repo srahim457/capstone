@@ -111,15 +111,17 @@ User.updateEmail = async function (req, res) {
     res.status(400);
   }
 };
+
 // Updates user profile picture
 // Takes array of new_picture and user id
 // Returns the user row
 User.updateProfilePicture = async function (req, res) {
   try {
     const user = await sql.query(
-      'UPDATE guilds.users SET profile_picture=($2) WHERE id = ($1) RETURNING *',
-      [req[0].profile_picture, req[0].id]
+      'UPDATE guilds.users SET profile_picture = ($2) WHERE id = ($1) RETURNING *',
+      [req[0].id, req[0].profile_picture]
     );
+    console.log(req[0].profile_picture, 'this is the profile path!!!!!!!!!!!!');
     return user.rows[0];
   } catch (error) {
     console.log(error);

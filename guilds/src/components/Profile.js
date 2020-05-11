@@ -86,8 +86,18 @@ class Profile extends Component {
       rating = res.data.rating;
       picture = res.data.profile_picture;
 
-      this.setState({ email, firstname, lastname, phonenum, online, rating });
-      console.log(res.data);
+      this.setState({
+        email,
+        firstname,
+        lastname,
+        phonenum,
+        online,
+        rating,
+        picture,
+      });
+
+      //console.log(res.data);
+      console.log(picture, 'getting PATH');
     });
   }
 
@@ -98,6 +108,7 @@ class Profile extends Component {
     if (this.state.click === true) {
       return <EditProfile />;
     }
+
     return (
       <BrowserRouter>
         <div className='Background'>
@@ -107,7 +118,13 @@ class Profile extends Component {
             <div className='ProfilePic'>
               {' '}
               {/*adding the profile pic*/}
-              <img src={LaserLouis} alt=''></img>
+              <h5>{this.state.picture}</h5>
+              <img
+                src='./uploads/IMAGE-1589168900865.png'
+                height='200'
+                width='200'
+                alt='person'
+              ></img>
             </div>
             <div className='button-container'>
               {' '}
