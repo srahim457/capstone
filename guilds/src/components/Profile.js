@@ -125,11 +125,16 @@ class Profile extends Component {
               {' '}
               {/*adding the profile pic*/}
               {/*<h5>{this.state.picture}</h5>*/}
-              {this.state.picture === null ? (
-                <h5>No Picture</h5>
-              ) : (
+              {this.state.picture != null ? (
                 <img
                   src={parsePath(this.state.picture)}
+                  height='200'
+                  width='200'
+                  alt=''
+                ></img>
+              ) : (
+                <img
+                  src='./uploads/noImage.png'
                   height='200'
                   width='200'
                   alt=''
