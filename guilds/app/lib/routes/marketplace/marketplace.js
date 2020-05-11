@@ -3,6 +3,8 @@ const router = express.Router();
 
 var pool = require('../../db').pool;
 const bcrypt = require('bcrypt');
+const { check, validationResult } = require('express-validator');
+const auth = require('../../middleware/auth');
 
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
@@ -63,11 +65,10 @@ router.post('/create', async (req, res) => {
 //Gets a listing matching the passed listing id
 router.get('/:listingid', async (req, res, next) => {
   console.log(req.params.listingid);
-  if(!Number.isInteger(req.params.listingid)){
-    console.log('not a number')
-    next()
-  }
-  else{
+  if (!Number.isInteger(req.params.listingid)) {
+    console.log('not a number');
+    next();
+  } else {
     try {
       const listing = await Listing.getListingByListingID(
         [req.params.listingid],
@@ -78,7 +79,7 @@ router.get('/:listingid', async (req, res, next) => {
     } catch (error) {
       console.error('error retrieving listing by id \n', error);
     }
-    console.log('called get listing request by listing id',req.params);
+    console.log('called get listing request by listing id', req.params);
   }
 });
 
@@ -164,9 +165,12 @@ router.get('/', async (req, res) => {
 //Looks for req.user.id as a param
 router.get('/borrowed', async (req, res) => {
   try {
-    console.log('getting all borrowed items \n',req.app.locals.user[0])
-    const alllistings = await Listing.getAllBorrowerListings(req.app.locals.user[0].id, res);
-    console.log('all borrowed listing \n', alllistings)
+    console.log('getting all borrowed items \n', req.app.locals.user[0]);
+    const alllistings = await Listing.getAllBorrowerListings(
+      req.app.locals.user[0].id,
+      res
+    );
+    console.log('all borrowed listing \n', alllistings);
     return res.write(JSON.stringify(alllistings));
   } catch (error) {
     console.error('error getting all borrowed listings \n ', error);
@@ -178,8 +182,11 @@ router.get('/borrowed', async (req, res) => {
 //Look for req.user.id as a param
 router.get('/listed', async (req, res) => {
   try {
-    console.log('getting all listed items \n',req.app.locals.user[0])
-    const alllistings = await Listing.getAllLenderListings(req.app.locals.user[0].id, res);
+    console.log('getting all listed items \n', req.app.locals.user[0]);
+    const alllistings = await Listing.getAllLenderListings(
+      req.app.locals.user[0].id,
+      res
+    );
     return res.write(JSON.stringify(alllistings));
   } catch (error) {
     console.error('error getting all listed listings', error);

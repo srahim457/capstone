@@ -230,7 +230,9 @@ class EditProfile extends Component {
               />
             </div>
           </form>
-          <button onClick={this.handleSubmit}>Submit</button>
+          <button className='submit-button' onClick={this.handleSubmit}>
+            Submit
+          </button>
         </div>
       </div>
     );
