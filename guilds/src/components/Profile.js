@@ -25,6 +25,12 @@ import LaserLouis from '../images/LaserLouis.jpg';
 
 // const element = <Nombre name='Profile' />;
 
+function parsePath(orig) {
+  let res = orig.substr(9);
+  res = '.' + res;
+  return res;
+}
+
 class Profile extends Component {
   constructor() {
     super();
@@ -118,13 +124,17 @@ class Profile extends Component {
             <div className='ProfilePic'>
               {' '}
               {/*adding the profile pic*/}
-              <h5>{this.state.picture}</h5>
-              <img
-                src='./uploads/IMAGE-1589168900865.png'
-                height='200'
-                width='200'
-                alt='person'
-              ></img>
+              {/*<h5>{this.state.picture}</h5>*/}
+              {this.state.picture === null ? (
+                <h5>No Picture</h5>
+              ) : (
+                <img
+                  src={parsePath(this.state.picture)}
+                  height='200'
+                  width='200'
+                  alt=''
+                ></img>
+              )}
             </div>
             <div className='button-container'>
               {' '}
