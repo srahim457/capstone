@@ -125,7 +125,8 @@ Listing.getAllLenderListings = async function (req, res) {
 //Returns listing id
 Listing.addBorrower = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1) where id = ($2) RETURNING *', [req[0].user_id, req[0].listing_id]);
+    var d = new Date();
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].user_id, req[0].listing_id,d]);
     console.log('added a borrower to listing ', req[0].listing_id, '\n')
     return listing.rows[0].id
   } catch (error) {
