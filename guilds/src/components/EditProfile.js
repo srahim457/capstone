@@ -9,31 +9,18 @@ class EditProfile extends Component {
     super(props);
 
     this.state = {
-      name: '',
+      firstname: '',
+      lastname: '',
       phonenum: null,
       email: '',
       picture: null,
-      description: '',
+      description: null,
     };
-    this.nameChangeHandler = this.nameChangeHandler.bind(this);
-    this.emailChangeHandler = this.emailChangeHandler.bind(this);
     this.numberChangeHandler = this.numberChangeHandler.bind(this);
     this.pictureChangeHandler = this.pictureChangeHandler.bind(this);
     this.descriptionChangeHandler = this.descriptionChangeHandler.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  nameChangeHandler = (e) => {
-    this.setState({
-      name: e.target.value,
-    });
-  };
-
-  emailChangeHandler = (e) => {
-    this.setState({
-      email: e.target.value,
-    });
-  };
 
   numberChangeHandler = (e) => {
     this.setState({
@@ -55,6 +42,26 @@ class EditProfile extends Component {
       description: e.target.value,
     });
   };
+
+  componentDidMount() {
+    let phonenum;
+    let description;
+
+    axios.get('http://localhost:4000/profile').then((res) => {
+      const profile = res.data;
+      this.setState({ profile });
+
+      phonenum = res.data.phonenum;
+      description = res.data.description;
+
+      this.setState({
+        phonenum,
+        description,
+      });
+      console.log(this.state.phonenum)
+      console.log(this.state.description)
+    });
+  }
 
   handleSubmit = async (e) => {
     e.preventDefault();
@@ -164,13 +171,13 @@ class EditProfile extends Component {
         <div className='container'>
           <h1 className='title'>Edit Profile</h1>
           <form onSubmit={this.handleSubmit} className='form-fields'>
-            <div>
               <div className='button-wrapper'>
                 <button className='close-button' onClick={this.closeButton}>
                   X
                 </button>
               </div>
-              {/* <label>User's Name: </label>
+              {/*</div>
+              <label>User's Name: </label>
               <input
                 type='text'
                 className='form-input'
@@ -178,8 +185,8 @@ class EditProfile extends Component {
                 maxLength='100'
                 value={this.state.name}
                 onChange={this.nameChangeHandler}
-    ></input> */}
-            </div>
+                ></input>
+            </div>*/}
             {/* <div>
               <label>User's Email: </label>
               <input
@@ -200,7 +207,7 @@ class EditProfile extends Component {
                 placeholder='only supply numbers'
                 maxLength='10'
                 minLength='10'
-                value={this.state.number}
+                value={this.state.phonenum}
                 onChange={this.numberChangeHandler}
               />
             </div>

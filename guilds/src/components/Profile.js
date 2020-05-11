@@ -83,6 +83,7 @@ class Profile extends Component {
     let online;
     let rating;
     let picture;
+    let description;
 
     axios.get('http://localhost:4000/profile').then((res) => {
       const profile = res.data;
@@ -98,6 +99,7 @@ class Profile extends Component {
       online = res.data.online;
       rating = res.data.rating;
       picture = res.data.profile_picture;
+      description = res.data.description;
 
       this.setState({
         email,
@@ -107,6 +109,7 @@ class Profile extends Component {
         online,
         rating,
         picture,
+        description,
       });
 
       //console.log(res.data);
@@ -196,11 +199,8 @@ class Profile extends Component {
           {/*contains the list of the guilds the user is apart of and user bio*/}
             <h1>Bio:</h1>
             <div className='userBioSection'>
-              <h1> Hi I like anime and having fun. I'm a fullstack developer :)
-              testing testing testing testing testing testing testing testing testing testing testing
-              testing testing testing testing testing testing testing testing testing testing testing
-              testing testing testing testing testing testing testing testing testing testing testing
-              testing testing testing testing testing testing testing testing testing testing testing
+              <h1>
+              {this.state.description}
               </h1>
             </div>
             <div className='userGuildListTitle'>
