@@ -24,7 +24,7 @@ Listing.createSaleListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating sale listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,lender_id,completed,expired,type) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].lender_id, 'F', 'F','sale']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].lender_id, 'F', 'F','sale','F', 'F']);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -39,7 +39,7 @@ Listing.createLoanListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating loan listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired,type) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [req[0].item_id, d, req[0].return_by,req[0].policy, req[0].lender_id, 'F', 'F','loan']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *', [req[0].item_id, d, req[0].return_by,req[0].policy, req[0].lender_id, 'F', 'F','loan','F', 'F']);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -53,7 +53,7 @@ Listing.createRentalListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating rental listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired,type) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F','rental']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F','rental','F', 'F']);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -76,7 +76,7 @@ Listing.getListingByListingID = async function (req, res) {
 // Shows the newests listings first 
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select * from guilds.listings where completed = 'F' AND expired = 'F' AND deleted = 'F' AND reserved = 'F' ORDER by time_posted DESC");
+    const listing = await sql.query("Select * from guilds.listings where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
     console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -191,7 +191,8 @@ Listing.markCompleted = async function (req, res) {
 //Returns listing entry
 Listing.delete = async function (req, res) {
   try {
-    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T' where id = ($1) RETURNING *" [req]);
+    var d = new Date()
+    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *" [req,d]);
     console.log('Deleted listing \n ')
     return listing.rows
   } catch (error) {
