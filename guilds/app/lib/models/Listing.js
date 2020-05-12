@@ -17,6 +17,21 @@ var Listing = function (listing) {
 
 //Listing
 
+//Create a new item
+//Takes in an item object
+//Returns created item id
+Listing.createItem = async function (req, res) {
+  try {
+    console.log('creating item  with ', req[0])
+    const listing = await sql.query('INSERT INTO guilds.item_info(item_name,item_desc,image) VALUES($1,$2,$3) RETURNING *', [req[0].item_name,req[0].item_desc, req[0].picture]);
+    return listing.rows[0].id
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+
+
 //Create a new sale listing entry
 //Takes in a listing object
 //Returns created id

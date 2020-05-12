@@ -33,7 +33,11 @@ const upload = multer({
 // Assuming the parameter is the item id and we can pull the user id from the current session information
 // @access private
 router.post('/create', auth, async (req, res) => {
+<<<<<<< HEAD
   //console.log('current create req \n', req.body.item)
+=======
+  console.log('current create req \n', req.body.item)
+>>>>>>> 4c90cdd5893efb365ff390f6f90cb0deeaf741fa
   try {
     //assumes req.body.item is the created object item
     var newItem = {
@@ -42,7 +46,11 @@ router.post('/create', auth, async (req, res) => {
       picture: req.body.item.picture, //add picture@!!!
     };
 
+<<<<<<< HEAD
     const createdItemId = await Item.createItem([newItem], res); //this doesnt work
+=======
+    const createdItemId = await Listing.createItem([newItem], res); 
+>>>>>>> 4c90cdd5893efb365ff390f6f90cb0deeaf741fa
 
     /*
       Still need to implement the check if it is a sale,rental,loan
