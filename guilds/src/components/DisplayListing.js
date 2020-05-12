@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
+import {format,parseISO } from 'date-fns';
 {/*uses the same css file as create listing,
 because the layout is exactly the same except
 when editing the form fields should be filled with existing information
 also there is a delete button to delete the listing entirely
 */}
+
 
 class DisplayListing extends Component {
   constructor(props) {
@@ -15,7 +17,9 @@ class DisplayListing extends Component {
       price: '',
       description: 'some description',
       option: '',
-      insurance: '0'
+      insurance: '0',
+      listing_type: '123123',
+      return_date: ''
     };
   }
 
@@ -28,7 +32,7 @@ class DisplayListing extends Component {
   };
 
   render() {
-    const {name, description} = this.props;
+    const {name, description,listing_type,insurance,return_date} = this.props;
     return (
 
       <div className='container-parent'>
@@ -44,19 +48,21 @@ class DisplayListing extends Component {
             </div>
             <div>
               {/* make into a description box */}
-              <label>Item Description:</label>
+              <label>Item Description: </label>
               {description}
             </div>
             <div>
-              <label>Type of Listing:</label>
+              <label>Type of Listing: </label>
+              {listing_type}
               <br />
             </div>
             <div>
               <label>Insurance: $</label>
-              {this.state.insurance}
+              {insurance}
               <br />
               <label>
-                Return time and date:
+                Return time and date :
+                {format(parseISO(return_date),"MMMM do,yyyy H:mma")}
               </label>
               <br />
               <label>

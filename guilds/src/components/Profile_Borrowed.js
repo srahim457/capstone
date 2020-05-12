@@ -1,65 +1,52 @@
 import React, { Component } from 'react';
 import './styles/profile.css';
 import axios from 'axios';
+import {format,parseISO } from 'date-fns';
 
 class Profile_Borrowed extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isLoading: true,
+      listings: [] ,
+      error: null
+    }
+  }
   async componentDidMount(){
-    let itemname;
-    let itemdesc
-    let itemimg;
-    let itemcost;
-    let itempolicy;
-    let rentaltype;
-    let rentprice;
-    let insurance;
-
-    axios.get('http://localhost:4000/market-place/borrowed').then((res) => {
-      const listings = res.data;
-      console.log('listing data \n',listings)
-      this.setState({ listings });
-
-      itemname = res.data.item_name;
-      itemdesc = res.data.item_desc;
-      itemimg = res.data.image;
-      itemcost = res.data.total_price;
-      itempolicy = res.data.policy;
-      rentaltype = res.data.type;
-      rentprice = res.data.rent_amount;
-      insurance = res.data.insurance_amount;
-
-      this.setState({itemname,itemdesc,itemimg,itemcost,itempolicy,rentaltype,rentprice,insurance})
-  
-     console.log(res.data);
-
-    });  
+    const response = await axios.get('http://localhost:4000/market-place/borrowed')
+    console.log('listings', response)
+    this.setState({listings: response.data, isLoading: false})   
   }
   render(){
-    var tmp = [];
-    for (var i = 0; i < 15; i++) {
-      tmp.push(i);
-    }
-    var borroweditems = tmp.map(function (i) {
-      return (
-        <div className='item'>
-          <div className='itemImageWrapper'>
-            <h1> img {i} </h1>
-          </div>
-          <div className='itemInfoWrapper'>
-            <h1 className='itemInfoField'> Name: Item {i}</h1>
-            <h1 className='itemInfoField'> Cost: ${i}</h1>
-            <h1 className='itemInfoField'> Borrow Date: #/#/#  Return Date: #/#/# </h1>
-          </div>
-        </div>
-      );
-    });
-    
-    return (
-      <div className='ItemListWrapper'>
-        {borroweditems}
-      </div>
-
-    );
-  }
-}
+     const {isLoading} = this.state;
+     console.log('this.state \n',this.state.listings)
+     return (
+       <React.Fragment>
+         {!isLoading ? (
+           Object.values(this.state.listings).map(listing => {
+             return(
+               <div className='item' key={listing.item_id}>
+                 {console.log('test res',listing,listing.item_name)}                 
+                 <div className='itemImageWrapper'>
+                   <h1> img {listing.image} </h1>
+                 </div>   
+                 <div className = 'itemInfoWrapper' key = {listing}>
+                   <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
+                   <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
+                   {console.log('formatted time',listing,listing.item_name)} 
+                   <h1 className='itemInfoField'> Borrow Date: {format(parseISO(listing.time_borrowed),"MMMM do,yyyy H:mma")}</h1>
+                   <h1 className='itemInfoField'> Return Date: {format(parseISO(listing.return_by),"MMMM do,yyyy H:mma")}</h1>
+                 <hr /> 
+                 </div> 
+               </div>
+             );
+           })
+         ) : (
+           <h3>Loadin</h3>
+         )}
+       </React.Fragment>
+     );
+   }
+ }
 
 export default Profile_Borrowed;

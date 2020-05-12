@@ -5,7 +5,10 @@ const path = require('path');
 
 var pool = require('../../db').pool;
 const bcrypt = require('bcrypt');
-const { check, validationResult } = require('express-validator');
+const {
+  check,
+  validationResult
+} = require('express-validator');
 const auth = require('../../middleware/auth');
 
 let User = require('../../models/User').User;
@@ -187,7 +190,7 @@ router.get('/borrowed', async (req, res) => {
       res
     );
     console.log('all borrowed listing \n', alllistings);
-    return res.write(JSON.stringify(alllistings));
+    res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all borrowed listings \n ', error);
   }
@@ -203,7 +206,7 @@ router.get('/listed', async (req, res) => {
       req.app.locals.user[0].id,
       res
     );
-    return res.write(JSON.stringify(alllistings));
+    res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all listed listings', error);
   }
@@ -211,8 +214,7 @@ router.get('/listed', async (req, res) => {
 });
 
 //example;
-const item = [
-  {
+const item = [{
     id: 1,
     name: 'Ball',
     cost: 2.3,
