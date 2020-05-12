@@ -1,22 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router-dom';
-import MarketPlace from './MarketPlace';
-import AllGuilds from './AllGuilds';
+import { confirmAlert } from 'react-confirm-alert';
 import DateTimePicker from 'react-datetime-picker';
-import axios from 'axios';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+/*install this stuff for the confirmation pop-ups:
+      npm install react-confirm-alert --save
+*/
 import './styles/CreateListing.css';
-
-function validate(name, description) {
-  // true means invalid, so our conditions got reversed
-  return {
-    name: name.length === 0,
-    description: description.length === 0,
-  };
+{
+  /*uses the same css file as create listing,
+because the layout is exactly the same except
+when editing the form fields should be filled with existing information
+also there is a delete button to delete the listing entirely
+*/
 }
 
-class CreateListing extends Component {
-  constructor() {
-    super();
+class EditListing extends Component {
+  constructor(props) {
+    super(props);
 
     this.state = {
       name: '',
@@ -24,25 +24,31 @@ class CreateListing extends Component {
       description: '',
       option: '',
       date: '',
-      policy: '',
       curTime: new Date().toLocaleString(),
-      picture: '',
+      policy: '',
+      image: '',
+      delete_item: 'false',
     };
+    this.delete = this.delete.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   itemNameChangeHandler = (e) => {
-    this.setState({
-      name: e.currentTarget.value,
-    });
+    const {
+      target: { value },
+    } = e;
+    this.setState({ name: value });
   };
 
   descriptionChangeHandler = (e) => {
+    e.preventDefault();
     this.setState({
       description: e.currentTarget.value,
     });
   };
 
   handleOptionChange = (e) => {
+    e.preventDefault();
     this.setState({
       option: e.currentTarget.value,
     });
@@ -60,39 +66,35 @@ class CreateListing extends Component {
     });
   };
 
-  pictureChangeHandler = (e) => {
-    this.setState({
-      picture: e.target.files[0],
-      loaded: 0,
+  handleDeletion() {
+    this.setState({ delete_item: true });
+    window.location.reload(false);
+  }
+
+  delete() {
+    confirmAlert({
+      title: 'Delete this Listing: ',
+      message: 'Are you sure you want to do this?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => this.handleDeletion(),
+        },
+        {
+          label: 'No',
+          onClick: () => this.setState({ delete_item: false }),
+        },
+      ],
     });
-    //console.log(this.state.picture, '$$$$');
-    //console.log(e.target.files[0], '$$$$');
-  };
+  }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    if (!this.canBeSubmitted()) {
-      alert('Unable to submit: some fields may be empty');
-      return;
-    } else {
-      alert('submission has been completed');
-      e.preventDefault();
-      console.log(this.state); //post request with axios
-      const item = this.state;
-      axios
-        .post(`http://localhost:4000/market-place/create`, { item })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
-        });
-      // window.location.reload(false);
-    }
-  };
+  reloadPage() {
+    window.location.reload(false);
+  }
 
-  canBeSubmitted() {
-    const empty = validate(this.state.name, this.state.description);
-    const isDisabled = Object.keys(empty).some((x) => empty[x]);
-    return !isDisabled;
+  componentDidMount() {
+    const { name } = this.props;
+    this.setState({ name: name });
   }
 
   fileSelectedHandler = (e) => {
@@ -205,62 +207,49 @@ class CreateListing extends Component {
       </Fragment>
     );
   }
-
-  closeButton() {
-    //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
-    window.location.reload(false);
-  }
-
   render() {
+    const { name } = this.props;
     return (
+      // <div>{this.props.children}</div>
+
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Create Listing</h1>
-
+          <h1 className='title'>Edit Listing: {name} </h1>
           <div className='button-wrapper'>
-            <button className='close-button' onClick={this.closeButton}>
-              <strong>X</strong>
+            <button className='close-button' onClick={this.reloadPage}>
+              X
             </button>
           </div>
-
-          <form className='form-fields'>
+          <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
-              <label>
-                <strong>Item Name</strong>
-              </label>
+              <label>Item Name </label>
               <br />
               <input
                 type='text'
                 className='form-input'
-                placeholder='Name of item'
+                placeholder={this.state.name}
                 maxLength='50'
-                col='10'
                 value={this.state.name}
                 onChange={this.itemNameChangeHandler}
               ></input>
             </div>
-            <br />
             <div>
-              <label>
-                <strong>Item Description</strong>
-              </label>
+              {/* make into a description box */}
+              <label>Item Description</label>
               <br />
               <textarea
                 className='form-input'
-                autoFocus
+                autofocus
                 placeholder='Type your description'
-                maxLength='180'
-                rows='8'
-                cols='70'
+                maxlength='180'
+                rows='5'
+                cols='40'
                 value={this.state.description}
                 onChange={this.descriptionChangeHandler}
               />
             </div>
-            <br />
             <div>
-              <label>
-                <strong>Type of Listing:</strong>
-              </label>
+              <label>Type of Listing:</label>
               <br />
               <input
                 type='radio'
@@ -270,7 +259,7 @@ class CreateListing extends Component {
                 onChange={this.handleOptionChange}
                 checked={this.state.option === 'sale'}
               />
-              <label htmlFor='sale'>Sale</label>
+              <label for='sale'>Sale</label>
               <br />
               <input
                 type='radio'
@@ -292,8 +281,6 @@ class CreateListing extends Component {
               />
               <label for='rental'>Rental</label>
             </div>
-            <br />
-
             {this.state.option === 'sale' || this.state.option === ''
               ? this.saleForm()
               : this.state.option === 'loan'
@@ -302,26 +289,20 @@ class CreateListing extends Component {
             <br />
             <br />
             <label>Upload an image</label>
-            <div className=' form-group files '>
-              <label>Profile Picture: </label>
-              <input
-                className='form-control'
-                type='file'
-                multiple=''
-                name='myImage'
-                onChange={this.pictureChangeHandler}
-              />
-            </div>
+            <br />
+
+            <input
+              type='file'
+              onChange={this.fileSelectedHandler}
+              value={this.state.image}
+            />
           </form>
-          <div className='submit-button-wrapper'>
-            <button className='submit-button' onClick={this.handleSubmit}>
-              <strong>Submit</strong>
-            </button>
-          </div>
+          <button>Submit</button>
+          <button onClick={this.delete}>Delete Listing</button>
         </div>
       </div>
     );
   }
 }
 
-export default CreateListing;
+export default EditListing;

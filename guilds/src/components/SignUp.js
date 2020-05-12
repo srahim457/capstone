@@ -11,7 +11,7 @@ class SignUp extends Component {
       email: '',
       password: '',
       firstname: '',
-      lastname: ''
+      lastname: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -19,37 +19,30 @@ class SignUp extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleChange(e) {
     let target = e.target;
     let name = target.name;
     this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
-  handleChange(e) {
-    let target = e.target;
-    let name = target.name;
-    this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   }
   handleEmailChange(e) {
     this.setState({
-      email: e.target.value
+      email: e.target.value,
     });
   }
   handlePasswordChange(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
   handleSubmit(e) {
     e.preventDefault();
-
     axios
-      .post('http://localhost:4000/users  ', this.state)
-      .then(res => console.log(res.data));
-    console.log('The form was submitted with the following data:');
+      .post('http://localhost:4000/signup', this.state)
+      .then((res) => console.log(res.data));
+    console.log('The signup  form was submitted with the following data:');
     console.log(this.state);
   }
 
@@ -116,7 +109,7 @@ class SignUp extends Component {
 
           <div className='FormField'>
             <button className='FormField__Button mr-20'>Sign Up</button>{' '}
-            <Link exact to='sign-in' className='FormField__Link'>
+            <Link to='/sign-in' className='FormField__Link'>
               I'm already a member
             </Link>
           </div>
