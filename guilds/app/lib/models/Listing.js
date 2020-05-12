@@ -76,8 +76,8 @@ Listing.getListingByListingID = async function (req, res) {
 // Shows the newests listings first 
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select * from guilds.listings where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
-    console.log('number of active listings are ', listing.rows.length, '\n')
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
+    console.log('number of active listings are ', listing.rows.length, '\n',listing.rows)
     return listing.rows
   } catch (error) {
     console.log(error)

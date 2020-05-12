@@ -8,26 +8,21 @@ import './styles/MarketPlace.css';
 class MarketPlace extends Component {
   constructor() {
     super();
-
-    // an example array of 150 items to be paged
-    let exampleItems = [...Array(150).keys()].map((i) => ({
-      id: i + 1,
-      name: 'Item ' + (i+1),
-      lender: 'Random guy '+ (i+1),
-      description: 'This is the item '+ (i+1) +' an item posted by Random guy '+ (i+1),
-    }));
-
-    this.state = {
-      exampleItems: exampleItems,
-      pageOfItems: [],
+    this.state ={
+      isLoading: true,
+      listings: [],
+      error: null,
       click: false, //added to see if it respond on click
       open: false,
-      items: [],
-      //variables that are going to be passed
       name: '',
       id: '',
       description: '',
-    };
+      insurance: '',
+      return_date: '',
+      images: '',
+      listing_type: '',
+      pageOfItems: [],
+    }
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
     this.onChangePage = this.onChangePage.bind(this);
@@ -45,9 +40,16 @@ class MarketPlace extends Component {
     this.setState({ click: true });
   }
 
+
+  
   openListing(item) {
-    this.setState({name: item.name});
-    this.setState({description: item.description});
+    //console.log('open listing wth item', item)
+    this.setState({name: item.item_name});
+    this.setState({description: item.item_desc});
+    this.setState({return_date: item.return_by});
+    this.setState({listing_type: item.type})
+    this.setState({insurance: item.insurance_amount});
+    this.setState({images: item.image});
     this.setState({ open: true });
   }
 
@@ -59,71 +61,73 @@ class MarketPlace extends Component {
   //   console.log(this.item);
   // }
 
-  componentDidMount() {
-    fetch(`/market-place/`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((items) =>
-        this.setState({ items }, () => console.log('items fetched..', items))
-      );
+  async componentDidMount() {
+    const response = await axios.get('http://localhost:4000/market-place/active')
+    console.log('listings', response)
+    this.setState({listings: response.data, isLoading: false})   
   }
-
+ 
   render() {
+    const {isLoading} = this.state;
     if (this.state.click === true) {
       return <CreateListing />;
     }
+    
     if(this.state.open === true){
       return <DisplayListing
               name = {this.state.name}
               description = {this.state.description}
+              return_date = {this.state.return_date}
+              insurance = {this.state.insurance}
+              listing_type = {this.state.listing_type}
               />;
     }
-    return (
+    return (      
       <div className='containerParent'>
-        <div className='container'>
-          <h1 className='title'>Market Place</h1>
-          <div className='itemBoard'>
-            <div className='button-wrapper'>
-              <button className='listing-button' onClick={this.onClickHandler}>
-                Create a Listing
-              </button>
-            </div>
-
-            <div className='searchItemsWrapper'>
-              <input
-                type='text'
-                className='item-search-input'
-                placeholder='search for item'
-                maxLength='200'
-              ></input>
-              <button className='listing-button'>Search</button>
-            </div>
-
-            {this.state.pageOfItems.map((item) => (
-              <div className='itemContainer' key={item.id}>
-                <div className='itemImage'
-                  onClick={this.openListing.bind(this, item)}>
-
-                  image {item.id}
-
-                </div>
-
-                {item.name}
-
-              </div>
-            ))}
+      <div className='container'>
+        <h1 className='title'>Market Place</h1>
+        <div className='itemBoard'>
+          <div className='button-wrapper'>
+            <button className='listing-button' onClick={this.onClickHandler}>
+              Create a Listing
+            </button>
           </div>
-          <div className='paginate'>
-            <Pagination
-              items={this.state.exampleItems}
-              onChangePage={this.onChangePage}
-            />
-          </div>
+          <div className='searchItemsWrapper'>
+            <input
+              type='text'
+              className='item-search-input'
+              placeholder='search for item'
+              maxLength='200'
+            ></input>
+            <button className='listing-button'>Search</button>
+          </div>      
+          {console.log('test res',this.state.listings)} 
+          <React.Fragment>
+            {!isLoading ? (
+              Object.values(this.state.listings).map(listing => {
+                return(
+                  <div className='itemContainer' key={listing.id}>
+                    {console.log('test listing',listing)} 
+                    <div className='itemImage'
+                      onClick={this.openListing.bind(this, listing)}>
+                      image {listing.image}
+                  {listing.item_name}
+                  </div>
+                  <div className='paginate'>
+                    <Pagination
+                    items={this.state.listing}
+                    onChangePage={this.onChangePage}
+                    />
+                  </div>
+                  </div>
+                );
+              })
+            ) : (
+            <h3>Loading</h3>
+              )}
+            </React.Fragment>
         </div>
+      </div>
       </div>
     );
   }
