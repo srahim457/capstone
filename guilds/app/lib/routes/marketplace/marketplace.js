@@ -13,7 +13,7 @@ let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
 
 const storage = multer.diskStorage({
-  destination: '../public/uploads', //orig ../public/uploads
+  destination: '../public/market', //orig ../public/uploads
   filename: function (req, file, cb) {
     cb(null, 'IMAGE-' + Date.now() + path.extname(file.originalname));
   },
@@ -24,6 +24,8 @@ const upload = multer({
   limits: { fileSize: 1000000 },
 }).single('myImage');
 
+let  itemId;
+
 // @route Post
 // @desc Route to create lisiting for user
 // Needs an item object and a user id
@@ -33,14 +35,16 @@ router.post('/create', auth, async (req, res) => {
   console.log('current create req \n', req.body.item);
   try {
     //assumes req.body.item is the created object item
+    
+    
     var newItem = {
       item_name: req.body.item.name,
       item_desc: req.body.item.description,
-      picture: req.body.item.picture, //add picture@!!!
+      //picture: req.body.item.picture, //add picture@!!!
     };
 
     const createdItemId = await Listing.createItem([newItem], res);
-
+    itemId = createdItemId;
     /*
       Still need to implement the check if it is a sale,rental,loan
     */
@@ -77,6 +81,30 @@ router.post('/create', auth, async (req, res) => {
   }
   console.log('called post request for create at market');
 });
+
+// @route UPDATE /picture
+// @desc Update users profile picture
+// @access Private
+router.post('/create/picture', auth, async (req, res) => {
+  await upload(req, res, (err) => {
+    //console.log('Request ---', req.body);
+    //console.log('Request file ---', req.file); //Here you get file.
+    /*Now do where ever you want to do*/
+
+    let path = req.file.path;
+console.log(itemId, 'PAssed item id')
+    const imageObj = {
+      id: itemId, //item id here instead
+      image_picture: path,
+    };
+
+    Listing.createItemImage([imageObj], res); 
+    if (!err) {
+      return res.sendStatus(200).end();
+    }
+  });
+});
+
 
 //Gets a listing matching the passed listing id
 router.get('/:listingid', async (req, res, next) => {
