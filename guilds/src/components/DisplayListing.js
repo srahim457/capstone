@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
-import {format,parseISO } from 'date-fns';
-{/*uses the same css file as create listing,
+import { format, parseISO } from 'date-fns';
+
+{
+  /*uses the same css file as create listing,
 because the layout is exactly the same except
 when editing the form fields should be filled with existing information
 also there is a delete button to delete the listing entirely
-*/}
-
+*/
+}
 
 class DisplayListing extends Component {
   constructor(props) {
@@ -19,22 +21,26 @@ class DisplayListing extends Component {
       option: '',
       insurance: '0',
       listing_type: '123123',
-      return_date: ''
+      return_date: '',
     };
   }
 
-
-  handleOptionChange = e => {
+  handleOptionChange = (e) => {
     e.preventDefault();
     this.setState({
-      option: e.currentTarget.value
+      option: e.currentTarget.value,
     });
   };
 
   render() {
-    const {name, description,listing_type,insurance,return_date} = this.props;
+    const {
+      name,
+      description,
+      listing_type,
+      insurance,
+      return_date,
+    } = this.props;
     return (
-
       <div className='container-parent'>
         <div className='container'>
           <h1 className='title'>{this.state.name}</h1>
@@ -62,12 +68,10 @@ class DisplayListing extends Component {
               <br />
               <label>
                 Return time and date :
-                {format(parseISO(return_date),"MMMM do,yyyy H:mma")}
+                {format(parseISO(return_date), 'MMMM do,yyyy H:mma')}
               </label>
               <br />
-              <label>
-                Images:
-              </label>
+              <label>Images:</label>
               <br />
             </div>
           </form>
