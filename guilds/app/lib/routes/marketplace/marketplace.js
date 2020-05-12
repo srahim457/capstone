@@ -18,8 +18,8 @@ let Listing = require('../../models/Listing').Listing;
 // Needs an item object and a user id
 // Assuming the parameter is the item id and we can pull the user id from the current session information
 // @access private
-router.post('/create', async (req, res) => {
-  //console.log('current create req \n', req.body.item)
+router.post('/create', auth, async (req, res) => {
+  console.log('current create req \n', req.body.item)
   try {
     //assumes req.body.item is the created object item
     var newItem = {
@@ -27,7 +27,9 @@ router.post('/create', async (req, res) => {
       item_desc: req.body.item.description,
       image: req.body.item.image,
     };
-    const createdItemId = await Item.createItem([newItem], res);
+
+    const createdItemId = await Listing.createItem([newItem], res); 
+
     /*
       Still need to implement the check if it is a sale,rental,loan
     */
