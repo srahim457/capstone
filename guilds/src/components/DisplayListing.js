@@ -33,6 +33,7 @@ class DisplayListing extends Component {
   };
 
   render() {
+<<<<<<< HEAD
     const {
       name,
       description,
@@ -40,6 +41,14 @@ class DisplayListing extends Component {
       insurance,
       return_date,
     } = this.props;
+=======
+    const {name, description,listing_type,insurance,return_date} = this.props;
+    //console.log('return date', return_date)
+    if(return_date != ''){ //Its a sale -> no valid date
+      return_date = format(parseISO(return_date),"MMMM do,yyyy H:mma")
+    }      
+    //console.log(this.props, 'props',return_date)
+>>>>>>> 7980149863fd00be12d135f0f24bed5babe85cd5
     return (
       <div className='container-parent'>
         <div className='container'>
@@ -68,7 +77,11 @@ class DisplayListing extends Component {
               <br />
               <label>
                 Return time and date :
+<<<<<<< HEAD
                 {format(parseISO(return_date), 'MMMM do,yyyy H:mma')}
+=======
+                {return_date}
+>>>>>>> 7980149863fd00be12d135f0f24bed5babe85cd5
               </label>
               <br />
               <label>Images:</label>
