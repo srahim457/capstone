@@ -24,7 +24,7 @@ class Profile_Listed extends Component {
    this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  async componentDidMount(){
+   async componentDidMount(){
     const response = await axios.get('http://localhost:4000/market-place/listed')
     console.log('listings', response)
     this.setState({listings: response.data, isLoading: false})   
@@ -88,7 +88,7 @@ class Profile_Listed extends Component {
                 </div>
                 <div className='editListingButtonWrapper'>
                   <button
-                  class='edit-button'
+                  className='edit-button'
                   onClick={this.testClick.bind(this, listing)}
                   >
                   Edit Listed Item
