@@ -26,7 +26,7 @@ class CreateListing extends Component {
       date: '',
       policy: '',
       curTime: new Date().toLocaleString(),
-      image: '',
+      picture: '',
     };
   }
 
@@ -60,20 +60,31 @@ class CreateListing extends Component {
     });
   };
 
+  pictureChangeHandler = (e) => {
+    this.setState({
+      picture: e.target.files[0],
+      loaded: 0,
+    });
+    //console.log(this.state.picture, '$$$$');
+    //console.log(e.target.files[0], '$$$$');
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     if (!this.canBeSubmitted()) {
-      alert('Unable to submit: some field may be empty');
+      alert('Unable to submit: some fields may be empty');
       return;
     } else {
       alert('submission has been completed');
       e.preventDefault();
       console.log(this.state); //post request with axios
       const item = this.state;
-      axios.post(`http://localhost:4000/market-place/create`, { item }).then((res) => {
-        console.log(res);
-        console.log(res.data);
-      });
+      axios
+        .post(`http://localhost:4000/market-place/create`, { item })
+        .then((res) => {
+          console.log(res);
+          console.log(res.data);
+        });
       // window.location.reload(false);
     }
   };
@@ -291,12 +302,16 @@ class CreateListing extends Component {
             <br />
             <br />
             <label>Upload an image</label>
-            <br />
-            <input
-              type='file'
-              onChange={this.fileSelectedHandler}
-              value={this.state.image}
-            />
+            <div className=' form-group files '>
+              <label>Profile Picture: </label>
+              <input
+                className='form-control'
+                type='file'
+                multiple=''
+                name='myImage'
+                onChange={this.pictureChangeHandler}
+              />
+            </div>
           </form>
           <div className='submit-button-wrapper'>
             <button className='submit-button' onClick={this.handleSubmit}>

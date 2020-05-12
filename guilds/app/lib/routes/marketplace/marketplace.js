@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 
 var pool = require('../../db').pool;
 const bcrypt = require('bcrypt');
@@ -10,21 +12,35 @@ let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
 
-// @route Post marketplace/users
+const storage = multer.diskStorage({
+  destination: '../public/uploads', //orig ../public/uploads
+  filename: function (req, file, cb) {
+    cb(null, 'IMAGE-' + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 },
+}).single('myImage');
+
+// @route Post
 // @desc Route to create lisiting for user
 // Needs an item object and a user id
 // Assuming the parameter is the item id and we can pull the user id from the current session information
 // @access private
-router.post('/create', async (req, res) => {
+router.post('/create', auth, async (req, res) => {
   //console.log('current create req \n', req.body.item)
   try {
     //assumes req.body.item is the created object item
     var newItem = {
       item_name: req.body.item.name,
       item_desc: req.body.item.description,
-      image: req.body.item.image,
+      picture: req.body.item.picture, //add picture@!!!
     };
-    const createdItemId = await Item.createItem([newItem], res);
+
+    const createdItemId = await Item.createItem([newItem], res); //this doesnt work
+
     /*
       Still need to implement the check if it is a sale,rental,loan
     */
