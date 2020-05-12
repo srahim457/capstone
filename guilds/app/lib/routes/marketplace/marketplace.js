@@ -209,9 +209,9 @@ router.get('/', async (req, res) => {
 //Looks for req.user.id as a param
 router.get('/borrowed', async (req, res) => {
   try {
-    console.log('getting all borrowed items \n', req.app.locals.user[0]);
+    console.log('getting all borrowed items \n', req.user.id);
     const alllistings = await Listing.getAllBorrowerListings(
-      req.app.locals.user[0].id,
+      req.user.id,
       res
     );
     console.log('all borrowed listing \n', alllistings);
@@ -226,9 +226,9 @@ router.get('/borrowed', async (req, res) => {
 //Look for req.user.id as a param
 router.get('/listed', async (req, res) => {
   try {
-    console.log('getting all listed items \n', req.app.locals.user[0]);
+    console.log('getting all listed items \n', req.user.id);
     const alllistings = await Listing.getAllLenderListings(
-      req.app.locals.user[0].id,
+      req.user.id,
       res
     );
     res.status(200).json(alllistings);
