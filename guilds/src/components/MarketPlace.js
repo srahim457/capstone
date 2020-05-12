@@ -43,14 +43,19 @@ class MarketPlace extends Component {
 
   
   openListing(item) {
-    //console.log('open listing wth item', item)
+    console.log('open listing wth item', item)
     this.setState({name: item.item_name});
     this.setState({description: item.item_desc});
-    this.setState({return_date: item.return_by});
     this.setState({listing_type: item.type})
     this.setState({insurance: item.insurance_amount});
     this.setState({images: item.image});
     this.setState({ open: true });
+    if(item.return_by === null){
+      this.setState({return_date: ''});
+    }
+    else{
+      this.setState({return_date: item.return_by});
+    }
   }
 
   // componentDidMount() {

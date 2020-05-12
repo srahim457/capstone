@@ -33,8 +33,12 @@ class DisplayListing extends Component {
 
   render() {
     const {name, description,listing_type,insurance,return_date} = this.props;
+    //console.log('return date', return_date)
+    if(return_date != ''){ //Its a sale -> no valid date
+      return_date = format(parseISO(return_date),"MMMM do,yyyy H:mma")
+    }      
+    //console.log(this.props, 'props',return_date)
     return (
-
       <div className='container-parent'>
         <div className='container'>
           <h1 className='title'>{this.state.name}</h1>
@@ -62,7 +66,7 @@ class DisplayListing extends Component {
               <br />
               <label>
                 Return time and date :
-                {format(parseISO(return_date),"MMMM do,yyyy H:mma")}
+                {return_date}
               </label>
               <br />
               <label>
