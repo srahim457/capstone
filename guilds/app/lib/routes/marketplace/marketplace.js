@@ -41,6 +41,7 @@ router.post('/create', auth, async (req, res) => {
 
     const createdItemId = await Item.createItem([newItem], res); //this doesnt work
 
+    console.log(createdItemId, 'createdItemId');
     /*
       Still need to implement the check if it is a sale,rental,loan
     */
