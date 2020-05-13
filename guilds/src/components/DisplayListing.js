@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
 import { format, parseISO } from 'date-fns';
+import { Redirect } from 'react-router-dom'; 
+import Payment from './Payment';
 
 {
   /*uses the same css file as create listing,
@@ -22,18 +24,36 @@ class DisplayListing extends Component {
       insurance: '0',
       listing_type: '123123',
       return_date: '',
+<<<<<<< HEAD
       total_price: '',
       rent_amount: '',
       policy: ''
+=======
+      click: false,
+>>>>>>> 2e2f2154ce3eeea5101045a9ae1c3321e52bf31f
     };
+
+    this.onClickHandler = this.onClickHandler.bind(this);
+  }
+
+  onClickHandler = (e) => {
+    e.preventDefault();
+    this.setState({ click: true });
   }
 
   handleOptionChange = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     this.setState({
       option: e.currentTarget.value,
     });
   };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    return <Redirect to="/payment" Component={Payment}/>
+  }
+
+
 
   render() {
     let {
@@ -45,8 +65,25 @@ class DisplayListing extends Component {
       total_price,
       rent_amount
     } = this.props;
+<<<<<<< HEAD
     // types are sale, loan, rental
     console.log('type of listing', listing_type)
+=======
+    //console.log('return date', return_date)
+    
+    // for redirecting to Payment page AL
+    // if(this.state.open === true){
+    //   return <Payment
+    //           name = {this.state.name}
+    //           description = {this.state.description}
+    //           return_date = {this.state.return_date}
+    //           insurance = {this.state.insurance}
+    //           listing_type = {this.state.listing_type}
+    //           price = {this.state.price}
+    //           />;
+    // }
+
+>>>>>>> 2e2f2154ce3eeea5101045a9ae1c3321e52bf31f
     if (return_date != '') {
       //Its a sale -> no valid date
       return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
@@ -63,7 +100,7 @@ class DisplayListing extends Component {
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
               <div className='button-wrapper'>
-                <button className='close-button'>X</button>
+                <button onClick={this.onClickHandler} className='close-button'>X</button>
               </div>
               <br />
                 <label>Images:</label>
@@ -105,7 +142,7 @@ class DisplayListing extends Component {
                 <br />
             </div>
           </form>
-          <button>Confirm</button>
+          <button onClick={this.handleSubmit}>Confirm</button>
         </div>
       </div>
     );

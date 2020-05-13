@@ -49,6 +49,9 @@ import AllGuilds from '../AllGuilds';
 import PrivateRoute from '../routing/PrivateRoute';
 import Messages from '../Messages';
 
+import Payment from '../Payment';
+import PaymentSuccess from '../PaymentSuccess';
+
 //Might import Navbar in here instead
 
 const Routes = (props) => {
@@ -61,6 +64,8 @@ const Routes = (props) => {
         <PrivateRoute path='/market-place' component={MarketPlace} />
         <PrivateRoute path='/all-guilds' component={AllGuilds} />
         <PrivateRoute path='/messages' component={Messages} />
+        <PrivateRoute path='/payment' component={Payment} />
+        <PrivateRoute path='/payment-success' component={PaymentSuccess} />
         {/* <Route exact path='/profile/:id' component={Profile} />
         <PrivateRoute exact path='/edit-profile' component={ProfileForm} />
         <PrivateRoute exact path='/posts' component={Posts} />
