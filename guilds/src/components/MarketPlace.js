@@ -22,6 +22,9 @@ class MarketPlace extends Component {
       return_date: '',
       images: '',
       listing_type: '',
+      total_price: '',
+      rent_amount: '',
+      policy: '',
       pageOfItems: [],
     }
 
@@ -50,6 +53,9 @@ class MarketPlace extends Component {
     this.setState({listing_type: item.type})
     this.setState({insurance: item.insurance_amount});
     this.setState({images: item.image});
+    this.setState({total_price: item.total_price});
+    this.setState({policy: item.policy});
+    this.setState({rent_amount: item.rent_amount});
     this.setState({ open: true });
     if(item.return_by === null){
       this.setState({return_date: ''});
@@ -86,6 +92,9 @@ class MarketPlace extends Component {
               return_date = {this.state.return_date}
               insurance = {this.state.insurance}
               listing_type = {this.state.listing_type}
+              total_price = {this.state.total_price}
+              rent_amount = {this.state.rent_amount}
+              policy = {this.state.policy}
               />;
     }
     return (      
