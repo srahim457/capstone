@@ -50,6 +50,7 @@ class Profile extends Component {
       rating: null,
       picture: null,
       profile: {},
+      guilds: [],
       click: false, //added to see if it respond on click
       testToken: false,
       exampleArrayGuilds: exampleArrayGuilds,
@@ -75,7 +76,7 @@ class Profile extends Component {
     this.setState({ testToken: true });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let firstname;
     let lastname;
     let email;
@@ -84,37 +85,34 @@ class Profile extends Component {
     let rating;
     let picture;
     let description;
+    let guilds;
 
-    axios.get('http://localhost:4000/profile').then((res) => {
-      const profile = res.data;
+
+   const[firstResp,secondResp] = await Promise.all([
+    axios.get('http://localhost:4000/profile'),
+    axios.get('http://localhost:4000/profile/guilds')  
+  ]);
+      const profile = firstResp.data;
       this.setState({ profile });
       //console.log(res.data.email);
       //console.log(res.data.email);
       //response = res.data;
 
-      firstname = res.data.first_name;
-      lastname = res.data.last_name;
-      email = res.data.email;
-      phonenum = res.data.phonenum;
-      online = res.data.online;
-      rating = res.data.rating;
-      picture = res.data.profile_picture;
-      description = res.data.description;
+      //console.log('user profile info',firstResp.data,'\n',secondResp.data);
 
       this.setState({
-        email,
-        firstname,
-        lastname,
-        phonenum,
-        online,
-        rating,
-        picture,
-        description,
+        firstname: firstResp.data.first_name,
+        lastname: firstResp.data.last_name,
+        email: firstResp.data.email,
+        phonenum: firstResp.data.phonenum,
+        online: firstResp.data.online,
+        rating: firstResp.data.rating,
+        picture: firstResp.data.profile_picture,
+        description: firstResp.data.description,
+        guilds: secondResp.data,
       });
 
-      //console.log(res.data);
-      console.log(picture, 'getting PATH');
-    });
+     // console.log(picture, 'getting PATH');
   }
 
   render() {
@@ -202,19 +200,21 @@ class Profile extends Component {
               <h1>
               {this.state.description}
               </h1>
-            </div>
+            </div>            
             <div className='userGuildListTitle'>
               <div className='centerText'>
                 <h1>Affiliated Guilds</h1>
               </div>
             </div>
+            <React.Fragment>
             <div className='guildnamelistcontainer'>
-              {this.state.exampleArrayGuilds.map((guild) => (
+              {Object.values(this.state.guilds).map((guild) => (
                 <div className='guildnamecontainer' key={guild.id}>
-                    <h2> Guild {guild.id} </h2>
+                    <h2> Guild: {guild.name} </h2>
                 </div>
               ))}
             </div>
+            </React.Fragment>
           </div /*Listings*/>
 
           {/*The user's listings*/}
