@@ -266,7 +266,7 @@ class CreateListing extends Component {
   }
 
   closeButton() {
-    //return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    // return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
     window.location.reload(false);
   }
 

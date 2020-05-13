@@ -76,7 +76,7 @@ class Payment extends Component {
     // Stripe form takes care of everything else
     const product = {
       name: this.state.name,
-      price: 34.50,
+      price: 45.50,
       description: this.state.description
     };
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
 import { format, parseISO } from 'date-fns';
-
+import { Redirect } from 'react-router-dom'; 
 import Payment from './Payment';
 
 {
@@ -30,17 +30,24 @@ class DisplayListing extends Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  onClickHandler(e) {
+  onClickHandler = (e) => {
     e.preventDefault();
     this.setState({ click: true });
   }
 
   handleOptionChange = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     this.setState({
       option: e.currentTarget.value,
     });
   };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    return <Redirect to="/payment" Component={Payment}/>
+  }
+
+
 
   render() {
     let {
@@ -76,7 +83,7 @@ class DisplayListing extends Component {
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
               <div className='button-wrapper'>
-                <button className='close-button'>X</button>
+                <button onClick={this.onClickHandler} className='close-button'>X</button>
               </div>
               <label>Item Name: </label>
               {name}
@@ -101,7 +108,7 @@ class DisplayListing extends Component {
               <br />
             </div>
           </form>
-          <button>Confirm</button>
+          <button onClick={this.handleSubmit}>Confirm</button>
         </div>
       </div>
     );
