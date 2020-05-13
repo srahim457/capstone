@@ -25,33 +25,13 @@ class Messages extends Component {
   };
 
   render() {
+    const {data} = this.props.location;
+    
     return (
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Messages</h1>
+          <h1 className='title'>User Search Results: {data}</h1>
           <div className='itemBoard'>
-            <div className='searchItemsWrapper'>
-              <input
-                type='text'
-                className='item-search-input'
-                placeholder='search for item'
-                maxLength='200'
-                value={this.state.search_key}
-                onChange={this.searchChangeHandler}
-              ></input>
-
-              <button className='listing-button'>
-                <Link to={{
-                  pathname: '/messages/user-search-results',
-                  data: this.state.search_key,
-                }}
-                className='yellow'
-                >
-                  Search
-                </Link>
-              </button>
-
-            </div>
           </div>
         </div>
       </div>

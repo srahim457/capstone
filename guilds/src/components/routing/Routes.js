@@ -45,9 +45,12 @@ import Profile from '../Profile';
 import MarketPlace from '../MarketPlace';
 import NotFound from '../layout/NotFound';
 import AllGuilds from '../AllGuilds';
+import MarketPlaceSearchResults from '../MarketPlaceSearch';
+import AllGuildsSearchResults from '../AllGuildsSearch';
+import Messages from '../Messages';
+import UserSearchResults from '../UserSearch';
 
 import PrivateRoute from '../routing/PrivateRoute';
-import Messages from '../Messages';
 
 import Payment from '../Payment';
 import PaymentSuccess from '../PaymentSuccess';
@@ -61,11 +64,20 @@ const Routes = (props) => {
         <Route exact path='/' component={Signup} />
         <Route path='/' component={Login} />
         <PrivateRoute path='/profile' component={Profile} />
+<<<<<<< HEAD
         <PrivateRoute path='/market-place' component={MarketPlace} />
         <PrivateRoute path='/all-guilds' component={AllGuilds} />
         <PrivateRoute path='/messages' component={Messages} />
         <PrivateRoute path='/payment' component={Payment} />
         <PrivateRoute path='/payment-success' component={PaymentSuccess} />
+=======
+        <PrivateRoute exact path='/market-place' component={MarketPlace} />
+        <PrivateRoute path='/market-place/search-results' component={MarketPlaceSearchResults} />
+        <PrivateRoute exact path='/all-guilds' component={AllGuilds} />
+        <PrivateRoute path='/all-guilds/search-results' component={AllGuildsSearchResults} />
+        <PrivateRoute exact path='/messages' component={Messages} />
+        <PrivateRoute path='/messages/user-search-results' component={UserSearchResults} />
+>>>>>>> d5f0f347e5e8e540a28b115521f79b27e075dc76
         {/* <Route exact path='/profile/:id' component={Profile} />
         <PrivateRoute exact path='/edit-profile' component={ProfileForm} />
         <PrivateRoute exact path='/posts' component={Posts} />

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './styles/profile.css';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
+import Spinner from './layout/spinner_transparent.gif';
 
 class Profile_Borrowed extends Component {
   constructor() {
@@ -55,7 +56,9 @@ class Profile_Borrowed extends Component {
             );
           })
         ) : (
-          <h3>Loadin</h3>
+          <div className='spinner'>
+            <img src={Spinner} alt="loading..." />
+          </div>
         )}
       </React.Fragment>
     );

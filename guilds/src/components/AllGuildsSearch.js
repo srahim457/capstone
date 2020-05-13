@@ -1,8 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Link,
-  NavLink,
-} from 'react-router-dom';
 //import Navigation from './Navigation';
 
 import './styles/AllGuilds.css';
@@ -18,25 +14,15 @@ class AllGuilds extends Component {
       open: false,
       guilds: [],
       isLoading: true,
-      description: '',
-      search_key: '',
+      description: ''
     };
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.searchChangeHandler = this.searchChangeHandler.bind(this);
   }
 
   onClickHandler(e) {
     e.preventDefault();
     this.setState({ click: true });
   }
-
-  searchChangeHandler = (e) => {
-    e.preventDefault();
-    this.setState({
-      search_key: e.target.value,
-    });
-  };
-
   openGuild(item) {
     console.log('open guild listing with',item)
     this.setState({ name: item.name });
@@ -53,9 +39,7 @@ class AllGuilds extends Component {
 
   render() {
     const {isLoading} = this.state;
-    if (this.state.click === true) {
-      return <CreateGuild />;
-    }
+    const {data} = this.props.location;
 
     if (this.state.open === true) {
       console.log(this.state,'what im passing',this.state.guilds[0])
@@ -73,35 +57,8 @@ class AllGuilds extends Component {
       <div className='Background'>
         {' '}
         {/*the background color*/}
-        <h1 className='title'>All Guilds</h1>
+        <h1 className='title'>Search Results: {data}</h1>
         <div className='GuildBoard'>
-          <div className='addGuildsButtonWrapper'>
-            <button class='add-button' onClick={this.onClickHandler}>
-              Add New Guild
-            </button>
-          </div>
-
-          <div className='searchWrapper'>
-            <input
-              type='text'
-              className='search-input'
-              placeholder='search for guilds'
-              maxLength='200'
-              value={this.state.search_key}
-              onChange={this.searchChangeHandler}
-            ></input>
-            <button class='search-button'>
-              <Link to={{
-                pathname: '/all-guilds/search-results',
-                data: this.state.search_key,
-              }}
-              className='yellow'
-              >
-                Search
-              </Link>
-            </button>
-          </div>
-          {console.log('test res',this.state.guilds)}
           <React.Fragment>
           {!isLoading ? (
               Object.values(this.state.guilds).map(guild => {

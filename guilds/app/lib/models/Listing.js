@@ -91,6 +91,19 @@ Listing.createRentalListing = async function (req, res) {
     res.status(400);
   }
 };
+
+Listing.searchForListing = async function (req, res) {
+  try {
+    console.log('search for a listing containing ', req)
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND I.item_name LIKE '%($1)%' ORDER by time_posted DESC", [req]);
+    return listing.rows
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+
+
 //Return listing that matches listing id
 //Only takes in the listing id as a parameter
 Listing.getListingByListingID = async function (req, res) {
@@ -144,7 +157,7 @@ Listing.getAllBorrowerListings = async function (req, res) {
 Listing.getAllLenderListings = async function (req, res) {
   try {
     const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1)', [req]);
-    console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n',listing.rows)
+    console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
     console.log(error)

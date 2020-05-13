@@ -10,6 +10,7 @@ let pool = require('../../db').pool;
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
 let Listing = require('../../models/Listing').Listing;
+let Guild = require('../../models/Guilds').Guilds;
 
 const storage = multer.diskStorage({
   destination: '../public/uploads', //orig ../public/uploads
@@ -53,6 +54,20 @@ router.get('/', auth, async (req, res) => {
     res.status(200).json(profile[0]);
   } catch (err) {
     console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/guilds', auth, async (req, res) => {
+  //route profile/me ?
+  try {
+    console.log('at get user guilds \n')
+    userguilds = await Guild.getAllUserGuilds([req.user.id]); //gets logged in users by tokenid
+
+    console.log('all user guilds', userguilds);
+    res.status(200).json(userguilds);
+  } catch (error) {
+    console.error(error.message);
     res.status(500).send('Server Error');
   }
 });

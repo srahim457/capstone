@@ -214,7 +214,7 @@ router.get('/borrowed',auth, async (req, res) => {
       req.user.id,
       res
     );
-    console.log('all borrowed listing \n', alllistings);
+    console.log('all borrowed listings \n', alllistings.length);
     res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all borrowed listings \n ', error);
