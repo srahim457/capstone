@@ -107,7 +107,7 @@ console.log(itemId, 'PAssed item id')
 
 
 //Gets a listing matching the passed listing id
-router.get('/:listingid', async (req, res, next) => {
+router.get('/:listingid', auth,async (req, res, next) => {
   console.log(req.params.listingid);
   if (!Number.isInteger(req.params.listingid)) {
     console.log('not a number');
@@ -128,7 +128,7 @@ router.get('/:listingid', async (req, res, next) => {
 });
 
 //Borrows a listing
-router.get('/:listingid/borrow', async (req, res) => {
+router.get('/:listingid/borrow', auth,async (req, res) => {
   console.log(req.params.listingid);
   try {
     var ids = {
@@ -145,7 +145,7 @@ router.get('/:listingid/borrow', async (req, res) => {
 });
 
 //Cancels borrowing a listing in case a user decides to change their mind
-router.get('/:listingid/borrow/cancel', async (req, res) => {
+router.get('/:listingid/borrow/cancel',auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     const listing = await Listing.removeBorrower([req.params.listingid], res);
@@ -158,7 +158,7 @@ router.get('/:listingid/borrow/cancel', async (req, res) => {
 });
 
 //Marks a listing as reserved so only one person can see it
-router.get('/:listingid/reserve', async (req, res) => {
+router.get('/:listingid/reserve',auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     const listing = await Listing.reserveListing([req.params.listingid], res);
@@ -171,7 +171,7 @@ router.get('/:listingid/reserve', async (req, res) => {
 });
 
 //Frees a reserved listing so others can click on it
-router.get('/:listingid/unreserve', async (req, res) => {
+router.get('/:listingid/unreserve',auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     const listing = await Listing.unreserveListing([req.params.listingid], res);
@@ -195,7 +195,7 @@ router.get('/active', async (req, res) => {
 });
 
 //Gets all listings
-router.get('/', async (req, res) => {
+router.get('/', auth,async (req, res) => {
   try {
     const alllistings = await Listing.getEveryListing(req, res);
     res.status(200).json(alllistings);
