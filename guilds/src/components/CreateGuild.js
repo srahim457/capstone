@@ -124,11 +124,10 @@ class CreateGuild extends Component {
             </div>
             <div>
               {/* make into a description box */}
-<<<<<<< HEAD
+
               <label>Guild Description</label>
-=======
+
               <label>Guild Biography</label>
->>>>>>> 096943f4f53bfdbf876d7667f324b6c8001921e4
               <br />
               <textarea
                 className='form-input'
