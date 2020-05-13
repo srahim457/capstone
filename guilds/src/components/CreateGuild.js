@@ -125,8 +125,6 @@ class CreateGuild extends Component {
             <div>
               {/* make into a description box */}
 
-              <label>Guild Description</label>
-
               <label>Guild Biography</label>
               <br />
               <textarea
