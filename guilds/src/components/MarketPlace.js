@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Pagination from './Pagination';
 import CreateListing from './CreateListing';
 import DisplayListing from './DisplayListing';
+import noimage from '../images/noimageavailable.png'
 import axios from 'axios';
 import './styles/MarketPlace.css';
 
@@ -115,7 +116,8 @@ class MarketPlace extends Component {
                     {console.log('test listing',listing)} 
                     <div className='itemImage'
                       onClick={this.openListing.bind(this, listing)}>
-                      image {listing.image}
+                      {/*listing.image*/}
+                      <img src={noimage} height='150' width="500" ></img>
                   {listing.item_name}
                   </div>
                   <div className='paginate'>

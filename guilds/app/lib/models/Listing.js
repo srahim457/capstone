@@ -31,6 +31,22 @@ Listing.createItem = async function (req, res) {
   }
 };
 
+//Listing
+
+//Create a new picture for item
+//Takes in an item object
+//Returns created item id
+Listing.createItemImage = async function (req, res) {
+  try {
+   
+    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image, req[0].id]);
+    return listing.rows[0].id
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+
 
 //Create a new sale listing entry
 //Takes in a listing object
