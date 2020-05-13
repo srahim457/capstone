@@ -45,6 +45,8 @@ import MarketPlace from './MarketPlace';
 import Messages from './Messages';
 import Profile from './Profile.js';
 import AllGuilds from './AllGuilds';
+import MarketPlaceSearchResults from './MarketPlaceSearch';
+import AllGuildsSearchResults from './AllGuildsSearch';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -68,9 +70,11 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       </div>
       <div className='content'>
         <Route path='/profile' component={Profile} />
-        <Route path='/market-place' component={MarketPlace} />
+        <Route exact path='/market-place' component={MarketPlace} />
         <Route path='/messages' component={Messages} />
-        <Route path='/all-guilds' component={AllGuilds} />
+        <Route exact path='/all-guilds' component={AllGuilds} />
+        <Route path='/market-place/search-results' component={MarketPlaceSearchResults} />
+        <Route path='/all-guilds/search-results' component={AllGuildsSearchResults} />
       </div>
     </BrowserRouter>
   );

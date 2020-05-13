@@ -1,12 +1,4 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter,
-  HashRouter as Router,
-  Route,
-  Link,
-  NavLink,
-  Switch,
-} from 'react-router-dom';
 import Pagination from './Pagination';
 import CreateListing from './CreateListing';
 import DisplayListing from './DisplayListing';
@@ -31,13 +23,11 @@ class MarketPlace extends Component {
       images: '',
       listing_type: '',
       pageOfItems: [],
-      search_key: '',
     }
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
     this.onChangePage = this.onChangePage.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.searchChangeHandler = this.searchChangeHandler.bind(this);
     //this.openListing = this.openListing.bind(this);
   }
 
@@ -51,11 +41,6 @@ class MarketPlace extends Component {
     this.setState({ click: true });
   }
 
-  searchChangeHandler = (e) => {
-    this.setState({
-      search_key: e.target.value,
-    });
-  };
 
 
   openListing(item) {
@@ -90,9 +75,7 @@ class MarketPlace extends Component {
 
   render() {
     const {isLoading} = this.state;
-    if (this.state.click === true) {
-      return <CreateListing />;
-    }
+    const {data} = this.props.location;
 
     if(this.state.open === true){
       return <DisplayListing
@@ -106,32 +89,9 @@ class MarketPlace extends Component {
     return (
       <div className='containerParent'>
       <div className='container'>
-        <h1 className='title'>Market Place</h1>
+        <h1 className='title'>Search Results: {data}</h1>
+
         <div className='itemBoard'>
-          <div className='button-wrapper'>
-            <button className='listing-button' onClick={this.onClickHandler}>
-              Create a Listing
-            </button>
-          </div>
-          <div className='searchItemsWrapper'>
-            <input
-              type='text'
-              className='item-search-input'
-              placeholder='search for item'
-              maxLength='200'
-              value={this.state.search_key}
-              onChange={this.searchChangeHandler}
-            ></input>
-            <button className='listing-button'>
-              <Link to={{
-                pathname: '/market-place/search-results',
-                data: this.state.search_key,
-              }}
-              >
-                Search
-              </Link>
-            </button>
-          </div>
           {console.log('test res',this.state.listings)}
           <React.Fragment>
             {!isLoading ? (
@@ -160,79 +120,10 @@ class MarketPlace extends Component {
               )}
             </React.Fragment>
         </div>
+
       </div>
       </div>
     );
   }
 }
 export default MarketPlace;
-
-{/*
-class Profile_Listed extends Component {
-
-  constructor() {
-    super();
-
-    var numItems = [...Array(100).keys()].map(i => ({
-      id: i + 1,
-      name: 'Item ' + (i + 1),
-      description: 'this is an item',
-      cost: i+1,
-    }));
-
-    this.state = {
-      numItems: numItems,
-      name: 'some existing name',
-      click: false //added to see if it respond on click
-    };
-    this.onClickHandler = this.onClickHandler.bind(this);
-  }
-
-  testClick(item){
-    alert(item.name);
-    this.setState({name: item.name});
-    this.setState({ click: true });
-  }
-
-  onClickHandler(e) {
-    e.preventDefault();
-    this.setState({ click: true });
-  }
-
-
-  render(){
-    {/*routes to an edit listing page*
-
-    if (this.state.click === true) {
-      return <EditListing name = {this.state.name} />;
-    }
-
-    return (
-      <div className='ItemListWrapper'>
-      {this.state.numItems.map(item => (
-        <div className='item' key={item.id}>
-
-          <div className='itemImageWrapper'>
-            <h1> img {item.id} </h1>
-          </div>
-
-          <div className='itemInfoWrapper'>
-            <h1 className='itemInfoField'> Name: {item.name}</h1>
-            <h1 className='itemInfoField'> Cost: ${item.cost}</h1>
-          </div>
-
-          <div className='editListingButtonWrapper'>
-            <button class="edit-button" onClick={this.testClick.bind(this, item)}>
-              Edit Listed Item
-            </button>
-          </div>
-        </div>
-      ))}
-      </div>
-
-    );
-  }
-}
-export default Profile_Listed;
-
-*/}
