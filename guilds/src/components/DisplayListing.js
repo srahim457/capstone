@@ -52,17 +52,17 @@ class DisplayListing extends Component {
     } = this.props;
     //console.log('return date', return_date)
     
-    // for showing Payment page AL
-    if(this.state.open === true){
-      return <Payment
-              name = {this.state.name}
-              description = {this.state.description}
-              return_date = {this.state.return_date}
-              insurance = {this.state.insurance}
-              listing_type = {this.state.listing_type}
-              price = {this.state.price}
-              />;
-    }
+    // for redirecting to Payment page AL
+    // if(this.state.open === true){
+    //   return <Payment
+    //           name = {this.state.name}
+    //           description = {this.state.description}
+    //           return_date = {this.state.return_date}
+    //           insurance = {this.state.insurance}
+    //           listing_type = {this.state.listing_type}
+    //           price = {this.state.price}
+    //           />;
+    // }
 
     if (return_date != '') {
       //Its a sale -> no valid date

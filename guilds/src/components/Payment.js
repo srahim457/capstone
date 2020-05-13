@@ -31,6 +31,7 @@ class Payment extends Component {
       return_date: '',
       greeting: '',
       click: false,
+      payment_status: '',
     };
 
     // for listing
@@ -71,12 +72,15 @@ class Payment extends Component {
   // }
 
   render() {
+    // this will get passed to stripe form
+    // Stripe form takes care of everything else
     const product = {
-      name: "Tesla Roadster",
+      name: this.state.name,
       price: 34.50,
-      description: "Cool car"
+      description: this.state.description
     };
 
+    // submits stripe payment for and returns 'success' or 'error' status
     async function handleToken(token) {
       // console.log({ token, addresses });
       const response = await axios.post('http://localhost:4000/payment/charge', 
@@ -94,6 +98,7 @@ class Payment extends Component {
         toast('Something went wrong',
         { type: 'error' })
       }
+      // will require a POST to backend and marking listing paid for + unavailable
     }
 
     return (
