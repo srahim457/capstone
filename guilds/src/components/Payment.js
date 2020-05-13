@@ -23,11 +23,11 @@ class Payment extends Component {
     // for test
     this.state = {
       id: '',
-      name: 'Item Name',
-      lender: 'Lender Name',
-      description: 'Description here',
-      listing_type: 'Rent, Buy, or Loan',
-      insurance: '0',
+      name: '',
+      lender: '',
+      description: '',
+      listing_type: '',
+      insurance: '',
       return_date: '',
       greeting: '',
       click: false,
