@@ -39,9 +39,7 @@ class AllGuilds extends Component {
 
   render() {
     const {isLoading} = this.state;
-    if (this.state.click === true) {
-      return <CreateGuild />;
-    }
+    const {data} = this.props.location;
 
     if (this.state.open === true) {
       console.log(this.state,'what im passing',this.state.guilds[0])
@@ -59,7 +57,30 @@ class AllGuilds extends Component {
       <div className='Background'>
         {' '}
         {/*the background color*/}
-        <h1 className='title'>Search Results: </h1>
+        <h1 className='title'>Search Results: {data}</h1>
+        <div className='GuildBoard'>
+          <React.Fragment>
+          {!isLoading ? (
+              Object.values(this.state.guilds).map(guild => {
+                return(
+            <div className='GuildContainer' key = {guild.id}>
+              <div
+                className='GuildImageWrapper'
+                onClick={this.openGuild.bind(this, guild)}
+              >
+                <h1> Image {guild.picture} </h1>
+              </div>
+              <div className='GuildNameWrapper'>
+                <h1>{guild.name} </h1>
+                </div>
+                  </div>
+                );
+              })
+            ) : (
+            <h3>Loading</h3>
+              )}
+            </React.Fragment>
+        </div>
       </div>
     );
   }

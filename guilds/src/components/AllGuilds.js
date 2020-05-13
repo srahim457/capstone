@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import {
+  Link,
+  NavLink,
+} from 'react-router-dom';
 //import Navigation from './Navigation';
 
 import './styles/AllGuilds.css';
@@ -14,15 +18,25 @@ class AllGuilds extends Component {
       open: false,
       guilds: [],
       isLoading: true,
-      description: ''
+      description: '',
+      search_key: '',
     };
     this.onClickHandler = this.onClickHandler.bind(this);
+    this.searchChangeHandler = this.searchChangeHandler.bind(this);
   }
 
   onClickHandler(e) {
     e.preventDefault();
     this.setState({ click: true });
   }
+
+  searchChangeHandler = (e) => {
+    e.preventDefault();
+    this.setState({
+      search_key: e.target.value,
+    });
+  };
+
   openGuild(item) {
     console.log('open guild listing with',item)
     this.setState({ name: item.name });
@@ -34,9 +48,9 @@ class AllGuilds extends Component {
   async componentDidMount() {
     const response = await axios.get('http://localhost:4000/all-guilds/')
     console.log('all guilds', response)
-    this.setState({guilds: response.data, isLoading: false})   
+    this.setState({guilds: response.data, isLoading: false})
   }
- 
+
   render() {
     const {isLoading} = this.state;
     if (this.state.click === true) {
@@ -73,10 +87,21 @@ class AllGuilds extends Component {
               className='search-input'
               placeholder='search for guilds'
               maxLength='200'
+              value={this.state.search_key}
+              onChange={this.searchChangeHandler}
             ></input>
-            <button class='search-button'>Search</button>
+            <button class='search-button'>
+              <Link to={{
+                pathname: '/all-guilds/search-results',
+                data: this.state.search_key,
+              }}
+              className='yellow'
+              >
+                Search
+              </Link>
+            </button>
           </div>
-          {console.log('test res',this.state.guilds)} 
+          {console.log('test res',this.state.guilds)}
           <React.Fragment>
           {!isLoading ? (
               Object.values(this.state.guilds).map(guild => {

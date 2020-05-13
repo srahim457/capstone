@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter,
-  HashRouter as Router,
-  Route,
   Link,
   NavLink,
-  Switch,
 } from 'react-router-dom';
 import Pagination from './Pagination';
 import CreateListing from './CreateListing';
@@ -55,6 +51,7 @@ class MarketPlace extends Component {
   }
 
   searchChangeHandler = (e) => {
+    e.preventDefault();
     this.setState({
       search_key: e.target.value,
     });
@@ -122,6 +119,7 @@ class MarketPlace extends Component {
               Create a Listing
             </button>
           </div>
+
           <div className='searchItemsWrapper'>
             <input
               type='text'
@@ -131,15 +129,18 @@ class MarketPlace extends Component {
               value={this.state.search_key}
               onChange={this.searchChangeHandler}
             ></input>
+
             <button className='listing-button'>
               <Link to={{
                 pathname: '/market-place/search-results',
                 data: this.state.search_key,
               }}
+              className='yellow'
               >
                 Search
               </Link>
             </button>
+
           </div>
           {console.log('test res',this.state.listings)}
           <React.Fragment>

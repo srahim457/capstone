@@ -78,7 +78,7 @@ class Profile_Listed extends Component {
           Object.values(this.state.listings).map(listing => {
             return(
               <div className='item' key={listing.item_id}>
-                {console.log('test res',listing,listing.item_name)}
+                {console.log('test res',listing,listing.borrower_id)}
 
                 <div className='itemImageWrapper'>
                   <h1> img {listing.image} </h1>
