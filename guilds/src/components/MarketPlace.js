@@ -7,6 +7,7 @@ import Pagination from './Pagination';
 import CreateListing from './CreateListing';
 import DisplayListing from './DisplayListing';
 import noimage from '../images/noimageavailable.png'
+import Spinner from './layout/spinner_transparent.gif';
 import axios from 'axios';
 import './styles/MarketPlace.css';
 
@@ -166,7 +167,9 @@ class MarketPlace extends Component {
                 );
               })
             ) : (
-            <h3>Loading</h3>
+              <div className='spinner'>
+              <img src={Spinner} alt="loading..." />
+            </div>
               )}
             </React.Fragment>
         </div>
