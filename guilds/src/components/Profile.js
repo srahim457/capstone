@@ -229,7 +229,7 @@ class Profile extends Component {
                     : 'PageSwitcher__Item_profile'
                 }
               >
-                Listed Items
+                My Listed Items
               </button>
               <button
                 onClick={this.borrowed.bind(this)}
@@ -239,7 +239,7 @@ class Profile extends Component {
                     : 'PageSwitcher__Item_profile'
                 }
               >
-                Borrowed Items
+                My Borrowed Items
               </button>
             </div>
             {/*these components can be found in Profile_Borrowed.js and Profile_Listed.js*/}

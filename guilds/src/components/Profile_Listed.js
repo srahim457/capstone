@@ -12,6 +12,7 @@ import {
 
 import './styles/profile.css';
 import EditListing from './EditListing';
+import Spinner from './layout/spinner_transparent.gif';
 
 class Profile_Listed extends Component {
   constructor() {
@@ -19,7 +20,7 @@ class Profile_Listed extends Component {
     this.state = {
       isLoading: true,
       listings: [] ,
-      error: null
+      error: null,
     }
    this.onClickHandler = this.onClickHandler.bind(this);
   }
@@ -27,16 +28,17 @@ class Profile_Listed extends Component {
   async componentDidMount(){
     const response = await axios.get('http://localhost:4000/market-place/listed')
     console.log('listings', response)
-    this.setState({listings: response.data, isLoading: false})   
-}
+    this.setState({listings: response.data, isLoading: false})
+  }
+
     /*
     // dont need to do two seperate requests
     // kept here for future ref in case needed
     const[firstResp] = await Promise.all([
-      axios.get('http://localhost:4000/market-place/listed')  
+      axios.get('http://localhost:4000/market-place/listed')
     ]);
     const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
-    
+
     // Will need to loop and get request on every item for information for every item user has
     console.log('first \n', firstResp, 'second \n', secondResp);
 
@@ -77,10 +79,10 @@ class Profile_Listed extends Component {
             return(
               <div className='item' key={listing.item_id}>
                 {console.log('test res',listing,listing.item_name)}
-                
+
                 <div className='itemImageWrapper'>
                   <h1> img {listing.image} </h1>
-                </div>  
+                </div>
                 <div className = 'itemInfoWrapper' key = {listing}>
                   <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
                   <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
@@ -93,12 +95,14 @@ class Profile_Listed extends Component {
                   >
                   Edit Listed Item
                   </button>
-                </div>  
+                </div>
               </div>
             );
           })
         ) : (
-          <h3>Loadin</h3>
+          <div className='spinner'>
+            <img src={Spinner} alt="loading..." />
+          </div>
         )}
       </div>
       </React.Fragment>
