@@ -46,7 +46,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "uuid": "^8.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

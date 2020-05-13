@@ -22,6 +22,9 @@ class DisplayListing extends Component {
       insurance: '0',
       listing_type: '123123',
       return_date: '',
+      total_price: '',
+      rent_amount: '',
+      policy: ''
     };
   }
 
@@ -39,13 +42,20 @@ class DisplayListing extends Component {
       listing_type,
       insurance,
       return_date,
+      total_price,
+      rent_amount
     } = this.props;
-    //console.log('return date', return_date)
+    // types are sale, loan, rental
+    console.log('type of listing', listing_type)
     if (return_date != '') {
       //Its a sale -> no valid date
       return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
     }
-    //console.log(this.props, 'props',return_date)
+    if(listing_type == 'sale'){
+      console.log('sale detected')
+    }
+    const {listing} = this.state.listing_type;
+    console.log(this.props, 'props',return_date)
     return (
       <div className='container-parent'>
         <div className='container'>
@@ -55,6 +65,9 @@ class DisplayListing extends Component {
               <div className='button-wrapper'>
                 <button className='close-button'>X</button>
               </div>
+              <br />
+                <label>Images:</label>
+                <br />
               <label>Item Name: </label>
               {name}
             </div>
@@ -64,18 +77,32 @@ class DisplayListing extends Component {
               {description}
             </div>
             <div>
-              <label>Type of Listing: </label>
-              {listing_type}
-              <br />
-            </div>
-            <div>
-              <label>Insurance: $</label>
-              {insurance}
-              <br />
-              <label>Return time and date :{return_date}</label>
-              <br />
-              <label>Images:</label>
-              <br />
+              <label>Type of Listing: </label>{listing_type}
+              {listing_type === 'sale' && 
+                <div>
+                <label>Total Price: </label>
+                {total_price}
+                </div>
+              }
+                {listing_type === 'rental' && 
+                <div>
+                <label>Insurance Amount: </label>
+                {insurance}
+                <br />  
+                <label>Rent Amount :{rent_amount}</label>
+                <br />
+                <label>Return time and date: {return_date}</label>
+                </div>
+              }
+                {listing_type === 'loan' && 
+                <div>
+                <label>Insurance Amount : </label>
+                {insurance}
+                <br />
+                <label>Return time and date :{return_date}</label>
+                </div>
+              }
+                <br />
             </div>
           </form>
           <button>Confirm</button>

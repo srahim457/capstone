@@ -46,7 +46,7 @@ router.post(
       const theuser = await User.getUserByEmail([req.body.email], res);
       /// 0 = no row
       if (theuser.length > 0) {
-        return res.status(400).send('Email already exists');
+        return res.status(410).send('Email already exists');
       } else {
         ///asigned hashed password
         req.body.pwd = pwd;
