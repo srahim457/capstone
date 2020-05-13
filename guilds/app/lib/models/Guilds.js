@@ -26,8 +26,12 @@ Guilds.updateGuildsInformation = async function (req, res) {
 //Returns the whole guilds entry
 Guilds.createGuilds = async function (req, res) {
     try {
-        console.log('inserting new guilds now \n ')
-        const guild = await sql.query("INSERT INTO guilds.guilds(name,picture,public) values($1,$2,$3,$4) RETURNING *", [req[0].name, req[0].picture, req[0].public, req[0].desc])
+        var d = new Date();
+        console.log('inserting new guilds now \n ',req)
+        // privacy not implemented yet
+        //const guild = await sql.query("INSERT INTO guilds.guilds(name,picture,public,desc) values($1,$2,$3,$4,$5) RETURNING *", [req[0].name, req[0].picture, req[0].public, req[0].desc,d])
+        const guild = await sql.query("INSERT INTO guilds.guilds(name,picture,guild_desc,date_created) values($1,$2,$3,$4) RETURNING *", [req[0].name, req[0].picture,req[0].desc,d])
+        console.log(guild.rows[0],'\n result')
         return guild.rows[0]
     } catch (error) {
         console.log(error);
@@ -52,9 +56,43 @@ Guilds.setPrivacy = async function (req, res) {
 //Returns new entry
 Guilds.addUserToGuild = async function (req, res) {
     try {
-        console.log(' mapping user to guild \n')
-        const guild = await sql.query("INSERT INTO guilds.guilds_joined(user_id,guild_id) values($1,$2) RETURNING *", [req[0].userid, req[0].guildid])
+        var d = new Date();
+        console.log(' mapping user to guild \n',req)
+        const guild = await sql.query("INSERT INTO guilds.guilds_joined(user_id,guild_id,date_joined) values($1,$2,$3) RETURNING *", [req[0].userid, req[0].guildid,d])
         return guild.rows[0]
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+    }
+};
+//Search for all guilds that match the name provided
+
+Guilds.searchForGuilds = async function (req, res) {
+    try {
+        //console.log(' search for guilds \n', req.body)
+        // in case of privacy
+        //const guilds = await sql.query("SELECT * from guilds WHERE private <> 'F'", [req])
+        if(req === undefined){
+            console.log('undefined search')
+        }
+        else{
+            const guilds = await sql.query("SELECT * from guilds.guilds WHERE name LIKE ($1)",req)
+            return guilds.rows
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+    }
+};
+//Returns all guilds
+Guilds.getAllGuilds = async function (req, res) {
+    try {
+        console.log(' getting all guilds \n')
+        // in case of privacy
+        //const guilds = await sql.query("SELECT * from guilds WHERE private <> 'F'", [req])
+        const guilds = await sql.query("SELECT * from guilds.guilds ORDER BY name ASC")
+        return guilds.rows
     } catch (error) {
         console.log(error);
         res.status(400);
@@ -67,6 +105,19 @@ Guilds.getAllUsers = async function (req, res) {
         console.log(' getting all users in a guild \n')
         const guilds = await sql.query("SELECT user_id from guilds.guilds_joined WHERE guild_id = ANY ($1)", [req])
         return guilds.rows
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+    }
+};
+//Takes a guild id
+//Returns first user id in a guild
+Guilds.getFirstUser = async function (req, res) {
+    try {
+        console.log(' getting the first user in a guild \n')
+        const firstuser = await sql.query("SELECT user_id from guilds.guilds_joined WHERE guild_id = ANY ($1) ORDER BY date_joined ASC RETURNING 1", [req])
+        console.log(firstuser,'first')
+        return firstuser.rows
     } catch (error) {
         console.log(error);
         res.status(400);

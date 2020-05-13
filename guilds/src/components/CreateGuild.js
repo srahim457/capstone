@@ -3,12 +3,13 @@ import { Redirect } from 'react-router-dom';
 import './styles/CreateListing.css';
 import AllGuilds from './AllGuilds';
 import MarketPlace from './MarketPlace';
+import axios from 'axios';
 
 function validate(name, description) {
   // true means invalid, so our conditions got reversed
   return {
     name: name.length === 0,
-    description: description.length === 0,
+    desciption: description.length === 0,
   };
 }
 
@@ -18,7 +19,8 @@ class CreateGuild extends Component {
 
     this.state = {
       name: '',
-      description: '',
+      desc: '',
+      picture: '',
       close: 'false',
       value: '',
     };
@@ -35,17 +37,47 @@ class CreateGuild extends Component {
   descriptionChangeHandler = e => {
     e.preventDefault();
     this.setState({
-      description: e.currentTarget.value
+      desc: e.currentTarget.value
     });
   };
 
-  handleSubmit = evt => {
+  handleSubmit = (e) => {
     if (!this.canBeSubmitted()) {
-      evt.preventDefault();
+      e.preventDefault();
       alert('Unable to submit: some field may be empty');
       return;
     }
     else{
+          /*
+    // dont need to do two seperate requests
+    // kept here for future ref in case needed
+    const[firstResp] = await Promise.all([
+      axios.get('http://localhost:4000/market-place/listed')  
+    ]);
+    const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
+    
+    // Will need to loop and get request on every item for information for every item user has
+    console.log('first \n', firstResp, 'second \n', secondResp);
+
+    this.setState({
+      itemname: secondResp.data.item_name,
+      itemdesc: secondResp.data.item_desc,
+      itemimg: secondResp.data.image,
+      totalprice: firstResp.data.total_price,
+      rentaltype: firstResp.data.type
+    })
+    */
+   
+      //console.log(this.state); //post request with axios
+      const guild = this.state;
+      console.log(guild,'sending create with that')
+      axios
+        .post(`http://localhost:4000/all-guilds/create`, { guild })
+        .then((res) => {
+          console.log(res,'\n that was the response ');
+          console.log(res.data);
+        });
+        console.log(this.state,'after axios',guild,'\n'   )
       alert('submission has been completed');
     }
   };
@@ -53,7 +85,7 @@ class CreateGuild extends Component {
   canBeSubmitted() {
     const empty = validate(
                             this.state.name,
-                            this.state.description,
+                            this.state.desc,
                           );
     const isDisabled = Object.keys(empty).some(x => empty[x]);
     return !isDisabled;
@@ -84,7 +116,7 @@ class CreateGuild extends Component {
               <input
                 type='text'
                 className='form-input'
-                placeholder='Name of item'
+                placeholder='Name of your guild'
                 maxLength='50'
                 value={this.state.name}
                 onChange={this.itemNameChangeHandler}
@@ -92,12 +124,16 @@ class CreateGuild extends Component {
             </div>
             <div>
               {/* make into a description box */}
+<<<<<<< HEAD
               <label>Guild Description</label>
+=======
+              <label>Guild Biography</label>
+>>>>>>> 096943f4f53bfdbf876d7667f324b6c8001921e4
               <br />
               <textarea
                 className='form-input'
                 autofocus
-                placeholder='Type your description'
+                placeholder='Type information about your guild'
                 maxlength='180'
                 rows='5'
                 cols='40'
