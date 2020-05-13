@@ -4,23 +4,17 @@ import React, { Component } from 'react';
 import './styles/AllGuilds.css';
 import CreateGuild from './CreateGuild';
 import DisplayGuild from './DisplayGuild';
+import axios from 'axios';
 
 class AllGuilds extends Component {
   constructor() {
     super();
-
-    var numItems = [...Array(100).keys()].map((i) => ({
-      id: i + 1,
-      name: 'Guild ' + (i + 1),
-      description: 'this is guild' + (i + 1),
-      guildmaster: 'Guy ' + (i + 1),
-    }));
-
     this.state = {
-      numItems: numItems,
-      name: 'some existing name',
       click: false, //added to see if it respond on click
       open: false,
+      guilds: [],
+      isLoading: true,
+      description: ''
     };
     this.onClickHandler = this.onClickHandler.bind(this);
   }
@@ -30,23 +24,33 @@ class AllGuilds extends Component {
     this.setState({ click: true });
   }
   openGuild(item) {
+    console.log('open guild listing with',item)
     this.setState({ name: item.name });
-    this.setState({ description: item.description });
+    this.setState({ description: item.desc });
     this.setState({ guildmaster: item.guildmaster });
     this.setState({ open: true });
   }
 
+  async componentDidMount() {
+    const response = await axios.get('http://localhost:4000/all-guilds/')
+    console.log('all guilds', response)
+    this.setState({guilds: response.data, isLoading: false})   
+  }
+ 
   render() {
+    const {isLoading} = this.state;
     if (this.state.click === true) {
       return <CreateGuild />;
     }
 
     if (this.state.open === true) {
+      console.log(this.state,'what im passing',this.state.guilds[0])
       return (
         <DisplayGuild
-          name={this.state.name}
-          description={this.state.description}
-          guildmaster={this.state.guildmaster}
+          name={this.state.guilds[0].name}
+          description={this.state.guilds[0].guild_desc}
+          // could pull first member of guild
+          //guildmaster={this.state.guildmaster}
         />
       );
     }
@@ -72,20 +76,28 @@ class AllGuilds extends Component {
             ></input>
             <button class='search-button'>Search</button>
           </div>
-
-          {this.state.numItems.map((item) => (
-            <div className='GuildContainer'>
+          {console.log('test res',this.state.guilds)} 
+          <React.Fragment>
+          {!isLoading ? (
+              Object.values(this.state.guilds).map(guild => {
+                return(
+            <div className='GuildContainer' key = {guild.id}>
               <div
                 className='GuildImageWrapper'
-                onClick={this.openGuild.bind(this, item)}
+                onClick={this.openGuild.bind(this, guild)}
               >
-                <h1> Image {item.id} </h1>
+                <h1> Image {guild.picture} </h1>
               </div>
               <div className='GuildNameWrapper'>
-                <h1> guild {item.id} </h1>
-              </div>
-            </div>
-          ))}
+                <h1>{guild.name} </h1>
+                </div>
+                  </div>
+                );
+              })
+            ) : (
+            <h3>Loading</h3>
+              )}
+            </React.Fragment>
         </div>
       </div>
     );

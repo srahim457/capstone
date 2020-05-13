@@ -16,6 +16,7 @@ class DisplayGuild extends Component {
       description: '',
       guildmaster: '',
       close: false,
+      picture: '',
     };
     this.closeButton = this.closeButton.bind(this);
   }
@@ -26,8 +27,8 @@ class DisplayGuild extends Component {
   }
 
   render() {
-    var {name, description, guildmaster} = this.props;
-
+    var {name, description, guildmaster,picture} = this.props;
+    console.log(this.props, 'props')
     if (this.state.close === true) {
       return <AllGuilds />;
     }
@@ -54,14 +55,8 @@ class DisplayGuild extends Component {
               {description}
             </div>
             <div>
-              {/* make into a description box */}
-              <label> Founded by: </label>
-              {guildmaster}
-            </div>
-            <div>
-              <label>
-                Images:
-              </label>
+              <label>Images:</label>
+              {picture}
               <br />
             </div>
           </form>
