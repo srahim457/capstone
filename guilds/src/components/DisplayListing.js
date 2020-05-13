@@ -33,7 +33,7 @@ class DisplayListing extends Component {
   };
 
   render() {
-    const {
+    let {
       name,
       description,
       listing_type,

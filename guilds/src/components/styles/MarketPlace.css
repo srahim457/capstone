@@ -68,6 +68,7 @@
   float: none;
   position: relative;
   cursor: pointer;
+  justify-content: center;
 }
 
 .itemImage {

@@ -71,7 +71,7 @@ class CreateGuild extends Component {
     return (
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Create Listing</h1>
+          <h1 className='title'>Create Guild</h1>
           <div className='button-wrapper'>
             <button className='close-button' onClick={this.closeButton}>
               X
@@ -79,7 +79,7 @@ class CreateGuild extends Component {
           </div>
           <form onSubmit={this.handleSubmit} className='form-fields'>
             <div>
-              <label>Item Name </label>
+              <label>Guild Name </label>
               <br />
               <input
                 type='text'
@@ -92,7 +92,7 @@ class CreateGuild extends Component {
             </div>
             <div>
               {/* make into a description box */}
-              <label>Item Description</label>
+              <label>Guild Description</label>
               <br />
               <textarea
                 className='form-input'
