@@ -1,57 +1,68 @@
 const express = require('express');
-const stripe = require('stripe')('sk_test_zlDbmmvqhO05kEFUcfFDRzGX00yMAVDGIv');
+// const stripe = require('stripe')('sk_test_zlDbmmvqhO05kEFUcfFDRzGX00yMAVDGIv');
 const bodyParser = require('body-parser'); // already declared
 const exphbs = require('express-handlebars');
 let Listing = require('../../models/Listing').Listing;
 
+const cors = require("cors");
+const stripe = require("stripe")("sk_test_zlDbmmvqhO05kEFUcfFDRzGX00yMAVDGIv");
+const uuid = require("uuid/v4");
+
 const app = express();
 
-app.get('/', (req, res) => {
-  // res.render('index');
-  // console.log("payment received.")
-  res.json({ greeting: "hello world" });
+// middleware
+app.use(express.json());
+app.use(cors());
+
+// Testing route
+app.get("/", (req, res) => {
+  res.send("Add your Stripe Secret Key to the .require('stripe') statement!");
 });
 
-// Stripe: Handlebars Middleware
-app.engine('handlebars', exphbs({ defaultLayout:'main' }));
-app.set('view engine', 'handlebars');
+// post payment to Stripe
+app.post('/charge', async (req, res) => {
+  console.log("Request:", req.body);
 
-// Stripe: Body Parser Middlware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+  let error;
+  let status;
+  try {
+    const { product, token } = req.body;
 
-// Stripe: Set Static folder
-// app.use(express.static(`${__dirname}/public`)); // for storing images
+    const customer = await stripe.customers.create({
+      email: token.email,
+      source: token.id
+    });
 
-// Stripe: Index Route
-// connected to app/views/layouts/main.handlebars
-// connected to app/views/index.handlebars
-// app.get('/', (req, res) => {
-//   res.render('index');
-// });
-
-// Testing to see what it looks like
-app.get('/success', (req, res) => {
-  res.render('success');
-});
-
-// Stripe: Charge Route (Posting payment)
-app.post('/', (req,res) => {
-  const amount = 2500;
-  // console.log(req.body); // get json information to be sent out
-  // res.send('TEST');  // display on localhost:4000/charge
-  // this gets sent out
-  stripe.customers.create({
-    email: req.body.stripeEmail,
-    source: req.body.stripeToken
-  })
-  .then(customer => stripe.charges.create({
-    amount: amount,
-    description: "Web Development ebook",
-    currency: 'usd',
-    customer: customer.id
-  }))
-  .then(charge => res.render('success'))
+    const idempotency_key = uuid();
+    const charge = await stripe.charges.create(
+      {
+        amount: product.price * 100,
+        currency: "usd",
+        customer: customer.id,
+        receipt_email: token.email,
+        description: `Purchased the ${product.name}`,
+        shipping: {
+          name: token.card.name,
+          address: {
+            line1: token.card.address_line1,
+            line2: token.card.address_line2,
+            city: token.card.address_city,
+            country: token.card.address_country,
+            postal_code: token.card.address_zip
+          }
+        }
+      },
+      {
+        idempotency_key
+      }
+    );
+    console.log("Charge:", { charge });
+    status = "success";
+  } catch (error) {
+    console.error("Error:", error);
+    status="failure";
+  }
+  res.json({error, status});
 });
 
 module.exports = app;

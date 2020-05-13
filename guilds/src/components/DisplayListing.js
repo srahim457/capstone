@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './styles/CreateListing.css';
 import { format, parseISO } from 'date-fns';
 
+import Payment from './Payment';
+
 {
   /*uses the same css file as create listing,
 because the layout is exactly the same except
@@ -22,7 +24,15 @@ class DisplayListing extends Component {
       insurance: '0',
       listing_type: '123123',
       return_date: '',
+      click: false,
     };
+
+    this.onClickHandler = this.onClickHandler.bind(this);
+  }
+
+  onClickHandler(e) {
+    e.preventDefault();
+    this.setState({ click: true });
   }
 
   handleOptionChange = (e) => {
@@ -33,7 +43,7 @@ class DisplayListing extends Component {
   };
 
   render() {
-    const {
+    let {
       name,
       description,
       listing_type,
@@ -41,6 +51,19 @@ class DisplayListing extends Component {
       return_date,
     } = this.props;
     //console.log('return date', return_date)
+    
+    // for showing Payment page AL
+    if(this.state.open === true){
+      return <Payment
+              name = {this.state.name}
+              description = {this.state.description}
+              return_date = {this.state.return_date}
+              insurance = {this.state.insurance}
+              listing_type = {this.state.listing_type}
+              price = {this.state.price}
+              />;
+    }
+
     if (return_date != '') {
       //Its a sale -> no valid date
       return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
