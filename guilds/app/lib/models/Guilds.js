@@ -98,6 +98,21 @@ Guilds.getAllGuilds = async function (req, res) {
         res.status(400);
     }
 };
+//Returns all guilds
+Guilds.getAllUserGuilds = async function (req, res) {
+    try {
+        console.log(' getting all guilds for user \n',req)
+        // in case of privacy
+        //const guilds = await sql.query("SELECT * from guilds WHERE private <> 'F'", [req])
+        //const guilds = await sql.query("SELECT * from guilds.guilds.joined WHERE user_id = ($1) ORDER BY name ASC")
+        const guilds = await sql.query("SELECT G.name from guilds.guilds AS G INNER JOIN guilds.guilds_joined AS GJ ON G.id = GJ.guild_id WHERE user_id = ($1) ORDER BY name ASC",req);
+        console.log('number of guilds under userid ', req, 'are', guilds.rows.length, '\n')
+        return guilds.rows
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+    }
+};
 //Takes a guild id
 //Returns all user id in a guild
 Guilds.getAllUsers = async function (req, res) {
