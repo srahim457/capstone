@@ -12,7 +12,19 @@ function validate(name, description) {
     name: name.length === 0,
     description: description.length === 0,
   };
-}
+} 
+
+// let one = "http://localhost:4000/marketplace/create";
+// let two = "http://localhost:4000/picture";
+
+// const requestOne = axios.post(one);
+// const requestTwo = axios.post(two);
+
+// axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+//   const responseOne = response[0];
+//   const responseTwo = response[1];
+// })).catch(errors =>{
+//})
 
 class CreateListing extends Component {
   constructor() {
@@ -26,7 +38,7 @@ class CreateListing extends Component {
       date: '',
       policy: '',
       curTime: new Date().toLocaleString(),
-      picture: '',
+      picture: null,
     };
   }
 
@@ -69,7 +81,8 @@ class CreateListing extends Component {
     //console.log(e.target.files[0], '$$$$');
   };
 
-  handleSubmit = (e) => {
+
+  handleSubmit = async (e) => {
     e.preventDefault();
     if (!this.canBeSubmitted()) {
       alert('Unable to submit: some fields may be empty');
@@ -79,13 +92,59 @@ class CreateListing extends Component {
       e.preventDefault();
       console.log(this.state); //post request with axios
       const item = this.state;
-      axios
+     await axios
         .post(`http://localhost:4000/market-place/create`, { item })
         .then((res) => {
           console.log(res);
           console.log(res.data);
         });
-      // window.location.reload(false);
+        console.log('seee if picture is null', this.state.picture);
+
+
+
+        // if (this.state.picture != null) {
+        //   const picture = this.state.picture;
+        //   console.log(picture, ' in handle submit');
+        //   //console.log(phonenum, description, profile_picture);
+    
+        //   const image_picture = new FormData();
+    
+        //   image_picture.append(
+        //     'myImage',
+        //     this.state.picture,
+        //     this.state.picture.name
+        //   );
+        //   const config = {
+        //     headers: {
+        //       'content-type': 'multipart/form-data',
+        //     },
+        //   };
+        //   console.log(this.state.picture, 'name of file');
+        //  await axios
+        //     .post(
+        //       `http://localhost:4000/picture`,
+    
+        //       //{ phonenum, description, profile_picture },
+    
+        //       image_picture,
+        //       config
+        //       // {
+        //       //   onUploadProgress: (progressEvent) => {
+        //       //     console.log(
+        //       //       'Upload progress ' +
+        //       //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+        //       //         '%'
+        //       //     );
+        //       //   },
+        //       // }
+        //     )
+        //     .then((res) => {
+        //       console.log(res, 'this is the response');
+        //       console.log(res.data, 'this is res.data');
+        //       console.log(res.statusText);
+        //     });
+        // }
+       window.location.reload(false);
     }
   };
 
