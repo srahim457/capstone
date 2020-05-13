@@ -117,9 +117,10 @@ class MarketPlace extends Component {
                     <div className='itemImage'
                       onClick={this.openListing.bind(this, listing)}>
                       {/*listing.image*/}
-                      <img src={noimage} height='150' width="500" ></img>
-                  {listing.item_name}
+                      <img src={noimage} height='150' width="200" ></img>
+                  
                   </div>
+                  <h5>{listing.item_name}</h5>
                   <div className='paginate'>
                     <Pagination
                     items={this.state.listing}
