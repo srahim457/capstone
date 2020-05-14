@@ -74,14 +74,14 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       </div>
       <div className='content'>
         <Route path='/profile' component={Profile} />
-        <Route path='/market-place' component={MarketPlace} />
-        <Route path='/messages' component={Messages} />
-        <Route path='/all-guilds' component={AllGuilds} />
+        <Route exact path='/market-place' component={MarketPlace} />
+        <Route exact path='/messages' component={Messages} />
+        <Route exact path='/all-guilds' component={AllGuilds} />
         <Route path='/payment' component={Payment} />
         <Route path='/payment-success' component={PaymentSuccess} />
         <Route path='/market-place/search-results' component={MarketPlaceSearchResults} />
         <Route path='/all-guilds/search-results' component={AllGuildsSearchResults} />
-        <Route exact path='/messages/user-search-results' component={UserSearchResults} />
+        <Route path='/messages/user-search-results' component={UserSearchResults} />
 
       </div>
     </BrowserRouter>

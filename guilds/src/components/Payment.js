@@ -5,10 +5,10 @@ import "./styles/Payment.css";
 import "react-toastify/dist/ReactToastify.css"; //notification layout (default green)
 
 import ReactDOM from "react-dom";
-import StripeCheckout from "react-stripe-checkout"; 
+import StripeCheckout from "react-stripe-checkout";
 import { toast } from "react-toastify"; // notifaction
 
-import itemChest from "../images/item_chest.png"; 
+import itemChest from "../images/item_chest.png";
 import PaymentSuccess from './PaymentSuccess';
 
 // const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -49,7 +49,7 @@ class Payment extends Component {
   }
 
 
-  
+
   onClickHandler(e) {
     e.preventDefault();
     this.setState({ click: true });
@@ -76,14 +76,14 @@ class Payment extends Component {
     // Stripe form takes care of everything else
     const product = {
       name: this.state.name,
-      price: 45.50,
+      price: 4.50,
       description: this.state.description
     };
 
     // submits stripe payment for and returns 'success' or 'error' status
     async function handleToken(token) {
       // console.log({ token, addresses });
-      const response = await axios.post('http://localhost:4000/payment/charge', 
+      const response = await axios.post('http://localhost:4000/payment/charge',
         {
         token,
         product

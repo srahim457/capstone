@@ -6,7 +6,7 @@ let Listing = require('../../models/Listing').Listing;
 
 const cors = require("cors");
 const stripe = require("stripe")("sk_test_zlDbmmvqhO05kEFUcfFDRzGX00yMAVDGIv");
-const uuid = require("uuid/v4");
+const uuid = require("uuid");
 
 const app = express();
 
