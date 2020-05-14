@@ -35,11 +35,6 @@ class Profile extends Component {
   constructor() {
     super();
 
-    const exampleArrayGuilds = [...Array(10).keys()].map((i) => ({
-      id: i + 1,
-      name: 'Guild ' + (i+1),
-    }));
-
     this.state = {
       firstname: '',
       lastname: '',
@@ -53,7 +48,6 @@ class Profile extends Component {
       guilds: [],
       click: false, //added to see if it respond on click
       testToken: false,
-      exampleArrayGuilds: exampleArrayGuilds,
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -62,11 +56,33 @@ class Profile extends Component {
     e.preventDefault();
     this.setState({ click: true });
   }
+  /*
+      return <DisplayListing
+              name = {this.state.name}
+              description = {this.state.description}
+              return_date = {this.state.return_date}
+              insurance = {this.state.insurance}
+              listing_type = {this.state.listing_type}
+              total_price = {this.state.total_price}
+              rent_amount = {this.state.rent_amount}
+              policy = {this.state.policy}
+              />;
+    }
+
+
+
+
+  */
   displayBorrowed() {
-    return <Profile_Borrowed />;
+    console.log('clicked dis borrow',this.props.location.state.userid)
+    return <Profile_Borrowed 
+            userid = {this.props.location.state.userid}
+            />;
   }
   displayListings() {
-    return <Profile_Listed />;
+    return <Profile_Listed
+      userid = {this.props.location.state.userid}
+    />;
   }
 
   listings() {
@@ -89,8 +105,8 @@ class Profile extends Component {
 
 
    const[firstResp,secondResp] = await Promise.all([
-    axios.get('http://localhost:4000/profile'),
-    axios.get('http://localhost:4000/profile/guilds')  
+    axios.get('http://localhost:4000/profile/'+this.props.location.state.userid),
+    axios.get('http://localhost:4000/profile/guilds/'+this.props.location.state.userid)  
   ]);
       const profile = firstResp.data;
       this.setState({ profile });
@@ -110,12 +126,15 @@ class Profile extends Component {
         picture: firstResp.data.profile_picture,
         description: firstResp.data.description,
         guilds: secondResp.data,
+        userid: firstResp.data.id
       });
 
      // console.log(picture, 'getting PATH');
   }
 
   render() {
+      console.log('these are the props passed to profile \n ',this.props.location.state.userid)
+      //this is someone elses profile 
     {
       /*if the edit profile button is pressed it will redirect*/
     }

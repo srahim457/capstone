@@ -26,7 +26,7 @@ class Profile_Listed extends Component {
   }
 
   async componentDidMount(){
-    const response = await axios.get('http://localhost:4000/market-place/listed')
+    const response = await axios.get('http://localhost:4000/market-place/listed/'+this.props.userid)
     console.log('listings', response)
     this.setState({listings: response.data, isLoading: false})
   }
@@ -69,6 +69,8 @@ class Profile_Listed extends Component {
          return <EditListing name={this.state.name} />;
         }
         //console.log(this.state,'\n current state',isLoading,listings)
+        console.log('these are the props passed to listed \n ',this.props.userid,this.state)
+
     const {isLoading} = this.state;
     console.log('this.state \n',this.state.listings)
     return (

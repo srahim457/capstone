@@ -38,13 +38,13 @@ const upload = multer({
 // @route GET profile/me
 // @desc  Get logged in user profile
 // @access private
-router.get('/', auth, async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
   //route profile/me ?
   try {
-    console.log('getting logged in user profile \n',req)
+    console.log('getting user profile with id \n',req.params)
     const { email, password } = req.body;
 
-    profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
+    profile = await User.getUserById([req.params.id]); //gets logged in users by tokenid
 
     console.log('Print profile', profile[0]);
     if (profile == 0) {
@@ -59,11 +59,11 @@ router.get('/', auth, async (req, res) => {
   }
 });
 //gets the users guild
-router.get('/guilds', auth, async (req, res) => {
+router.get('/guilds/:id', auth, async (req, res) => {
   //route profile/me ?
   try {
-    console.log('at get user guilds \n')
-    userguilds = await Guild.getAllUserGuilds([req.user.id]); //gets logged in users by tokenid
+    console.log('at get user guilds \n',req.params)
+    userguilds = await Guild.getAllUserGuilds([req.params.id]); //gets logged in users by tokenid
 
     console.log('all user guilds', userguilds);
     res.status(200).json(userguilds);

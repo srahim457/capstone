@@ -44,11 +44,12 @@ class Messages extends Component {
     this.setState({users: response.data, isLoading: false})
   }
   render() {
-    console.log(this.state.redirect, 'current state',window.location,this.props.location)
+    console.log(this.state.redirect, '\n current state',window.location,this.props.location)
     const {isLoading} = this.state;
     const {data} = this.props.location;
     if (this.state.redirect) {
-      return <Redirect to={{pathname: this.state.redirect, query: this.state.userid}} />
+      console.log('redirecting with ,', this.state.redirect, ' ', this.state.userid)
+      return <Redirect to={{pathname: this.state.redirect, state: {userid: this.state.userid, email: this.state.email}}} />
     }
     
     return (

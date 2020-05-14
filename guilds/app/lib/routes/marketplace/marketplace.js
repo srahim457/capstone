@@ -220,11 +220,11 @@ router.get('/', auth,async (req, res) => {
 
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-router.get('/borrowed',auth, async (req, res) => {
+router.get('/borrowed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all borrowed items \n', req.user.id);
+    console.log('getting all borrowed items \n', req.params.id);
     const alllistings = await Listing.getAllBorrowerListings(
-      req.user.id,
+      req.params.id,
       res
     );
     console.log('all borrowed listings \n', alllistings.length);
@@ -237,11 +237,11 @@ router.get('/borrowed',auth, async (req, res) => {
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-router.get('/listed',auth, async (req, res) => {
+router.get('/listed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all listed items \n', req.user.id);
+    console.log('getting all listed items \n', req.params.id);
     const alllistings = await Listing.getAllLenderListings(
-      req.user.id,
+      req.params.id,
       res
     );
     res.status(200).json(alllistings);
