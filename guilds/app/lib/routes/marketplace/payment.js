@@ -7,6 +7,7 @@ let Listing = require('../../models/Listing').Listing;
 const cors = require("cors");
 const stripe = require("stripe")("sk_test_zlDbmmvqhO05kEFUcfFDRzGX00yMAVDGIv");
 const uuid = require("uuid");
+const auth = require('../../middleware/auth');
 
 const app = express();
 
@@ -15,12 +16,12 @@ app.use(express.json());
 app.use(cors());
 
 // Testing route
-app.get("/", (req, res) => {
+app.get("/", auth, (req, res) => {
   res.send("Add your Stripe Secret Key to the .require('stripe') statement!");
 });
 
 // post payment to Stripe
-app.post('/charge', async (req, res) => {
+app.post('/charge', auth, async (req, res) => {
   console.log("Request:", req.body);
 
   let error;

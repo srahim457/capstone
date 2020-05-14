@@ -24,7 +24,7 @@ const upload = multer({
   limits: { fileSize: 1000000 },
 }).single('myImage');
 
-let  itemId;
+let itemId;
 
 // @route Post
 // @desc Route to create lisiting for user
@@ -35,8 +35,8 @@ router.post('/create', auth, async (req, res) => {
   console.log('current create req \n', req.body.item);
   try {
     //assumes req.body.item is the created object item
-    
-    
+
+
     var newItem = {
       item_name: req.body.item.name,
       item_desc: req.body.item.description,
@@ -85,20 +85,20 @@ router.post('/create', auth, async (req, res) => {
 // @route UPDATE /picture
 // @desc Update users profile picture
 // @access Private
-router.post('/create/picture', auth, async (req, res) => {
+router.post('/picture', auth, async (req, res) => {
   await upload(req, res, (err) => {
     //console.log('Request ---', req.body);
     //console.log('Request file ---', req.file); //Here you get file.
     /*Now do where ever you want to do*/
 
     let path = req.file.path;
-console.log(itemId, 'PAssed item id')
+    console.log(itemId, 'PAssed item idnj jdnjsnjfgnsl')
     const imageObj = {
       id: itemId, //item id here instead
       image_picture: path,
     };
 
-    Listing.createItemImage([imageObj], res); 
+    Listing.createItemImage([imageObj], res);
     if (!err) {
       return res.sendStatus(200).end();
     }
@@ -107,7 +107,7 @@ console.log(itemId, 'PAssed item id')
 
 
 //Gets a listing matching the passed listing id
-router.get('/:listingid', auth,async (req, res, next) => {
+router.get('/:listingid', auth, async (req, res, next) => {
   console.log(req.params.listingid);
   if (!Number.isInteger(req.params.listingid)) {
     console.log('not a number');
@@ -128,7 +128,7 @@ router.get('/:listingid', auth,async (req, res, next) => {
 });
 
 //Borrows a listing
-router.get('/:listingid/borrow', auth,async (req, res) => {
+router.get('/:listingid/borrow', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     var ids = {
@@ -145,7 +145,7 @@ router.get('/:listingid/borrow', auth,async (req, res) => {
 });
 
 //Cancels borrowing a listing in case a user decides to change their mind
-router.get('/:listingid/borrow/cancel',auth, async (req, res) => {
+router.get('/:listingid/borrow/cancel', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     const listing = await Listing.removeBorrower([req.params.listingid], res);
@@ -158,7 +158,7 @@ router.get('/:listingid/borrow/cancel',auth, async (req, res) => {
 });
 
 //Marks a listing as reserved so only one person can see it
-router.get('/:listingid/reserve',auth, async (req, res) => {
+router.get('/:listingid/reserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     const listing = await Listing.reserveListing([req.params.listingid], res);
@@ -171,7 +171,7 @@ router.get('/:listingid/reserve',auth, async (req, res) => {
 });
 
 //Frees a reserved listing so others can click on it
-router.get('/:listingid/unreserve',auth, async (req, res) => {
+router.get('/:listingid/unreserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     const listing = await Listing.unreserveListing([req.params.listingid], res);
@@ -195,7 +195,7 @@ router.get('/active', async (req, res) => {
 });
 
 //Gets all listings
-router.get('/', auth,async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const alllistings = await Listing.getEveryListing(req, res);
     res.status(200).json(alllistings);
@@ -207,7 +207,7 @@ router.get('/', auth,async (req, res) => {
 
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-router.get('/borrowed',auth, async (req, res) => {
+router.get('/borrowed', auth, async (req, res) => {
   try {
     console.log('getting all borrowed items \n', req.user.id);
     const alllistings = await Listing.getAllBorrowerListings(
@@ -224,7 +224,7 @@ router.get('/borrowed',auth, async (req, res) => {
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-router.get('/listed',auth, async (req, res) => {
+router.get('/listed', auth, async (req, res) => {
   try {
     console.log('getting all listed items \n', req.user.id);
     const alllistings = await Listing.getAllLenderListings(

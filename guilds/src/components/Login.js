@@ -199,6 +199,7 @@ import PropTypes from 'prop-types';
 import { login } from '../actions/auth'; //FIX THIS
 import ForgotPassword from './ForgotPassword';
 import axios from 'axios';
+import Profile from './Profile';
 import './styles/Home.css';
 
 const Login = ({ login, isAuthenticated }) => {
@@ -226,7 +227,7 @@ const Login = ({ login, isAuthenticated }) => {
   };
 
   if (isAuthenticated) {
-    return (<Redirect to='/profile'></Redirect>), window.location.reload();
+    return (<Redirect to='/profile' ></Redirect>), window.location.reload();
   }
 
   return (
