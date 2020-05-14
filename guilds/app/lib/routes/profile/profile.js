@@ -41,6 +41,7 @@ const upload = multer({
 router.get('/', auth, async (req, res) => {
   //route profile/me ?
   try {
+    console.log('getting logged in user profile \n',req)
     const { email, password } = req.body;
 
     profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
@@ -57,7 +58,7 @@ router.get('/', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
+//gets the users guild
 router.get('/guilds', auth, async (req, res) => {
   //route profile/me ?
   try {
@@ -66,6 +67,35 @@ router.get('/guilds', auth, async (req, res) => {
 
     console.log('all user guilds', userguilds);
     res.status(200).json(userguilds);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+//Find and view someone elses profile
+router.get('/viewprofile/:query', auth, async (req, res) => {
+  //route profile/me ?
+  try {
+    console.log('at get another users profile \n',req.params.query)
+    user = await User.getUserById([req.params.query]); //gets logged in users by tokenid
+
+    console.log('the user profiles', user);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/search/:query', auth, async (req, res) => {
+  //route profile/me ?
+  try {
+    console.log('at search for a user \n',req.params.query)
+    users = await User.searchForUser([req.params.query]); //gets logged in users by tokenid
+
+    console.log('all users', users);
+    res.status(200).json(users);
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server Error');
@@ -152,6 +182,19 @@ router.post('/', auth, async (req, res) => {
   });
 });
 
+//Gets a profile matching the passed username
+router.get('/search/:query', auth,async (req, res, next) => {
+  console.log(req.params.query);
+    try {
+      console.log('seaching for a user with ',req.params.query)
+      const users = await User.searchForUser([req.params.query],res);
+      console.log('users with that name', users.rows.length);
+      res.status(200).json(users);
+    } catch (error) {
+      console.error('error searching for a user \n', error);
+    }
+    console.log('called search for user', req.params);
+});
 // router.post('/', function (req, res) {
 //   upload(req, res, function (err) {
 //     if (err instanceof multer.MulterError) {

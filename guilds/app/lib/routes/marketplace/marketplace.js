@@ -126,6 +126,19 @@ router.get('/:listingid', auth,async (req, res, next) => {
     console.log('called get listing request by listing id', req.params);
   }
 });
+//Gets a listing matching the passed name
+router.get('/search/:query', auth,async (req, res, next) => {
+  console.log(req.params.query);
+    try {
+      console.log('seaching for a listing',req.params.query)
+      const listing = await Listing.searchForListing([req.params.query],res);
+      console.log('listing result', listing);
+      res.status(200).json(listing);
+    } catch (error) {
+      console.error('error searching for a listing \n', error);
+    }
+    console.log('called search for listing', req.params);
+});
 
 //Borrows a listing
 router.get('/:listingid/borrow', auth,async (req, res) => {
