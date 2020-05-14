@@ -47,10 +47,10 @@ router.get('/', auth,async (req, res) => {
 
 //search for guilds 
 //returns all guilds matching that criteria
-router.get('/search',auth, async (req, res) => {
+router.get('/search/:query',auth, async (req, res) => {
   try {
-    console.log('recieved search for guild',res)
-    const allguilds = await Guild.searchForGuilds(req.body)
+    console.log('recieved search for guild',req.params.query)
+    const allguilds = await Guild.searchForGuilds(req.params.query)
     res.status(200).json(allguilds)
   } catch (error) {
     console.log('error with getting all listings',error)

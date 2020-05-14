@@ -69,14 +69,16 @@ Guilds.addUserToGuild = async function (req, res) {
 
 Guilds.searchForGuilds = async function (req, res) {
     try {
-        //console.log(' search for guilds \n', req.body)
+        //console.log(' search for guilds \n', req)
         // in case of privacy
         //const guilds = await sql.query("SELECT * from guilds WHERE private <> 'F'", [req])
         if(req === undefined){
             console.log('undefined search')
         }
         else{
-            const guilds = await sql.query("SELECT * from guilds.guilds WHERE name LIKE ($1)",req)
+             //I dont like concat + query
+            const guilds = await sql.query("SELECT * from guilds.guilds WHERE name LIKE ($1)",['%' +req + '%'])
+            console.log('there are ', guilds.rows.length, 'results \n')
             return guilds.rows
         }
 
