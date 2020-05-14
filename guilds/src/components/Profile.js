@@ -14,6 +14,7 @@ import Profile_Borrowed from './Profile_Borrowed';
 import Profile_Listed from './Profile_Listed';
 import EditProfile from './EditProfile';
 import LaserLouis from '../images/LaserLouis.jpg';
+import NotAvailable from '../images/noimageavailable.png';
 
 // function Nombre(props) {
 //   return <h1>{props.name}</h1>;
@@ -37,7 +38,7 @@ class Profile extends Component {
 
     const exampleArrayGuilds = [...Array(10).keys()].map((i) => ({
       id: i + 1,
-      name: 'Guild ' + (i+1),
+      name: 'Guild ' + (i + 1),
     }));
 
     this.state = {
@@ -88,31 +89,31 @@ class Profile extends Component {
     let guilds;
 
 
-   const[firstResp,secondResp] = await Promise.all([
-    axios.get('http://localhost:4000/profile'),
-    axios.get('http://localhost:4000/profile/guilds')  
-  ]);
-      const profile = firstResp.data;
-      this.setState({ profile });
-      //console.log(res.data.email);
-      //console.log(res.data.email);
-      //response = res.data;
+    const [firstResp, secondResp] = await Promise.all([
+      axios.get('http://localhost:4000/profile'),
+      axios.get('http://localhost:4000/profile/guilds')
+    ]);
+    const profile = firstResp.data;
+    this.setState({ profile });
+    //console.log(res.data.email);
+    //console.log(res.data.email);
+    //response = res.data;
 
-      //console.log('user profile info',firstResp.data,'\n',secondResp.data);
+    //console.log('user profile info',firstResp.data,'\n',secondResp.data);
 
-      this.setState({
-        firstname: firstResp.data.first_name,
-        lastname: firstResp.data.last_name,
-        email: firstResp.data.email,
-        phonenum: firstResp.data.phonenum,
-        online: firstResp.data.online,
-        rating: firstResp.data.rating,
-        picture: firstResp.data.profile_picture,
-        description: firstResp.data.description,
-        guilds: secondResp.data,
-      });
+    this.setState({
+      firstname: firstResp.data.first_name,
+      lastname: firstResp.data.last_name,
+      email: firstResp.data.email,
+      phonenum: firstResp.data.phonenum,
+      online: firstResp.data.online,
+      rating: firstResp.data.rating,
+      picture: firstResp.data.profile_picture,
+      description: firstResp.data.description,
+      guilds: secondResp.data,
+    });
 
-     // console.log(picture, 'getting PATH');
+    // console.log(picture, 'getting PATH');
   }
 
   render() {
@@ -141,13 +142,13 @@ class Profile extends Component {
                   alt=''
                 ></img>
               ) : (
-                <img
-                  src='./uploads/noImage.png'
-                  height='200'
-                  width='200'
-                  alt=''
-                ></img>
-              )}
+                  <img
+                    src='./uploads/noImage.png'
+                    height='200'
+                    width='200'
+                    alt=''
+                  ></img>
+                )}
             </div>
             <div className='button-container'>
               {/*the button that change the page to edit profile information*/}
@@ -194,26 +195,26 @@ class Profile extends Component {
           </div /*profileHeader*/ >
 
           <div className='additionalUserInfoPortion'>
-          {/*contains the list of the guilds the user is apart of and user bio*/}
+            {/*contains the list of the guilds the user is apart of and user bio*/}
             <h1>Bio:</h1>
             <div className='userBioSection'>
               <h1>
-              {this.state.description}
+                {this.state.description}
               </h1>
-            </div>            
+            </div>
             <div className='userGuildListTitle'>
               <div className='centerText'>
                 <h1>Affiliated Guilds</h1>
               </div>
             </div>
             <React.Fragment>
-            <div className='guildnamelistcontainer'>
-              {Object.values(this.state.guilds).map((guild) => (
-                <div className='guildnamecontainer' key={guild.id}>
+              <div className='guildnamelistcontainer'>
+                {Object.values(this.state.guilds).map((guild) => (
+                  <div className='guildnamecontainer' key={guild.id}>
                     <h2> Guild: {guild.name} </h2>
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
             </React.Fragment>
           </div /*Listings*/>
 

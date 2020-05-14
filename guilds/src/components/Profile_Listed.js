@@ -13,43 +13,50 @@ import {
 import './styles/profile.css';
 import EditListing from './EditListing';
 import Spinner from './layout/spinner_transparent.gif';
+import NotAvailable from '../images/noimageavailable.png';
+
+function parsePath(orig) {
+  let res = orig.substr(9);
+  res = '.' + res;
+  return res;
+}
 
 class Profile_Listed extends Component {
   constructor() {
     super();
     this.state = {
       isLoading: true,
-      listings: [] ,
+      listings: [],
       error: null,
     }
-   this.onClickHandler = this.onClickHandler.bind(this);
+    this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     const response = await axios.get('http://localhost:4000/market-place/listed')
     console.log('listings', response)
-    this.setState({listings: response.data, isLoading: false})
+    this.setState({ listings: response.data, isLoading: false })
   }
 
-    /*
-    // dont need to do two seperate requests
-    // kept here for future ref in case needed
-    const[firstResp] = await Promise.all([
-      axios.get('http://localhost:4000/market-place/listed')
-    ]);
-    const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
+  /*
+  // dont need to do two seperate requests
+  // kept here for future ref in case needed
+  const[firstResp] = await Promise.all([
+    axios.get('http://localhost:4000/market-place/listed')
+  ]);
+  const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
 
-    // Will need to loop and get request on every item for information for every item user has
-    console.log('first \n', firstResp, 'second \n', secondResp);
+  // Will need to loop and get request on every item for information for every item user has
+  console.log('first \n', firstResp, 'second \n', secondResp);
 
-    this.setState({
-      itemname: secondResp.data.item_name,
-      itemdesc: secondResp.data.item_desc,
-      itemimg: secondResp.data.image,
-      totalprice: firstResp.data.total_price,
-      rentaltype: firstResp.data.type
-    })
-    */
+  this.setState({
+    itemname: secondResp.data.item_name,
+    itemdesc: secondResp.data.item_desc,
+    itemimg: secondResp.data.image,
+    totalprice: firstResp.data.total_price,
+    rentaltype: firstResp.data.type
+  })
+  */
 
 
   testClick(item) {
@@ -64,47 +71,50 @@ class Profile_Listed extends Component {
   }
 
   render() {
-      /*routes to an edit listing page*/
-        if (this.state.click === true) {
-         return <EditListing name={this.state.name} />;
-        }
-        //console.log(this.state,'\n current state',isLoading,listings)
-    const {isLoading} = this.state;
-    console.log('this.state \n',this.state.listings)
+    /*routes to an edit listing page*/
+    if (this.state.click === true) {
+      return <EditListing name={this.state.name} />;
+    }
+    //console.log(this.state,'\n current state',isLoading,listings)
+    const { isLoading } = this.state;
+    console.log('this.state \n', this.state.listings)
     return (
       <React.Fragment>
-      <div className='ItemListWrapper'>
-        {!isLoading ? (
-          Object.values(this.state.listings).map(listing => {
-            return(
-              <div className='item' key={listing.item_id}>
-                {console.log('test res',listing,listing.borrower_id)}
+        <div className='ItemListWrapper'>
+          {!isLoading ? (
+            Object.values(this.state.listings).map(listing => {
+              return (
+                <div className='item' key={listing.item_id}>
+                  {console.log('test res', listing, listing.borrower_id)}
 
-                <div className='itemImageWrapper'>
-                  <h1> img {listing.image} </h1>
-                </div>
-                <div className = 'itemInfoWrapper' key = {listing}>
-                  <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
-                  <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
-                <hr />
-                </div>
-                <div className='editListingButtonWrapper'>
-                  <button
-                  class='edit-button'
-                  onClick={this.testClick.bind(this, listing)}
-                  >
-                  Edit Listed Item
+                  <div className='itemImageWrapper'>
+                    {/* <h1> img {listing.image} </h1> */}
+
+                    {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
+                      : <img src={NotAvailable} height="100" width="100"></img>}
+                  </div>
+                  <div className='itemInfoWrapper' key={listing}>
+                    <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
+                    <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
+                    <hr />
+                  </div>
+                  <div className='editListingButtonWrapper'>
+                    <button
+                      class='edit-button'
+                      onClick={this.testClick.bind(this, listing)}
+                    >
+                      Edit Listed Item
                   </button>
+                  </div>
                 </div>
+              );
+            })
+          ) : (
+              <div className='spinner'>
+                <img src={Spinner} alt="loading..." />
               </div>
-            );
-          })
-        ) : (
-          <div className='spinner'>
-            <img src={Spinner} alt="loading..." />
-          </div>
-        )}
-      </div>
+            )}
+        </div>
       </React.Fragment>
     );
   }

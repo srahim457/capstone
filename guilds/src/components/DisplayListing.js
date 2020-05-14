@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
 import { format, parseISO } from 'date-fns';
-import { Redirect } from 'react-router-dom'; 
+import { Redirect } from 'react-router-dom';
 import Payment from './Payment';
+import noimage from '../images/noimageavailable.png'
 
 {
   /*uses the same css file as create listing,
@@ -10,6 +11,11 @@ because the layout is exactly the same except
 when editing the form fields should be filled with existing information
 also there is a delete button to delete the listing entirely
 */
+}
+function parsePath(orig) {
+  let res = orig.substr(9);
+  res = '.' + res;
+  return res;
 }
 
 class DisplayListing extends Component {
@@ -28,7 +34,8 @@ class DisplayListing extends Component {
       rent_amount: '',
       policy: '',
       click: false,
-      open:false,
+      open: false,
+      images: null
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -46,9 +53,9 @@ class DisplayListing extends Component {
     });
   };
 
-  onClickListing =(e) =>{
+  onClickListing = (e) => {
     e.preventDefault();
-    this.setState({open:true});
+    this.setState({ open: true });
   }
 
   closeButton() {
@@ -64,33 +71,34 @@ class DisplayListing extends Component {
       insurance,
       return_date,
       total_price,
-      rent_amount
+      rent_amount,
+      images
     } = this.props;
     // types are sale, loan, rental
     console.log('type of listing', listing_type)
     //console.log('return date', return_date)
-    
+
     //for redirecting to Payment page AL
-    if(this.state.open === true){
+    if (this.state.open === true) {
       return <Payment
-              name = {this.state.name}
-              description = {this.state.description}
-              return_date = {this.state.return_date}
-              insurance = {this.state.insurance}
-              listing_type = {this.state.listing_type}
-              price = {this.state.price}
-              />;
+        name={this.state.name}
+        description={this.state.description}
+        return_date={this.state.return_date}
+        insurance={this.state.insurance}
+        listing_type={this.state.listing_type}
+        price={this.state.price}
+      />;
     }
 
     if (return_date != '') {
       //Its a sale -> no valid date
       return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
     }
-    if(listing_type == 'sale'){
+    if (listing_type == 'sale') {
       console.log('sale detected')
     }
-    const {listing} = this.state.listing_type;
-    console.log(this.props, 'props',return_date)
+    const { listing } = this.state.listing_type;
+    console.log(this.props, 'props', return_date)
     return (
       <div className='container-parent'>
         <div className='container'>
@@ -101,8 +109,18 @@ class DisplayListing extends Component {
                 <button onClick={this.closeButton} className='close-button'>X</button>
               </div>
               <br />
-                <label>Images:</label>
-                <br />
+              {/*<label>{images}:</label>*/}
+              {images != null ? (
+                <img
+                  src={parsePath(images)}
+                  height='350'
+                  width='400'
+                  alt=''
+                ></img>
+              ) : (
+                  <img src={noimage} height='150' width="200" ></img>
+                )}
+              <br />
               <label>Item Name: </label>
               {name}
             </div>
@@ -113,31 +131,31 @@ class DisplayListing extends Component {
             </div>
             <div>
               <label>Type of Listing: </label>{listing_type}
-              {listing_type === 'sale' && 
+              {listing_type === 'sale' &&
                 <div>
-                <label>Total Price: </label>
-                {total_price}
+                  <label>Total Price: </label>
+                  {total_price}
                 </div>
               }
-                {listing_type === 'rental' && 
+              {listing_type === 'rental' &&
                 <div>
-                <label>Insurance Amount: </label>
-                {insurance}
-                <br />  
-                <label>Rent Amount :{rent_amount}</label>
-                <br />
-                <label>Return time and date: {return_date}</label>
+                  <label>Insurance Amount: </label>
+                  {insurance}
+                  <br />
+                  <label>Rent Amount :{rent_amount}</label>
+                  <br />
+                  <label>Return time and date: {return_date}</label>
                 </div>
               }
-                {listing_type === 'loan' && 
+              {listing_type === 'loan' &&
                 <div>
-                <label>Insurance Amount : </label>
-                {insurance}
-                <br />
-                <label>Return time and date :{return_date}</label>
+                  <label>Insurance Amount : </label>
+                  {insurance}
+                  <br />
+                  <label>Return time and date :{return_date}</label>
                 </div>
               }
-                <br />
+              <br />
             </div>
           </form>
           <button onClick={this.onClickListing}>Confirm</button>
