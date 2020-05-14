@@ -37,9 +37,8 @@ Listing.createItem = async function (req, res) {
 //Takes in an item object
 //Returns created item id
 Listing.createItemImage = async function (req, res) {
-  try {
-   
-    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image, req[0].id]);
+  try {   
+    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image_picture, req[0].id]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
