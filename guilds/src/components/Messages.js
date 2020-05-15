@@ -34,7 +34,7 @@ class Messages extends Component {
               <input
                 type='text'
                 className='item-search-input'
-                placeholder='search user'
+                placeholder='search for a user to chat with'
                 maxLength='200'
                 value={this.state.search_key}
                 onChange={this.searchChangeHandler}
