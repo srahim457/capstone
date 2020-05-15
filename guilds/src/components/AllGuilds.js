@@ -28,7 +28,8 @@ class AllGuilds extends Component {
       isLoading: true,
       description: '',
       search_key: '',
-      picture: null
+      picture: null,
+      name: ''
     };
     this.onClickHandler = this.onClickHandler.bind(this);
     this.searchChangeHandler = this.searchChangeHandler.bind(this);
@@ -56,7 +57,7 @@ class AllGuilds extends Component {
 
   async componentDidMount() {
     const response = await axios.get('http://localhost:4000/all-guilds/')
-    //console.log('all guilds', response)
+    console.log('all guilds', response)
     this.setState({ guilds: response.data, isLoading: false })
   }
 
@@ -69,11 +70,12 @@ class AllGuilds extends Component {
     if (this.state.open === true) {
       return (
         <DisplayGuild
-          name={this.state.guilds[0].name}
-          description={this.state.guilds[0].guild_desc}
-          picture={this.state.guilds[0].picture}
+          name={this.state.name}
+          description={this.state.description}
+
+          picture={this.state.picture}
           // could pull first member of guild
-          guildmaster={this.state.guilds[0].creator_id}
+          guildmaster={this.state.guildmaster}
         />
       );
     }
