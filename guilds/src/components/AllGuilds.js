@@ -51,6 +51,7 @@ class AllGuilds extends Component {
     this.setState({ description: item.desc });
     this.setState({ guildmaster: item.guildmaster });
     this.setState({ open: true });
+    this.setState({ images: item.picture }); //added
   }
 
   async componentDidMount() {
@@ -71,7 +72,7 @@ class AllGuilds extends Component {
         <DisplayGuild
           name={this.state.guilds[0].name}
           description={this.state.guilds[0].guild_desc}
-          // picture={this.state.picture[0].picture}
+
           picture={this.state.guilds[0].picture}
         // could pull first member of guild
         //guildmaster={this.state.guildmaster}
