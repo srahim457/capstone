@@ -28,7 +28,7 @@ class AllGuilds extends Component {
       isLoading: true,
       description: '',
       search_key: '',
-      images: null
+      picture: null
     };
     this.onClickHandler = this.onClickHandler.bind(this);
     this.searchChangeHandler = this.searchChangeHandler.bind(this);
@@ -51,7 +51,7 @@ class AllGuilds extends Component {
     this.setState({ description: item.desc });
     this.setState({ guildmaster: item.guildmaster });
     this.setState({ open: true });
-    this.setState({ images: item.picture }); //added
+    this.setState({ picture: item.picture }); //added
   }
 
   async componentDidMount() {
@@ -71,9 +71,8 @@ class AllGuilds extends Component {
         <DisplayGuild
           name={this.state.guilds[0].name}
           description={this.state.guilds[0].guild_desc}
-
           picture={this.state.guilds[0].picture}
-        // could pull first member of guild
+          // could pull first member of guild
           guildmaster={this.state.guilds[0].creator_id}
         />
       );

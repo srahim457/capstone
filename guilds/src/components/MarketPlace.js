@@ -79,7 +79,7 @@ class MarketPlace extends Component {
     this.setState({ policy: item.policy });
     this.setState({ rent_amount: item.rent_amount });
     this.setState({ open: true });
-    this.setState({ lenderid: item.lender_id});
+    this.setState({ lenderid: item.lender_id });
     if (item.return_by === null) {
       this.setState({ return_date: '' });
     }

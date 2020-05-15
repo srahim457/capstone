@@ -18,11 +18,14 @@ class Messages extends Component {
   }
 
   searchChangeHandler = (e) => {
-    e.preventDefault();
     this.setState({
       search_key: e.target.value,
     });
   };
+
+  onClickHandler = (e) => {
+
+  }
 
   render() {
     return (

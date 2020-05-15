@@ -14,6 +14,8 @@ also there is a delete button to delete the listing entirely
 */
 }
 
+
+
 class EditListing extends Component {
   constructor(props) {
     super(props);
@@ -97,11 +99,13 @@ class EditListing extends Component {
     this.setState({ name: name });
   }
 
-  fileSelectedHandler = (e) => {
-    //console.log(e.target.files[0]);
+  pictureChangeHandler = (e) => {
     this.setState({
-      image: e.currentTarget.value,
+      picture: e.target.files[0],
+      loaded: 0,
     });
+    //console.log(this.state.picture, '$$$$');
+    //console.log(e.target.files[0], '$$$$');
   };
 
   onDateChange = (date) => this.setState({ date });
@@ -284,17 +288,18 @@ class EditListing extends Component {
             {this.state.option === 'sale' || this.state.option === ''
               ? this.saleForm()
               : this.state.option === 'loan'
-              ? this.loanForm()
-              : this.rentForm()}
+                ? this.loanForm()
+                : this.rentForm()}
             <br />
             <br />
             <label>Upload an image</label>
             <br />
-
             <input
+              className='form-control'
               type='file'
-              onChange={this.fileSelectedHandler}
-              value={this.state.image}
+              multiple=''
+              name='myImage'
+              onChange={this.pictureChangeHandler}
             />
           </form>
           <button>Submit</button>
