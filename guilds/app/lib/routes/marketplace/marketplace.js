@@ -174,8 +174,8 @@ router.get('/:listingid/borrow/cancel', auth, async (req, res) => {
 router.get('/:listingid/reserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
+    console.log('reserving listing', req.params.listingid);
     const listing = await Listing.reserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error reserving listing by id \n ', error);
@@ -187,8 +187,8 @@ router.get('/:listingid/reserve', auth, async (req, res) => {
 router.get('/:listingid/unreserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
+    console.log('unreserving listing',req.params.listingid);
     const listing = await Listing.unreserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error unreserving listing by id \n', error);
