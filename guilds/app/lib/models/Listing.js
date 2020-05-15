@@ -224,11 +224,10 @@ Listing.unreserveListing = async function (req, res) {
 // Returns listing id
 Listing.markCompleted = async function (req, res) {
   try {
-    var d = new Date();
     console.log('marking complete', req[0])
-    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, d, req[0].listing_id]);
+    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, req[0].datecompleted, req[0].listing_id]);
     console.log('marked listing completed \n', listing.rows[0])
-    return listing.rows[0].id
+    return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);

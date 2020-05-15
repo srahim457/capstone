@@ -28,7 +28,7 @@ class MarketPlace extends Component {
       click: false, //added to see if it respond on click
       open: false,
       name: '',
-      id: '',
+      listingid: '',
       description: '',
       insurance: '',
       return_date: '',
@@ -40,7 +40,8 @@ class MarketPlace extends Component {
       pageOfItems: [],
       search_key: '',
       lenderid: '',
-      borrowerid: ''
+      borrowerid: '',
+      itemid: ''
     }
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
@@ -80,6 +81,8 @@ class MarketPlace extends Component {
     this.setState({ rent_amount: item.rent_amount });
     this.setState({ open: true });
     this.setState({ lenderid: item.lender_id });
+    this.setState({ itemid: item.item_id })
+    this.setState({ listingid: item.id })
     if (item.return_by === null) {
       this.setState({ return_date: '' });
     }
@@ -120,6 +123,8 @@ class MarketPlace extends Component {
         policy={this.state.policy}
         images={this.state.images}
         lenderid={this.state.lenderid}
+        itemid={this.state.itemid}
+        listingid={this.state.listingid}
       />;
     }
     return (

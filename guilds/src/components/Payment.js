@@ -36,7 +36,8 @@ class Payment extends Component {
       payment_status: '',
       lendersearch: [],
       firstname: '',
-      lastname: ''
+      lastname: '',
+      lenderid: ''
     };
 
     // for listing
@@ -60,7 +61,8 @@ class Payment extends Component {
     this.setState({ user: userresponse.data, isLoading: false })
     this.setState({
       firstname: userresponse.data.first_name,
-      lastname: userresponse.data.last_name
+      lastname: userresponse.data.last_name,
+      lenderid: this.props.lenderid
   })
 }
 
@@ -86,13 +88,16 @@ class Payment extends Component {
   // }
 
   render() {
-    console.log('in render \n ',this.props)
+    console.log('in render for payment \n ',this.props)
     // this will get passed to stripe form
     // Stripe form takes care of everything else
     const product = {
       name: this.props.name,
       price: 4.50,
-      description: this.props.description
+      description: this.props.description,
+      lenderid: this.props.lenderid,
+      itemid: this.props.itemid,
+      listingid: this.props.listingid
     };
 
     // submits stripe payment for and returns 'success' or 'error' status
@@ -101,7 +106,7 @@ class Payment extends Component {
       const response = await axios.post('http://localhost:4000/payment/charge',
         {
         token,
-        product
+        product,
         }
       );
       const { status }  = response.data;
@@ -143,8 +148,10 @@ class Payment extends Component {
               Insurance: {this.props.insurance}
               <br />
               Price: {this.props.price}
-                <br />
-                Return By Date &amp; Time: {format(parseISO(this.props.return_date), 'MMMM do,yyyy H:mma')}
+              <br />
+              {this.props.listing_type != 'sale' &&
+              <label> Return By Date &amp; Time: {format(parseISO(this.props.return_date), 'MMMM do,yyyy H:mma')}</label>   
+              }            
               <br />
               {/* {this.state.greeting} */}
             </p>
