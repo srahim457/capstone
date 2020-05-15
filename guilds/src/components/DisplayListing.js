@@ -4,6 +4,7 @@ import { format, parseISO, fromUnixTime } from 'date-fns';
 import { Redirect } from 'react-router-dom';
 import Payment from './Payment';
 import noimage from '../images/noimageavailable.png';
+import axios from 'axios';
 
 {
   /*uses the same css file as create listing,
@@ -59,9 +60,17 @@ class DisplayListing extends Component {
     this.setState({ open: true });
   }
 
-  closeButton() {
+  closeButton = (e) => {
+    console.log('closed button must unreserve','\n',this.props)
     // return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    const response = axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/unreserve')
+    console.log('marking as unreserved', response)
     window.location.reload(false);
+  }
+
+  async componentDidMount() {
+    const response = await axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/reserve')
+    console.log('marking as reserved', response)
   }
 
   render() {

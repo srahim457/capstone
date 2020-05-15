@@ -125,7 +125,7 @@ Listing.getListingByListingID = async function (req, res) {
 Listing.getAllActiveListings = async function (req, res) {
   try {
     const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
-    console.log('number of active listings are ', listing.rows.length, '\n', listing.rows)
+    console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
     console.log(error)
@@ -199,20 +199,20 @@ Listing.removeBorrower = async function (req, res) {
 //Takes in a listing id only
 Listing.reserveListing = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET reserved = "T" where id = ($1) RETURNING *', [req]);
     console.log('marked listing as reserved ', req, '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'T' where id = ($1) RETURNING *", req);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
-    res.status(400);;
+    res.status(400);
   }
 };
 //Unreserves the listing
 //Takes in a listing id only
 Listing.unreserveListing = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET reserved = "F" where id = ($1) RETURNING *', [req]);
     console.log('marked listing as unreserved ', req, '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F' where id = ($1) RETURNING *", req);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
