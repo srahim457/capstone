@@ -22,8 +22,9 @@ function parsePath(orig) {
 }
 
 class Profile_Listed extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    console.log('props profile listed rec',this.props)
     this.state = {
       isLoading: true,
       listings: [],
@@ -32,9 +33,9 @@ class Profile_Listed extends Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/listed/' + this.props.userid)
-    console.log('listings', response)
+  async componentDidMount(){
+    const response = await axios.get('http://localhost:4000/market-place/listed/'+this.props.userid)
+    console.log('profile listings', response)
     this.setState({ listings: response.data, isLoading: false })
   }
 
@@ -71,40 +72,44 @@ class Profile_Listed extends Component {
   }
 
   render() {
-    /*routes to an edit listing page*/
-    if (this.state.click === true) {
-      return <EditListing name={this.state.name} />;
-    }
-    //console.log(this.state,'\n current state',isLoading,listings)
-    console.log('these are the props passed to listed \n ', this.props.userid, this.state)
+      /*routes to an edit listing page*/
+        if (this.state.click === true && this.props.canedit) {
+         return <EditListing name={this.state.name} />;
+        }
+        //console.log(this.state,'\n current state',isLoading,listings)
+    //console.log('these are the props passed to listed \n ',this.props.userid,this.state)
 
-    const { isLoading } = this.state;
-    console.log('this.state \n', this.state.listings)
+    const {isLoading} = this.state;
+   // console.log('this.state \n',this.state.listings)
+   //{console.log('test res',listing,listing.borrower_id)}
     return (
       <React.Fragment>
-        <div className='ItemListWrapper'>
-          {!isLoading ? (
-            Object.values(this.state.listings).map(listing => {
-              return (
-                <div className='item' key={listing.item_id}>
-                  {console.log('test res', listing, listing.borrower_id)}
-                  <div className='itemImageWrapper'>
-                    {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
-                      : <img src={NotAvailable} height="100" width="100"></img>}
-                  </div>
-                  <div className='itemInfoWrapper' key={listing}>
-                    <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
-                    <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
-                    <hr />
-                  </div>
-                  <div className='editListingButtonWrapper'>
-                    <button
-                      className='edit-button'
-                      onClick={this.testClick.bind(this, listing)}
-                    >
-                      Edit Listed Item
+      <div className='ItemListWrapper'>
+        {!isLoading ? (
+          Object.values(this.state.listings).map(listing => {
+            return(
+              <div className='item' key={listing.item_id}>                
+                <div className='itemImageWrapper'>
+                  <h1> <img src ={listing.image} /></h1>
+                </div>
+                <div className = 'itemInfoWrapper' key = {listing}>
+                  <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
+                  <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
+                <hr />
+                </div>
+               
+                {this.props.canedit == true ? (
+                   <div className='editListingButtonWrapper'>
+                  <button
+                  className='edit-button'
+                  onClick={this.testClick.bind(this, listing)}
+                  >
+                  Edit Listed Item
                   </button>
                   </div>
+              ):
+              ( console.log(''))
+              }
                 </div>
               );
             })

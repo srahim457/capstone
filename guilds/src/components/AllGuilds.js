@@ -56,7 +56,7 @@ class AllGuilds extends Component {
 
   async componentDidMount() {
     const response = await axios.get('http://localhost:4000/all-guilds/')
-    console.log('all guilds', response)
+    //console.log('all guilds', response)
     this.setState({ guilds: response.data, isLoading: false })
   }
 
@@ -67,7 +67,6 @@ class AllGuilds extends Component {
     }
 
     if (this.state.open === true) {
-      console.log(this.state, 'what im passing', this.state.guilds[0])
       return (
         <DisplayGuild
           name={this.state.guilds[0].name}
@@ -75,7 +74,7 @@ class AllGuilds extends Component {
 
           picture={this.state.guilds[0].picture}
         // could pull first member of guild
-        //guildmaster={this.state.guildmaster}
+          guildmaster={this.state.guilds[0].creator_id}
         />
       );
     }
@@ -87,7 +86,7 @@ class AllGuilds extends Component {
         <h1 className='title'>All Guilds</h1>
         <div className='GuildBoard'>
           <div className='addGuildsButtonWrapper'>
-            <button class='add-button' onClick={this.onClickHandler}>
+            <button className='add-button' onClick={this.onClickHandler}>
               Add New Guild
             </button>
           </div>
@@ -101,7 +100,7 @@ class AllGuilds extends Component {
               value={this.state.search_key}
               onChange={this.searchChangeHandler}
             ></input>
-            <button class='search-button'>
+            <button className='search-button'>
               <Link to={{
                 pathname: '/all-guilds/search-results',
                 data: this.state.search_key,
@@ -112,7 +111,6 @@ class AllGuilds extends Component {
               </Link>
             </button>
           </div>
-          {console.log('test res', this.state.guilds)}
           <React.Fragment>
             {!isLoading ? (
               Object.values(this.state.guilds).map(guild => {

@@ -36,7 +36,11 @@ router.post('/create', auth, async (req, res) => {
     //req.body.guild needed
     // as createguild passes a guild object
 
-    const createdGuild = await Guild.createGuilds([req.body.guild], res)
+    newguild = {
+      guild: req.body.guild,
+      userid: req.user.id
+    }
+    const createdGuild = await Guild.createGuilds([newguild], res)
 
     guildId = createdGuild.id;
 

@@ -49,7 +49,9 @@ class Profile extends Component {
       guilds: [],
       click: false, //added to see if it respond on click
       testToken: false,
-      currUserId: 0
+      currUserId: 0,
+      // Check to see if current viewer is allowed to edit
+      canedit: true,
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -65,11 +67,13 @@ class Profile extends Component {
       //console.log('user id props is null')
       return <Profile_Borrowed
       userid = {-1}
+      canedit = {this.state.canedit}
     />;
     }
     else{
       return <Profile_Borrowed 
       userid = {this.props.location.state.userid}
+      canedit = {this.state.canedit}
       />;
     }
   }
@@ -80,11 +84,13 @@ class Profile extends Component {
       //console.log('user id props is null')
       return <Profile_Listed
       userid = {-1}
+      canedit = {this.state.canedit}
     />;
     }
     else{
       return <Profile_Listed
       userid = {this.props.location.state.userid}
+      canedit = {this.state.canedit}
     />;
     }
   }
@@ -107,14 +113,16 @@ class Profile extends Component {
     let picture;
     let description;
     let guilds;
+    let loggedinuser;
 
     //console.log('getting profile results for',this.state.currUserId,this.props.location.state.userid)
     if(this.props.location.state != null){
       this.state.currUserId = this.props.location.state.userid
     }
-   const[firstResp,secondResp] = await Promise.all([
+   const[firstResp,secondResp,thirdResp] = await Promise.all([
     axios.get('http://localhost:4000/profile/'+this.state.currUserId),
-    axios.get('http://localhost:4000/profile/guilds/'+this.state.currUserId)  
+    axios.get('http://localhost:4000/profile/guilds/'+this.state.currUserId), 
+    axios.get('http://localhost:4000/profile/')
   ]);
       const profile = firstResp.data;
       this.setState({ profile });
@@ -135,19 +143,29 @@ class Profile extends Component {
         picture: firstResp.data.profile_picture,
         description: firstResp.data.description,
         guilds: secondResp.data,
-        userid: firstResp.data.id
+        userid: firstResp.data.id,
+        loggedinuser: thirdResp.data.id
       });
 
     // console.log(picture, 'getting PATH');
+    console.log('current user profile',firstResp.data)
+    console.log('current user guilds',this.state.guilds)
+    console.log('current logged in profile',thirdResp.data)
   }
 
   render() {
+    if(this.state.userid != this.state.loggedinuser){
+      console.log('VIEWING SOMEONE ELSES PROFILE \n')
+      this.state.canedit = false;
+      console.log(this.state.canedit)
+    }
       //console.log('these are the props passed to profile \n ',this.props.location.state.userid)
       //this is someone elses profile 
     {
       /*if the edit profile button is pressed it will redirect*/
     }
-    if (this.state.click === true) {
+    console.log('able to edit ? ', this.state.canedit)
+    if (this.state.click === true && this.state.canedit == true) {
       return <EditProfile 
       userid={this.state.currUserId}/>;
     }
@@ -180,9 +198,13 @@ class Profile extends Component {
             </div>
             <div className='button-container'>
               {/*the button that change the page to edit profile information*/}
-              <button className='edit-button' onClick={this.onClickHandler}>
-                Edit
-              </button>
+              {this.state.canedit == true ? (
+                <button className='edit-button' onClick={this.onClickHandler}>
+                  Edit
+                </button>
+              ):
+              ( console.log(''))
+              }
             </div>
             <div className='UserInfoContainer'>
               <div className='HeaderField'>
@@ -258,7 +280,7 @@ class Profile extends Component {
                     : 'PageSwitcher__Item_profile'
                 }
               >
-                My Listed Items
+                {this.state.firstname + "'s"} Listed Items
               </button>
               <button
                 onClick={this.borrowed.bind(this)}
@@ -267,8 +289,7 @@ class Profile extends Component {
                     ? 'PageSwitcher__Item_profile_active'
                     : 'PageSwitcher__Item_profile'
                 }
-              >
-                My Borrowed Items
+              >{this.state.firstname + "'s"} Borrowed Items
               </button>
             </div>
             {/*these components can be found in Profile_Borrowed.js and Profile_Listed.js*/}
