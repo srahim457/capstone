@@ -6,7 +6,7 @@ import {
 import Pagination from './Pagination';
 import CreateListing from './CreateListing';
 import DisplayListing from './DisplayListing';
-import noimage from '../images/noimageavailable.png'
+import noimage from '../images/noimageavailable.png';
 import Spinner from './layout/spinner_transparent.gif';
 import axios from 'axios';
 import './styles/MarketPlace.css';

@@ -3,7 +3,7 @@ import './styles/CreateListing.css';
 import { format, parseISO } from 'date-fns';
 import { Redirect } from 'react-router-dom';
 import Payment from './Payment';
-import noimage from '../images/noimageavailable.png'
+import noimage from '../images/noimageavailable.png';
 
 {
   /*uses the same css file as create listing,
@@ -118,7 +118,7 @@ class DisplayListing extends Component {
                   alt=''
                 ></img>
               ) : (
-                  <img src={noimage} height='150' width="200" ></img>
+                  <img src={noimage} height='350' width="400" ></img>
                 )}
               <br />
               <label>Item Name: </label>
@@ -158,7 +158,7 @@ class DisplayListing extends Component {
               <br />
             </div>
           </form>
-          <button onClick={this.onClickListing}>Confirm</button>
+          <button onClick={this.onClickListing}>Checkout</button>
         </div>
       </div>
     );

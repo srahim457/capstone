@@ -8,7 +8,7 @@ import './styles/Messages.css';
 class Messages extends Component {
   constructor() {
     super();
-    this.state ={
+    this.state = {
       search_key: '',
     }
 
@@ -34,7 +34,7 @@ class Messages extends Component {
               <input
                 type='text'
                 className='item-search-input'
-                placeholder='search for item'
+                placeholder='search user'
                 maxLength='200'
                 value={this.state.search_key}
                 onChange={this.searchChangeHandler}
@@ -45,7 +45,7 @@ class Messages extends Component {
                   pathname: '/messages/user-search-results',
                   data: this.state.search_key,
                 }}
-                className='yellow'
+                  className='yellow'
                 >
                   Search
                 </Link>

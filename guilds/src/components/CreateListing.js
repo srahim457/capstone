@@ -195,53 +195,6 @@ class CreateListing extends Component {
 
   };
 
-  handleSubmit2 = async (e) => {
-    e.preventDefault(e);
-    console.log('called handlesubmit2');
-
-    if (this.state.picture != null) {
-      const picture = this.state.picture;
-      console.log(picture, ' in handle submit');
-      //console.log(phonenum, description, profile_picture);
-
-      const image_picture = new FormData();
-
-      image_picture.append(
-        'myImage',
-        this.state.picture,
-        this.state.picture.name
-      );
-      const config = {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      };
-      console.log(this.state.picture, 'name of file');
-      await axios
-        .post(
-          `http://localhost:4000/picture`,
-
-          //{ phonenum, description, profile_picture },
-
-          image_picture,
-          config
-          // {
-          //   onUploadProgress: (progressEvent) => {
-          //     console.log(
-          //       'Upload progress ' +
-          //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-          //         '%'
-          //     );
-          //   },
-          // }
-        )
-        .then((res) => {
-          console.log(res, 'this is the response');
-          console.log(res.data, 'this is res.data');
-          console.log(res.statusText);
-        });
-    }
-  }
 
   canBeSubmitted() {
     const empty = validate(this.state.name, this.state.description);

@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
 import AllGuilds from './AllGuilds';
+import noimage from '../images/noimageavailable.png';
 {/*uses the same css file as create listing,
 because the layout is exactly the same except
 when editing the form fields should be filled with existing information
 also there is a delete button to delete the listing entirely
 */}
+
+
+
+function parsePath(orig) {
+  let res = orig.substr(9);
+  res = '.' + res;
+  return res;
+}
 
 class DisplayGuild extends Component {
   constructor(props) {
@@ -16,7 +25,7 @@ class DisplayGuild extends Component {
       description: '',
       guildmaster: '',
       close: false,
-      picture: '',
+      picture: null,
     };
     this.closeButton = this.closeButton.bind(this);
   }
@@ -25,9 +34,10 @@ class DisplayGuild extends Component {
     e.preventDefault();
     this.setState({ close: true });
   }
+  //create a button on click handler
 
   render() {
-    var {name, description, guildmaster,picture} = this.props;
+    var { name, description, guildmaster, picture } = this.props;
     console.log(this.props, 'props')
     if (this.state.close === true) {
       return <AllGuilds />;
@@ -45,6 +55,22 @@ class DisplayGuild extends Component {
             </button>
           </div>
           <form onSubmit={this.handleSubmit} className='form-fields'>
+
+            <div>
+              {picture != null ? (
+                <img
+                  src={parsePath(picture)}
+                  height='400'
+                  width='450'
+                  alt=''
+                ></img>
+              ) : (
+                  <img src={noimage} height='350' width="400" ></img>
+                )}
+
+              {/*picture*/}
+              <br />
+            </div>
             <div>
               <label> Name: </label>
               {name}
@@ -54,13 +80,9 @@ class DisplayGuild extends Component {
               <label> Description:</label>
               {description}
             </div>
-            <div>
-              <label>Images:</label>
-              {picture}
-              <br />
-            </div>
+
           </form>
-          <button>Join Guild</button>
+          <button className="submit-button">Join Guild</button>
         </div>
       </div>
     );
