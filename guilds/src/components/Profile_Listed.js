@@ -81,9 +81,8 @@ class Profile_Listed extends Component {
             return(
               <div className='item' key={listing.item_id}>
                 {console.log('test res',listing,listing.borrower_id)}
-
                 <div className='itemImageWrapper'>
-                  <h1> img {listing.image} </h1>
+                  <h1> <img src ={listing.image} /></h1>
                 </div>
                 <div className = 'itemInfoWrapper' key = {listing}>
                   <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
@@ -92,7 +91,7 @@ class Profile_Listed extends Component {
                 </div>
                 <div className='editListingButtonWrapper'>
                   <button
-                  class='edit-button'
+                  className='edit-button'
                   onClick={this.testClick.bind(this, listing)}
                   >
                   Edit Listed Item

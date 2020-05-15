@@ -41,11 +41,34 @@ const upload = multer({
 router.get('/:id', auth, async (req, res) => {
   //route profile/me ?
   try {
+    idtouse = 0
     console.log('getting user profile with id \n',req.params)
     const { email, password } = req.body;
+    if(req.params.id == -1){
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    profile = await User.getUserById([idtouse]); //gets logged in users by tokenid
 
-    profile = await User.getUserById([req.params.id]); //gets logged in users by tokenid
-
+    console.log('Print profile', profile[0]);
+    if (profile == 0) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: 'There is no profile for this user' }] }); //checks to see if the profile is valid
+    }
+    res.status(200).json(profile[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+//generic get request for the user
+router.get('/', auth, async (req, res) => {
+  //route profile/me ?
+  try{
+    profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
     console.log('Print profile', profile[0]);
     if (profile == 0) {
       return res
@@ -62,8 +85,15 @@ router.get('/:id', auth, async (req, res) => {
 router.get('/guilds/:id', auth, async (req, res) => {
   //route profile/me ?
   try {
+    idtouse = 0
     console.log('at get user guilds \n',req.params)
-    userguilds = await Guild.getAllUserGuilds([req.params.id]); //gets logged in users by tokenid
+    if(req.params.id == -1){
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    userguilds = await Guild.getAllUserGuilds([idtouse]); //gets logged in users by tokenid
 
     console.log('all user guilds', userguilds);
     res.status(200).json(userguilds);

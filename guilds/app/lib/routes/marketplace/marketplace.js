@@ -222,9 +222,17 @@ router.get('/', auth,async (req, res) => {
 //Looks for req.user.id as a param
 router.get('/borrowed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all borrowed items \n', req.params.id);
+    idtouse = 0
+    if(req.params.id == -1){
+      console.log('no id detected reverting to current user')
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    console.log('getting all borrowed items for  \n', idtouse);
     const alllistings = await Listing.getAllBorrowerListings(
-      req.params.id,
+      idtouse,
       res
     );
     console.log('all borrowed listings \n', alllistings.length);
@@ -239,11 +247,19 @@ router.get('/borrowed/:id',auth, async (req, res) => {
 //Look for req.user.id as a param
 router.get('/listed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all listed items \n', req.params.id);
+    idtouse = 0
+    if(req.params.id == -1){
+      idtouse = req.user.id
+      console.log('no id detected reverting to current user \n',idtouse)
+    }
+    else{
+      idtouse = req.params.id
+    }
     const alllistings = await Listing.getAllLenderListings(
-      req.params.id,
+      idtouse,
       res
     );
+    console.log('all listed listings \n', alllistings.length);
     res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all listed listings', error);
