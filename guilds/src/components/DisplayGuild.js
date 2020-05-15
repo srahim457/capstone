@@ -35,6 +35,9 @@ class DisplayGuild extends Component {
     this.setState({ close: true });
   }
   //create a button on click handler
+  onClickHandler = (e) => {
+    e.preventDefault();
+  }
 
   render() {
     var { name, description, guildmaster, picture } = this.props;
