@@ -5,8 +5,8 @@ import { format, parseISO } from 'date-fns';
 import Spinner from './layout/spinner_transparent.gif';
 
 class Profile_Borrowed extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       isLoading: true,
       listings: [],
@@ -14,13 +14,15 @@ class Profile_Borrowed extends Component {
     };
   }
   async componentDidMount() {
+    console.log('http://localhost:4000/market-place/borrowed/'+this.props.userid)
     const response = await axios.get(
-      'http://localhost:4000/market-place/borrowed'
+      'http://localhost:4000/market-place/borrowed/'+this.props.userid
     );
     console.log('listings', response);
     this.setState({ listings: response.data, isLoading: false });
   }
   render() {
+    console.log('these are the props passed to borrowed \n ',this.props.userid,this.state)
     const { isLoading } = this.state;
     console.log('this.state \n', this.state.listings);
     return (

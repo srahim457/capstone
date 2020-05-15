@@ -33,7 +33,7 @@ class Profile_Listed extends Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/listed')
+    const response = await axios.get('http://localhost:4000/market-place/listed/' + this.props.userid)
     console.log('listings', response)
     this.setState({ listings: response.data, isLoading: false })
   }
@@ -76,6 +76,8 @@ class Profile_Listed extends Component {
       return <EditListing name={this.state.name} />;
     }
     //console.log(this.state,'\n current state',isLoading,listings)
+    console.log('these are the props passed to listed \n ', this.props.userid, this.state)
+
     const { isLoading } = this.state;
     console.log('this.state \n', this.state.listings)
     return (
@@ -86,12 +88,8 @@ class Profile_Listed extends Component {
               return (
                 <div className='item' key={listing.item_id}>
                   {console.log('test res', listing, listing.borrower_id)}
-
                   <div className='itemImageWrapper'>
-                    {/* <h1> img {listing.image} </h1> */}
-
-                    {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
-                      : <img src={NotAvailable} height="100" width="100"></img>}
+                    <h1> <img src={listing.image} /></h1>
                   </div>
                   <div className='itemInfoWrapper' key={listing}>
                     <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
@@ -100,7 +98,7 @@ class Profile_Listed extends Component {
                   </div>
                   <div className='editListingButtonWrapper'>
                     <button
-                      class='edit-button'
+                      className='edit-button'
                       onClick={this.testClick.bind(this, listing)}
                     >
                       Edit Listed Item
