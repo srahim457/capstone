@@ -21,6 +21,7 @@ function parsePath(orig) {
 class DisplayListing extends Component {
   constructor(props) {
     super(props);
+    console.log('this is the props for  displayed',props)
 
     this.state = {
       name: '',
@@ -75,18 +76,19 @@ class DisplayListing extends Component {
       images
     } = this.props;
     // types are sale, loan, rental
-    console.log('type of listing', listing_type)
+    //console.log('type of listing display', listing_type,this.props)
     //console.log('return date', return_date)
 
     //for redirecting to Payment page AL
     if (this.state.open === true) {
       return <Payment
-        name={this.state.name}
-        description={this.state.description}
-        return_date={this.state.return_date}
-        insurance={this.state.insurance}
-        listing_type={this.state.listing_type}
-        price={this.state.price}
+        name={this.props.name}
+        description={this.props.description}
+        return_date={this.props.return_date}
+        insurance={this.props.insurance}
+        listing_type={this.props.listing_type}
+        price={this.props.total_price}
+        lenderid = {this.props.lenderid}
       />;
     }
 
