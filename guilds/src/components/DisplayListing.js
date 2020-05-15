@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, fromUnixTime } from 'date-fns';
 import { Redirect } from 'react-router-dom';
 import Payment from './Payment';
 import noimage from '../images/noimageavailable.png';
@@ -73,7 +73,8 @@ class DisplayListing extends Component {
       return_date,
       total_price,
       rent_amount,
-      images
+      images,
+      listingid
     } = this.props;
     // types are sale, loan, rental
     //console.log('type of listing display', listing_type,this.props)
@@ -89,6 +90,8 @@ class DisplayListing extends Component {
         listing_type={this.props.listing_type}
         price={this.props.total_price}
         lenderid = {this.props.lenderid}
+        itemid = {this.props.itemid}
+        listingid = {this.props.listingid}
       />;
     }
 
