@@ -56,7 +56,7 @@ class AllGuilds extends Component {
 
   async componentDidMount() {
     const response = await axios.get('http://localhost:4000/all-guilds/')
-    //console.log('all guilds', response)
+    console.log('all guilds', response)
     this.setState({ guilds: response.data, isLoading: false })
   }
 
@@ -69,12 +69,12 @@ class AllGuilds extends Component {
     if (this.state.open === true) {
       return (
         <DisplayGuild
-          name={this.state.guilds[0].name}
-          description={this.state.guilds[0].guild_desc}
+          name={this.state.name}
+          description={this.state.description}
 
-          picture={this.state.guilds[0].picture}
+          picture={this.state.images}
         // could pull first member of guild
-          guildmaster={this.state.guilds[0].creator_id}
+          guildmaster={this.state.guildmaster}
         />
       );
     }
