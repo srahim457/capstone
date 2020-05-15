@@ -89,7 +89,8 @@ class Profile_Listed extends Component {
                 <div className='item' key={listing.item_id}>
                   {console.log('test res', listing, listing.borrower_id)}
                   <div className='itemImageWrapper'>
-                    <h1> <img src={listing.image} /></h1>
+                    {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
+                      : <img src={NotAvailable} height="100" width="100"></img>}
                   </div>
                   <div className='itemInfoWrapper' key={listing}>
                     <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
