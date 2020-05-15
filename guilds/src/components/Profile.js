@@ -36,14 +36,6 @@ class Profile extends Component {
   constructor() {
     super();
 
-<<<<<<< HEAD
-    const exampleArrayGuilds = [...Array(10).keys()].map((i) => ({
-      id: i + 1,
-      name: 'Guild ' + (i + 1),
-    }));
-
-=======
->>>>>>> 4dc108170ce69b245c8647137868395578011771
     this.state = {
       firstname: '',
       lastname: '',
@@ -67,33 +59,33 @@ class Profile extends Component {
     this.setState({ click: true });
   }
   displayBorrowed() {
-     // Fix until sign in redirect is fixed
-    if(this.props.location.state == null){
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
       this.state.currUserId = -1
       //console.log('user id props is null')
       return <Profile_Borrowed
-      userid = {-1}
-    />;
+        userid={-1}
+      />;
     }
-    else{
-      return <Profile_Borrowed 
-      userid = {this.props.location.state.userid}
+    else {
+      return <Profile_Borrowed
+        userid={this.props.location.state.userid}
       />;
     }
   }
   displayListings() {
-     // Fix until sign in redirect is fixed
-    if(this.props.location.state == null){
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
       this.state.currUserId = -1
       //console.log('user id props is null')
       return <Profile_Listed
-      userid = {-1}
-    />;
+        userid={-1}
+      />;
     }
-    else{
+    else {
       return <Profile_Listed
-      userid = {this.props.location.state.userid}
-    />;
+        userid={this.props.location.state.userid}
+      />;
     }
   }
 
@@ -116,39 +108,26 @@ class Profile extends Component {
     let description;
     let guilds;
 
-<<<<<<< HEAD
-
+    //console.log('getting profile results for',this.state.currUserId,this.props.location.state.userid)
+    if (this.props.location.state != null) {
+      this.state.currUserId = this.props.location.state.userid
+    }
     const [firstResp, secondResp] = await Promise.all([
-      axios.get('http://localhost:4000/profile'),
-      axios.get('http://localhost:4000/profile/guilds')
+      axios.get('http://localhost:4000/profile/' + this.state.currUserId),
+      axios.get('http://localhost:4000/profile/guilds/' + this.state.currUserId)
     ]);
     const profile = firstResp.data;
     this.setState({ profile });
-    //console.log(res.data.email);
+    //console.log(res.datacompon.email);
     //console.log(res.data.email);
     //response = res.data;
-=======
-    //console.log('getting profile results for',this.state.currUserId,this.props.location.state.userid)
-    if(this.props.location.state != null){
-      this.state.currUserId = this.props.location.state.userid
-    }
-   const[firstResp,secondResp] = await Promise.all([
-    axios.get('http://localhost:4000/profile/'+this.state.currUserId),
-    axios.get('http://localhost:4000/profile/guilds/'+this.state.currUserId)  
-  ]);
-      const profile = firstResp.data;
-      this.setState({ profile });
-      //console.log(res.datacompon.email);
-      //console.log(res.data.email);
-      //response = res.data;
->>>>>>> 4dc108170ce69b245c8647137868395578011771
 
     //console.log('user profile info',firstResp.data,'\n',secondResp.data);
 
-<<<<<<< HEAD
     this.setState({
       firstname: firstResp.data.first_name,
       lastname: firstResp.data.last_name,
+      username: firstResp.data.username,
       email: firstResp.data.email,
       phonenum: firstResp.data.phonenum,
       online: firstResp.data.online,
@@ -156,35 +135,21 @@ class Profile extends Component {
       picture: firstResp.data.profile_picture,
       description: firstResp.data.description,
       guilds: secondResp.data,
+      userid: firstResp.data.id
     });
-=======
-      this.setState({
-        firstname: firstResp.data.first_name,
-        lastname: firstResp.data.last_name,
-        username: firstResp.data.username,
-        email: firstResp.data.email,
-        phonenum: firstResp.data.phonenum,
-        online: firstResp.data.online,
-        rating: firstResp.data.rating,
-        picture: firstResp.data.profile_picture,
-        description: firstResp.data.description,
-        guilds: secondResp.data,
-        userid: firstResp.data.id
-      });
->>>>>>> 4dc108170ce69b245c8647137868395578011771
 
     // console.log(picture, 'getting PATH');
   }
 
   render() {
-      //console.log('these are the props passed to profile \n ',this.props.location.state.userid)
-      //this is someone elses profile 
+    //console.log('these are the props passed to profile \n ',this.props.location.state.userid)
+    //this is someone elses profile 
     {
       /*if the edit profile button is pressed it will redirect*/
     }
     if (this.state.click === true) {
-      return <EditProfile 
-      userid={this.state.currUserId}/>;
+      return <EditProfile
+        userid={this.state.currUserId} />;
     }
 
     return (

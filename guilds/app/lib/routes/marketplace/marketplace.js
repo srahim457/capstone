@@ -127,17 +127,17 @@ router.get('/:listingid', auth, async (req, res, next) => {
   }
 });
 //Gets a listing matching the passed name
-router.get('/search/:query', auth,async (req, res, next) => {
+router.get('/search/:query', auth, async (req, res, next) => {
   console.log(req.params.query);
-    try {
-      console.log('seaching for a listing',req.params.query)
-      const listing = await Listing.searchForListing([req.params.query],res);
-      console.log('listing result', listing);
-      res.status(200).json(listing);
-    } catch (error) {
-      console.error('error searching for a listing \n', error);
-    }
-    console.log('called search for listing', req.params);
+  try {
+    console.log('seaching for a listing', req.params.query)
+    const listing = await Listing.searchForListing([req.params.query], res);
+    console.log('listing result', listing);
+    res.status(200).json(listing);
+  } catch (error) {
+    console.error('error searching for a listing \n', error);
+  }
+  console.log('called search for listing', req.params);
 });
 
 //Borrows a listing
@@ -220,18 +220,14 @@ router.get('/', auth, async (req, res) => {
 
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-<<<<<<< HEAD
-router.get('/borrowed', auth, async (req, res) => {
-=======
-router.get('/borrowed/:id',auth, async (req, res) => {
->>>>>>> 4dc108170ce69b245c8647137868395578011771
+router.get('/borrowed/:id', auth, async (req, res) => {
   try {
     idtouse = 0
-    if(req.params.id == -1){
+    if (req.params.id == -1) {
       console.log('no id detected reverting to current user')
       idtouse = req.user.id
     }
-    else{
+    else {
       idtouse = req.params.id
     }
     console.log('getting all borrowed items for  \n', idtouse);
@@ -249,18 +245,14 @@ router.get('/borrowed/:id',auth, async (req, res) => {
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-<<<<<<< HEAD
-router.get('/listed', auth, async (req, res) => {
-=======
-router.get('/listed/:id',auth, async (req, res) => {
->>>>>>> 4dc108170ce69b245c8647137868395578011771
+router.get('/listed/:id', auth, async (req, res) => {
   try {
     idtouse = 0
-    if(req.params.id == -1){
+    if (req.params.id == -1) {
       idtouse = req.user.id
-      console.log('no id detected reverting to current user \n',idtouse)
+      console.log('no id detected reverting to current user \n', idtouse)
     }
-    else{
+    else {
       idtouse = req.params.id
     }
     const alllistings = await Listing.getAllLenderListings(

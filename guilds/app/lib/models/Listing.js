@@ -37,14 +37,9 @@ Listing.createItem = async function (req, res) {
 //Takes in an item object
 //Returns created item id
 Listing.createItemImage = async function (req, res) {
-<<<<<<< HEAD
-  try {   
-    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image_picture, req[0].id]);
-=======
   try {
 
     const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image, req[0].id]);
->>>>>>> 4dc108170ce69b245c8647137868395578011771
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -246,7 +241,7 @@ Listing.markCompleted = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
-    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *" [req, d]);
+    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *"[req, d]);
     console.log('Deleted listing \n ')
     return listing.rows
   } catch (error) {
