@@ -61,16 +61,15 @@ class DisplayListing extends Component {
   }
 
   closeButton = (e) => {
-    console.log('closed button must unreserve','\n',this.props)
+    e.preventDefault();
     // return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
     const response = axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/unreserve')
-    console.log('marking as unreserved', response)
     window.location.reload(false);
   }
 
   async componentDidMount() {
+    console.log(' display listing mounted',this.props)
     const response = await axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/reserve')
-    console.log('marking as reserved', response)
   }
 
   render() {
@@ -107,9 +106,6 @@ class DisplayListing extends Component {
     if (return_date != '') {
       //Its a sale -> no valid date
       return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
-    }
-    if (listing_type == 'sale') {
-      console.log('sale detected')
     }
     const { listing } = this.state.listing_type;
     console.log(this.props, 'props', return_date)

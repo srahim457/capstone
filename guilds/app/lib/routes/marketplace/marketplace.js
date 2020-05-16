@@ -108,9 +108,9 @@ router.post('/picture', auth, async (req, res) => {
 
 //Gets a listing matching the passed listing id
 router.get('/:listingid', auth, async (req, res, next) => {
-  console.log(req.params.listingid);
-  if (!Number.isInteger(req.params.listingid)) {
-    console.log('not a number');
+  console.log(req.params.listingid,parseInt(req.params.listingid,10));
+  if (!Number.isInteger(parseInt(req.params.listingid,10))) {
+    console.log('not a number in /:listingid',typeof req.params.listingid );
     next();
   } else {
     try {
@@ -123,7 +123,7 @@ router.get('/:listingid', auth, async (req, res, next) => {
     } catch (error) {
       console.error('error retrieving listing by id \n', error);
     }
-    console.log('called get listing request by listing id', req.params);
+    console.log('called get listing request by listing id', req.params.listingid);
   }
 });
 //Gets a listing matching the passed name
