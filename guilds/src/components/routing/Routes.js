@@ -47,13 +47,14 @@ import NotFound from '../layout/NotFound';
 import AllGuilds from '../AllGuilds';
 import MarketPlaceSearchResults from '../MarketPlaceSearch';
 import AllGuildsSearchResults from '../AllGuildsSearch';
-import Messages from '../Messages';
+import Messages from '../FindUser';
 import UserSearchResults from '../UserSearch';
 
 import PrivateRoute from '../routing/PrivateRoute';
 
 import Payment from '../Payment';
 import PaymentSuccess from '../PaymentSuccess';
+import FindUser from '../FindUser';
 
 //Might import Navbar in here instead
 
@@ -66,7 +67,7 @@ const Routes = (props) => {
         <PrivateRoute path='/profile' component={Profile} />
         <PrivateRoute exact path='/market-place' component={MarketPlace} />
         <PrivateRoute exact path='/all-guilds' component={AllGuilds} />
-        <PrivateRoute exact path='/messages' component={Messages} />
+        <PrivateRoute exact path='/messages' component={FindUser} />
         <PrivateRoute path='/payment' component={Payment} />
         <PrivateRoute path='/payment-success' component={PaymentSuccess} />
         <PrivateRoute path='/market-place/search-results' component={MarketPlaceSearchResults} />

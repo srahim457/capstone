@@ -1,6 +1,10 @@
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var express = require('express');
+const morgan = require("morgan"); // Loggin
+
+const http = require('http');
+var io = require('socket.io');
 
 // connection configurations
 //require('dotenv').config();
@@ -13,6 +17,8 @@ var session = require('express-session');
 var request = require('request');
 
 var app = express();
+
+const server = http.createServer(app);
 
 // ---------------------------STRIPE---------------------------
 // with handlebars
@@ -67,8 +73,7 @@ var app = express();
 // });
 
 // ----------------------STRIPE end---------------------------
-
-app.use(cors());
+app.use(morgan('combined'));
 let User = require('./lib/routes/users/users').User;
 // app.use(
 //   session({ secret: 'capstone', resave: 'false', saveUninitialized: 'false' })
@@ -95,6 +100,50 @@ require('./lib/resetPassword.js')(app);
 
 //Init Middleware
 app.use(express.json({ extended: false }));
+
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+
+
+
+const socketIo = io(server);
+
+// Start listening
+server.listen(process.env.PORT || 4001);
+console.log(`Listening on port ${'4001'}`);
+
+// Setup socket.io
+var connectedUsers = {}
+socketIo.on('connection', socket => {
+  
+  const username = socket.handshake.query.username;
+  console.log(`${username} connected`);
+  connectedUsers[username] = socket;
+  console.log(Object.keys(connectedUsers),' users after connected')
+
+  socket.on('client:message', data => {
+    console.log(`${data.username}: ${data.message},${data.targetname}`);
+    console.log('sending a message now')
+    connectedUsers[username].targetname = data.targetname
+    console.log(Object.keys(connectedUsers),'user info')
+    if(connectedUsers.hasOwnProperty(data.targetname)){
+      console.log('the other user is connected \n')
+      connectedUsers[data.targetname].emit('server:message', data);
+    }
+    else{
+      console.log('the user is not connected')
+      connectedUsers[data.username].emit('not connected', finalresponse={username: data.targetname, message:'user not connected', sentby: data.username});
+    }    
+    //socket.broadcast.emit('server:message', data);
+    //console.log(Object.keys(connectedUsers), connectedUsers.hasOwnProperty(data.targetname))
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`${username} disconnected`);
+    delete connectedUsers[username]
+    console.log(connectedUsers,' users after disconnected')
+    
+  });
+});
 
 //Defining routes
 app.use('/market-place', require('./lib/routes/marketplace/marketplace'));

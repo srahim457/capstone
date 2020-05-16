@@ -1,69 +1,39 @@
-import React, { Component } from 'react';
-import {
-  Link,
-  NavLink,
-} from 'react-router-dom';
-import './styles/Messages.css';
-import axios from "axios";
+ 
+import React from 'react';
 
-class Messages extends Component {
-  constructor() {
-    super();
-    this.state = {
-      search_key: '',
-    }
+import Message from './Message';
 
-    // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
-    this.searchChangeHandler = this.searchChangeHandler.bind(this);
-    //this.openListing = this.openListing.bind(this);
-  }
-
-  searchChangeHandler = (e) => {
-    this.setState({
-      search_key: e.target.value,
-    });
-  };
-  async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/all-guilds/') // no route for messages currently using guilds
-}
-
-  onClickHandler = (e) => {
-
+class Messages extends React.Component {
+  componentDidUpdate() {
+    // There is a new message in the state, scroll to bottom of list
+    const objDiv = document.getElementById('messageList');
+    objDiv.scrollTop = objDiv.scrollHeight;
+    console.log('update to messages')
   }
 
   render() {
+      console.log(this.props.messages, 'rendering all messages')
+    // Loop through all the messages in the state and create a Message component
+    const messages = this.props.messages.map((message, i) => {
+        return (
+          <Message
+            key={i}
+            username={message.username}
+            message={message.message}
+            fromMe={message.fromMe} />
+        );
+      });
+
     return (
-      <div className='container-parent'>
-        <div className='container'>
-          <h1 className='title'>Messages</h1>
-          <div className='itemBoard'>
-            <div className='searchItemsWrapper'>
-              <input
-                type='text'
-                className='item-search-input'
-                placeholder='search for a user to chat with'
-                maxLength='200'
-                value={this.state.search_key}
-                onChange={this.searchChangeHandler}
-              ></input>
-
-              <button className='listing-button'>
-                <Link to={{
-                  pathname: '/messages/user-search-results',
-                  data: this.state.search_key,
-                }}
-                  className='yellow'
-                >
-                  Search
-                </Link>
-              </button>
-
-            </div>
-          </div>
-        </div>
+      <div className='messages' id='messageList'>
+        { messages }
       </div>
     );
   }
 }
+
+Messages.defaultProps = {
+  messages: []
+};
 
 export default Messages;
