@@ -225,7 +225,7 @@ Listing.unreserveListing = async function (req, res) {
 //Takes in a listing id only
 Listing.freeListings = async function (req, res) {
   try {
-    console.log('unreserving all listings not in listing ', req.user.id, '\n')
+    console.log('unreserving all listings belonging to this ', req.user.id, '\n')
     const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = (null) where id = ($1) RETURNING *", [req.user.id]);
     return listing.rows[0]
   } catch (error) {

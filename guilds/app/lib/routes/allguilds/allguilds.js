@@ -87,6 +87,7 @@ router.get('/', auth, async (req, res) => {
   try {
     console.log('recieved get all guilds request')
     const allguilds = await Guild.getAllGuilds([req.body], res)
+    const freelistings = await Listing.freeListings(req,res)
     res.status(200).json(allguilds)
   } catch (error) {
     console.log('error with getting all listings', error)
