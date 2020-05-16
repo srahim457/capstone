@@ -64,13 +64,16 @@ class Messages extends Component {
                 return(
                   <div className='itemContainer' key={user.id}>
                     {console.log('test user',user)}
-                    <div className='itemImage'
-                      onClick={this.openUser.bind(this, user)}>
+                    <div className='itemImage'>
                       {/*listing.image*/}
                       <img src={noimage} height='150' width="200" ></img>
-
                   </div>
                   <h5>{user.username}</h5>
+                  <button className='listing-button'
+                  onClick={this.openUser.bind(this, user)}
+                  >View Profile</button>
+                  <button className='listing-button'
+                  >Chat With User</button>
                   <div className='paginate'>
                     <Pagination
                     users={this.state.user}
