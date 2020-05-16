@@ -109,7 +109,7 @@ class MarketPlace extends Component {
 
   async componentDidMount() {
     const active = await axios.get('http://localhost:4000/market-place/active')
-    console.log('listings in marketplace', active)
+    console.log('listings in marketplace', active.data)
     this.setState({ listings: active.data, isLoading: false })
   }
 
