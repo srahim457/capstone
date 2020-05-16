@@ -4,6 +4,7 @@ import {
   NavLink,
 } from 'react-router-dom';
 import './styles/Messages.css';
+import axios from "axios";
 
 class Messages extends Component {
   constructor() {
@@ -22,6 +23,9 @@ class Messages extends Component {
       search_key: e.target.value,
     });
   };
+  async componentDidMount() {
+    const response = await axios.get('http://localhost:4000/all-guilds/') // no route for messages currently using guilds
+}
 
   onClickHandler = (e) => {
 

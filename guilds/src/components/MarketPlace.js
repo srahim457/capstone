@@ -41,7 +41,8 @@ class MarketPlace extends Component {
       search_key: '',
       lenderid: '',
       borrowerid: '',
-      itemid: ''
+      itemid: '',
+      reserved: false
     }
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
@@ -69,7 +70,9 @@ class MarketPlace extends Component {
   };
 
 
-  openListing(item) {
+  async openListing(item) {
+    const response = await axios.get('http://localhost:4000/market-place/' + item.id)
+    console.log('checking if reserved ', response.data[0].reserved)
     console.log('open listing wth item', item)
     this.setState({ name: item.item_name });
     this.setState({ description: item.item_desc });
@@ -79,10 +82,15 @@ class MarketPlace extends Component {
     this.setState({ total_price: item.total_price });
     this.setState({ policy: item.policy });
     this.setState({ rent_amount: item.rent_amount });
-    this.setState({ open: true });
     this.setState({ lenderid: item.lender_id });
     this.setState({ itemid: item.item_id })
     this.setState({ listingid: item.id })
+    this.setState({ reserved: response.data[0].reserved })
+
+    console.log('this.state after assigned', this.state)
+    this.setState({ open: true }); // moved to the end because of a race condition
+
+
     if (item.return_by === null) {
       this.setState({ return_date: '' });
     }
@@ -100,9 +108,9 @@ class MarketPlace extends Component {
   // }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/active')
-    console.log('listings', response)
-    this.setState({ listings: response.data, isLoading: false })
+    const active = await axios.get('http://localhost:4000/market-place/active')
+    console.log('listings in marketplace', active.data)
+    this.setState({ listings: active.data, isLoading: false })
   }
 
   render() {
@@ -112,6 +120,13 @@ class MarketPlace extends Component {
     }
 
     if (this.state.open === true) {
+      console.log('opening a listing will display now \n', this.state)
+      if (this.state.reserved === true) {
+        // I think this would be a good place for a notification cause
+        // the transition is jaring and you dont know what happened
+        console.log('already reserved srry')
+        return <MarketPlace />
+      }
       return <DisplayListing
         name={this.state.name}
         description={this.state.description}
@@ -127,6 +142,8 @@ class MarketPlace extends Component {
         listingid={this.state.listingid}
       />;
     }
+    //{console.log('test listing', listing)}
+    // {console.log('test res', this.state.listings)}
     return (
       <div className='containerParent'>
         <div className='container'>
@@ -160,13 +177,11 @@ class MarketPlace extends Component {
               </button>
 
             </div>
-            {console.log('test res', this.state.listings)}
             <React.Fragment>
               {!isLoading ? (
                 Object.values(this.state.listings).map(listing => {
                   return (
                     <div className='itemContainer' key={listing.id}>
-                      {console.log('test listing', listing)}
                       <div className='itemImage'
                         onClick={this.openListing.bind(this, listing)}>
                         {/*listing.image*/}

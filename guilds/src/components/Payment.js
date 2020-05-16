@@ -37,7 +37,8 @@ class Payment extends Component {
       lendersearch: [],
       firstname: '',
       lastname: '',
-      lenderid: ''
+      lenderid: '',
+      formatted_price: 0
     };
 
     // for listing
@@ -97,9 +98,13 @@ class Payment extends Component {
       description: this.props.description,
       lenderid: this.props.lenderid,
       itemid: this.props.itemid,
-      listingid: this.props.listingid
+      listingid: this.props.listingid,
+      listing_type: this.props.listing_type,
+      formatted_price: 0
     };
 
+    var formatted_price = Number(this.props.price.replace(/[^0-9.-]+/g,""))
+    product.formatted_price = formatted_price
     // submits stripe payment for and returns 'success' or 'error' status
     async function handleToken(token) {
       // console.log({ token, addresses });
@@ -163,7 +168,7 @@ class Payment extends Component {
               stripeKey="pk_test_Ci5vDkQD1gwMM6faugOYBC0B00IddzaMye"
               token={handleToken}
               billingAddress
-              amount={product.price * 100}
+              amount={formatted_price * 100}
               name={product.name}
             />
           </div>

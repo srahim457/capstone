@@ -63,8 +63,10 @@ app.post('/charge',auth, async (req, res) => {
 
     final_charge = {
       charge: charge,
-      user_id: req.user.id,
-      listing_id: product.listingid
+      borrower_id: req.user.id, // a lender is never going to be paying for something
+      listing_id: product.listingid,
+      listing_type: product.listing_type,
+      lender_id: product.lenderid
     }
 
     payresult = await Payment.newPayment([final_charge],res)

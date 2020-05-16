@@ -20,13 +20,13 @@ Payment.newPayment = async function (req, res) {
         //console.log(payment.rows[0],'\n result')
         //return payment.rows[0]
         if(req[0].charge.status == 'succeeded'){        
-            const payment= await sql.query("INSERT INTO guilds.payments(user_id,listing_id,date_processed,processed,stripe_info,method) values($1,$2,$3,$4,$5,$6) RETURNING *", [req[0].user_id,req[0].listing_id,fromUnixTime(req[0].charge.created),'T',req[0].charge,req[0].charge.payment_method_details.type])
+            const payment= await sql.query("INSERT INTO guilds.payments(user_id,listing_id,date_processed,processed,stripe_info,method) values($1,$2,$3,$4,$5,$6) RETURNING *", [req[0].borrower_id,req[0].listing_id,fromUnixTime(req[0].charge.created),'T',req[0].charge,req[0].charge.payment_method_details.type])
             var listinginfo = {
                 completed: 'T',
                 datecompleted: fromUnixTime(req[0].charge.created),
                 listing_id: req[0].listing_id
             }
-            const completeListing = await Listing.markCompleted([listinginfo],res)
+            const completeListing = await Listing.markCompletedSale([listinginfo],res)
             console.log(payment.rows.length, completeListing.rows)
         }
         else{

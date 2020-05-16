@@ -68,6 +68,7 @@ router.get('/:id', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
   //route profile/me ?
   try{
+    clearedlisting = await Listing.freeListings(req,res)
     profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
     console.log('Print profile', profile[0]);
     if (profile == 0) {
@@ -93,6 +94,7 @@ router.get('/guilds/:id', auth, async (req, res) => {
     else{
       idtouse = req.params.id
     }
+    clearedlisting = await Listing.freeListings(req,res)
     userguilds = await Guild.getAllUserGuilds([idtouse]); //gets logged in users by tokenid
 
     console.log('all user guilds', userguilds);

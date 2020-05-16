@@ -108,9 +108,9 @@ router.post('/picture', auth, async (req, res) => {
 
 //Gets a listing matching the passed listing id
 router.get('/:listingid', auth, async (req, res, next) => {
-  console.log(req.params.listingid);
-  if (!Number.isInteger(req.params.listingid)) {
-    console.log('not a number');
+  console.log(req.params.listingid,parseInt(req.params.listingid,10));
+  if (!Number.isInteger(parseInt(req.params.listingid,10))) {
+    console.log('not a number in /:listingid',typeof req.params.listingid );
     next();
   } else {
     try {
@@ -123,7 +123,7 @@ router.get('/:listingid', auth, async (req, res, next) => {
     } catch (error) {
       console.error('error retrieving listing by id \n', error);
     }
-    console.log('called get listing request by listing id', req.params);
+    console.log('called get listing request by listing id', req.params.listingid);
   }
 });
 //Gets a listing matching the passed name
@@ -175,7 +175,11 @@ router.get('/:listingid/reserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     console.log('reserving listing', req.params.listingid);
-    const listing = await Listing.reserveListing([req.params.listingid], res);
+    parameters ={
+      listingid: req.params.listingid,
+      user_id: req.user.id
+    }
+    const listing = await Listing.reserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error reserving listing by id \n ', error);
@@ -188,7 +192,11 @@ router.get('/:listingid/unreserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     console.log('unreserving listing',req.params.listingid);
-    const listing = await Listing.unreserveListing([req.params.listingid], res);
+    parameters ={
+      listingid: req.params.listingid,
+      user_id : req.user.id
+    }
+    const listing = await Listing.unreserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error unreserving listing by id \n', error);
@@ -197,10 +205,11 @@ router.get('/:listingid/unreserve', auth, async (req, res) => {
 });
 
 //Gets all active listings
-router.get('/active', async (req, res) => {
+router.get('/active',auth, async (req, res) => {
   try {
     const activelistings = await Listing.getAllActiveListings(req, res);
     res.status(200).json(activelistings);
+    const unreservedlistings = await Listing.freeListings(req,res)
   } catch (error) {
     console.error('error getting all active listings \n', error);
   }
