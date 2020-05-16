@@ -48,11 +48,16 @@ class Profile_Borrowed extends Component {
                       'MMMM do,yyyy H:mma'
                     )}
                   </h1>
+                  {this.props.canedit == true ? (
                   <h1 className='itemInfoField'>
-                    {' '}
-                    Return Date:{' '}
-                    {format(parseISO(listing.return_by), 'MMMM do,yyyy H:mma')}
-                  </h1>
+                  {' '}
+                  Return By Date:{' '}
+                  {format(parseISO(listing.return_by), 'MMMM do,yyyy H:mma')}
+                </h1>
+              ):
+              ( console.log(''))
+              }
+
                   <hr />
                 </div>
               </div>
