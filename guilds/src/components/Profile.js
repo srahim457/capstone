@@ -26,6 +26,12 @@ import NotAvailable from '../images/noimageavailable.png';
 
 // const element = <Nombre name='Profile' />;
 
+
+const styleTitle = {
+  fontFamily: 'fantasy',
+  color: 'black'
+};
+
 function parsePath(orig) {
   let res = orig.substr(9);
   res = '.' + res;
@@ -61,37 +67,37 @@ class Profile extends Component {
     this.setState({ click: true });
   }
   displayBorrowed() {
-     // Fix until sign in redirect is fixed
-    if(this.props.location.state == null){
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
       this.state.currUserId = -1
       //console.log('user id props is null')
       return <Profile_Borrowed
-      userid = {-1}
-      canedit = {this.state.canedit}
-    />;
+        userid={-1}
+        canedit={this.state.canedit}
+      />;
     }
-    else{
-      return <Profile_Borrowed 
-      userid = {this.props.location.state.userid}
-      canedit = {this.state.canedit}
+    else {
+      return <Profile_Borrowed
+        userid={this.props.location.state.userid}
+        canedit={this.state.canedit}
       />;
     }
   }
   displayListings() {
-     // Fix until sign in redirect is fixed
-    if(this.props.location.state == null){
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
       this.state.currUserId = -1
       //console.log('user id props is null')
       return <Profile_Listed
-      userid = {-1}
-      canedit = {this.state.canedit}
-    />;
+        userid={-1}
+        canedit={this.state.canedit}
+      />;
     }
-    else{
+    else {
       return <Profile_Listed
-      userid = {this.props.location.state.userid}
-      canedit = {this.state.canedit}
-    />;
+        userid={this.props.location.state.userid}
+        canedit={this.state.canedit}
+      />;
     }
   }
 
@@ -116,58 +122,58 @@ class Profile extends Component {
     let loggedinuser;
 
     //console.log('getting profile results for',this.state.currUserId,this.props.location.state.userid)
-    if(this.props.location.state != null){
+    if (this.props.location.state != null) {
       this.state.currUserId = this.props.location.state.userid
     }
-   const[firstResp,secondResp,thirdResp] = await Promise.all([
-    axios.get('http://localhost:4000/profile/'+this.state.currUserId),
-    axios.get('http://localhost:4000/profile/guilds/'+this.state.currUserId), 
-    axios.get('http://localhost:4000/profile/')
-  ]);
-      const profile = firstResp.data;
-      this.setState({ profile });
-      //console.log(res.datacompon.email);
-      //console.log(res.data.email);
-      //response = res.data;
+    const [firstResp, secondResp, thirdResp] = await Promise.all([
+      axios.get('http://localhost:4000/profile/' + this.state.currUserId),
+      axios.get('http://localhost:4000/profile/guilds/' + this.state.currUserId),
+      axios.get('http://localhost:4000/profile/')
+    ]);
+    const profile = firstResp.data;
+    this.setState({ profile });
+    //console.log(res.datacompon.email);
+    //console.log(res.data.email);
+    //response = res.data;
 
     //console.log('user profile info',firstResp.data,'\n',secondResp.data);
 
-      this.setState({
-        firstname: firstResp.data.first_name,
-        lastname: firstResp.data.last_name,
-        username: firstResp.data.username,
-        email: firstResp.data.email,
-        phonenum: firstResp.data.phonenum,
-        online: firstResp.data.online,
-        rating: firstResp.data.rating,
-        picture: firstResp.data.profile_picture,
-        description: firstResp.data.description,
-        guilds: secondResp.data,
-        userid: firstResp.data.id,
-        loggedinuser: thirdResp.data.id
-      });
+    this.setState({
+      firstname: firstResp.data.first_name,
+      lastname: firstResp.data.last_name,
+      username: firstResp.data.username,
+      email: firstResp.data.email,
+      phonenum: firstResp.data.phonenum,
+      online: firstResp.data.online,
+      rating: firstResp.data.rating,
+      picture: firstResp.data.profile_picture,
+      description: firstResp.data.description,
+      guilds: secondResp.data,
+      userid: firstResp.data.id,
+      loggedinuser: thirdResp.data.id
+    });
 
     // console.log(picture, 'getting PATH');
-    console.log('current user profile',firstResp.data)
-    console.log('current user guilds',this.state.guilds)
-    console.log('current logged in profile',thirdResp.data)
+    console.log('current user profile', firstResp.data)
+    console.log('current user guilds', this.state.guilds)
+    console.log('current logged in profile', thirdResp.data)
   }
 
   render() {
-    if(this.state.userid != this.state.loggedinuser){
+    if (this.state.userid != this.state.loggedinuser) {
       console.log('VIEWING SOMEONE ELSES PROFILE \n')
       this.state.canedit = false;
       console.log(this.state.canedit)
     }
-      //console.log('these are the props passed to profile \n ',this.props.location.state.userid)
-      //this is someone elses profile 
+    //console.log('these are the props passed to profile \n ',this.props.location.state.userid)
+    //this is someone elses profile 
     {
       /*if the edit profile button is pressed it will redirect*/
     }
     console.log('able to edit ? ', this.state.canedit)
     if (this.state.click === true && this.state.canedit == true) {
-      return <EditProfile 
-      userid={this.state.currUserId}/>;
+      return <EditProfile
+        userid={this.state.currUserId} />;
     }
 
     return (
@@ -202,8 +208,8 @@ class Profile extends Component {
                 <button className='edit-button' onClick={this.onClickHandler}>
                   Edit
                 </button>
-              ):
-              ( console.log(''))
+              ) :
+                (console.log(''))
               }
             </div>
             <div className='UserInfoContainer'>
@@ -212,32 +218,33 @@ class Profile extends Component {
                 {/*the username*/}
                 <h1>Name: </h1>
                 <div className='UserField'>
-                  <h1>{this.state.firstname + ' ' + this.state.lastname}</h1>
+                  <h1 style={styleTitle}>{this.state.firstname + ' ' + this.state.lastname}</h1>
                 </div>
               </div>
               <div className='HeaderField'>
                 {' '}
                 {/*the guild ranking*/}
-                <h1>Rank: </h1>
+                <h2 style={styleTitle}>Rank: </h2>
                 <div className='UserField'>
-                  <h1>
+                  <h1 style={styleTitle}>
                     {this.state.rating == null ? 'N/A' : this.state.rating}
                   </h1>
+                  <br />
                 </div>
               </div>
             </div>
             <div className='SubfieldInfoContainer'>
               <div className='HeaderSubfield'>
-                <h2>Email: </h2>
+                <h2 style={styleTitle}>Email: </h2>
               </div>
               <div className='UserSubfield'>
-                <h2> {this.state.email} </h2>
+                <h2 style={styleTitle}> {this.state.email} </h2>
               </div>
               <div className='HeaderSubfield'>
-                <h2>Phone: </h2>
+                <h2 style={styleTitle} >Phone: </h2>
               </div>
               <div className='UserSubfield'>
-                <h2>
+                <h2 style={styleTitle}>
                   {this.state.phonenum == null ? 'N/A' : this.state.phonenum}{' '}
                 </h2>
               </div>
@@ -246,22 +253,22 @@ class Profile extends Component {
 
           <div className='additionalUserInfoPortion'>
             {/*contains the list of the guilds the user is apart of and user bio*/}
-            <h1>Bio:</h1>
+            <h1 style={styleTitle}>Bio:</h1>
             <div className='userBioSection'>
-              <h1>
+              <h1 style={styleTitle}>
                 {this.state.description}
               </h1>
             </div>
             <div className='userGuildListTitle'>
               <div className='centerText'>
-                <h1>Affiliated Guilds</h1>
+                <h1 >Affiliated Guilds</h1>
               </div>
             </div>
             <React.Fragment>
               <div className='guildnamelistcontainer'>
                 {Object.values(this.state.guilds).map((guild) => (
                   <div className='guildnamecontainer' key={guild.id}>
-                    <h2> Guild: {guild.name} </h2>
+                    <h2 style={styleTitle}> Guild: {guild.name} </h2>
                   </div>
                 ))}
               </div>

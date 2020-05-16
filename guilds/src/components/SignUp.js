@@ -207,9 +207,9 @@ const SignUp = ({ setAlert, register, isAuthenticated }) => {
             name='firstname'
             value={firstname}
             onChange={e => onChange(e)}
+
           />
-          />
-          </div>
+        </div>
         <div className='FormField'>
           <label className='FormField__Label' htmlFor='name'>
             <strong>Last Name</strong>
@@ -223,23 +223,8 @@ const SignUp = ({ setAlert, register, isAuthenticated }) => {
             value={lastname}
             onChange={e => onChange(e)}
           />
-          />
-          </div>
-        <div className='FormField'>
-          <label className='FormField__Label' htmlFor='password'>
-            <strong>Password</strong>
-          </label>
-          <input
-            type='password'
-            id='password'
-            className='FormField__Input'
-            placeholder='Enter your password'
-            name='password'
-            value={password}
-            onChange={e => onChange(e)}
-          />
-          />
-          </div>
+
+        </div>
         <div className='FormField'>
           <label className='FormField__Label' htmlFor='email'>
             <strong>E-Mail Address</strong>
@@ -253,8 +238,23 @@ const SignUp = ({ setAlert, register, isAuthenticated }) => {
             value={email}
             onChange={e => onChange(e)}
           />
+        </div>
+        <div className='FormField'>
+          <label className='FormField__Label' htmlFor='password'>
+            <strong>Password</strong>
+          </label>
+          <input
+            type='password'
+            id='password'
+            className='FormField__Input'
+            placeholder='Enter your password'
+            name='password'
+            value={password}
+            onChange={e => onChange(e)}
           />
-          </div>
+
+        </div>
+
 
         <div className='FormField'>
           <button className='FormField__Button mr-20' >Sign Up</button>{' '}

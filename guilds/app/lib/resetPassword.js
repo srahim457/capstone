@@ -1,5 +1,6 @@
 var User = require('./appModel').User;
 var Login = require('./appModel').Login;
+const auth = require('./middleware/auth');
 
 /**
  * @swagger
@@ -25,8 +26,9 @@ var Login = require('./appModel').Login;
  *         description: Password reset link is invalid or has expired
  */
 
-module.exports = (app) => {
-  app.get('/resetPassword', (req, res) => {
+//changed from app to router
+module.exports = (router) => {
+  router.get('/', (req, res) => {
     Login.findByToken({
       where: {
         resetPasswordToken: req.query.resetPasswordToken,

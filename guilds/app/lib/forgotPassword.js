@@ -1,12 +1,15 @@
 const crypto = require('crypto');
-
+const express = require('express');
+const router = express.Router();
 require('dotenv').config();
 var User = require('./appModel').User;
 var Login = require('./appModel').Login;
+const auth = require('./middleware/auth');
 const nodemailer = require('nodemailer');
 
-module.exports = (app) => {
-  app.post('/forgotPassword', (req, res) => {
+
+module.exports = (router) => {
+  router.post('/', (req, res) => {
     if (req.body.email.length === 0) {
       res.status(400).send('email required');
     } else {
