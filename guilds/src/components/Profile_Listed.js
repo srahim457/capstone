@@ -95,23 +95,16 @@ class Profile_Listed extends Component {
         }
 
         //console.log(this.state,'\n current state',isLoading,listings)
-<<<<<<< HEAD
         const {isLoading} = this.state;
         console.log('this.state \n',this.state.listings)
-=======
-    //console.log('these are the props passed to listed \n ',this.props.userid,this.state)
 
-    const {isLoading} = this.state;
-   // console.log('this.state \n',this.state.listings)
-   //{console.log('test res',listing,listing.borrower_id)}
->>>>>>> bd02fe99ff73dfd798f0596ebe7c4b1c45b350ac
     return (
       <React.Fragment>
       <div className='ItemListWrapper'>
         {!isLoading ? (
           Object.values(this.state.listings).map(listing => {
             return(
-              <div className='item' key={listing.item_id}>                
+              <div className='item' key={listing.item_id}>
                 <div className='itemImageWrapper'>
                 {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
                 : <img src={NotAvailable} height="100" width="100"></img>}
@@ -121,31 +114,19 @@ class Profile_Listed extends Component {
                   <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
                 <hr />
                 </div>
-<<<<<<< HEAD
                 <div className='editListingButtonWrapper'>
                 {/*if the borrower_id is not null, then change the button from edit to borrowed*/}
                 {displayBorrowedOrEditListingButton(listing)}
                 {/*
-=======
-               
-                {this.props.canedit == true ? (
-                   <div className='editListingButtonWrapper'>
->>>>>>> bd02fe99ff73dfd798f0596ebe7c4b1c45b350ac
                   <button
                   className='edit-button'
                   onClick={this.testClick.bind(this, listing)}
                   >
                   Edit Listed Item
                   </button>
-<<<<<<< HEAD
                 */}
-=======
-                  </div>
-              ):
-              ( console.log(''))
-              }
->>>>>>> bd02fe99ff73dfd798f0596ebe7c4b1c45b350ac
                 </div>
+              </div>
               );
             })
           ) : (
