@@ -49,7 +49,7 @@ class AllGuilds extends Component {
   openGuild(item) {
     console.log('open guild listing with', item)
     this.setState({ name: item.name });
-    this.setState({ description: item.desc });
+    this.setState({ description: item.guild_desc });
     this.setState({ guildmaster: item.guildmaster });
     this.setState({ open: true });
     this.setState({ picture: item.picture }); //added

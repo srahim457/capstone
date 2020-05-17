@@ -35,13 +35,13 @@ class FindUser extends Component {
     return (
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Find a User To Chat With</h1>
+          <h1 className='title'>Find a User</h1>
           <div className='itemBoard'>
             <div className='searchItemsWrapper'>
               <input
                 type='text'
                 className='item-search-input'
-                placeholder='search for a user to chat with'
+                placeholder='Type In a User here'
                 maxLength='200'
                 value={this.state.search_key}
                 onChange={this.searchChangeHandler}
