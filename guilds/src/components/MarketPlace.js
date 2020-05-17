@@ -6,32 +6,43 @@ import {
 import Pagination from './Pagination';
 import CreateListing from './CreateListing';
 import DisplayListing from './DisplayListing';
-import noimage from '../images/noimageavailable.png'
+import noimage from '../images/noimageavailable.png';
 import Spinner from './layout/spinner_transparent.gif';
 import axios from 'axios';
 import './styles/MarketPlace.css';
 
+
+function parsePath(orig) {
+  let res = orig.substr(9);
+  res = '.' + res;
+  return res;
+}
+
 class MarketPlace extends Component {
   constructor() {
     super();
-    this.state ={
+    this.state = {
       isLoading: true,
       listings: [],
       error: null,
       click: false, //added to see if it respond on click
       open: false,
       name: '',
-      id: '',
+      listingid: '',
       description: '',
       insurance: '',
       return_date: '',
-      images: '',
+      images: null,
       listing_type: '',
       total_price: '',
       rent_amount: '',
       policy: '',
       pageOfItems: [],
       search_key: '',
+      lenderid: '',
+      borrowerid: '',
+      itemid: '',
+      reserved: false
     }
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
@@ -59,22 +70,32 @@ class MarketPlace extends Component {
   };
 
 
-  openListing(item) {
+  async openListing(item) {
+    const response = await axios.get('http://localhost:4000/market-place/' + item.id)
+    console.log('checking if reserved ', response.data[0].reserved)
     console.log('open listing wth item', item)
-    this.setState({name: item.item_name});
-    this.setState({description: item.item_desc});
-    this.setState({listing_type: item.type})
-    this.setState({insurance: item.insurance_amount});
-    this.setState({images: item.image});
-    this.setState({total_price: item.total_price});
-    this.setState({policy: item.policy});
-    this.setState({rent_amount: item.rent_amount});
-    this.setState({ open: true });
-    if(item.return_by === null){
-      this.setState({return_date: ''});
+    this.setState({ name: item.item_name });
+    this.setState({ description: item.item_desc });
+    this.setState({ listing_type: item.type })
+    this.setState({ insurance: item.insurance_amount });
+    this.setState({ images: item.image });   //changed this from item.image to images
+    this.setState({ total_price: item.total_price });
+    this.setState({ policy: item.policy });
+    this.setState({ rent_amount: item.rent_amount });
+    this.setState({ lenderid: item.lender_id });
+    this.setState({ itemid: item.item_id })
+    this.setState({ listingid: item.id })
+    this.setState({ reserved: response.data[0].reserved })
+
+    console.log('this.state after assigned', this.state)
+    this.setState({ open: true }); // moved to the end because of a race condition
+
+
+    if (item.return_by === null) {
+      this.setState({ return_date: '' });
     }
-    else{
-      this.setState({return_date: item.return_by});
+    else {
+      this.setState({ return_date: item.return_by });
     }
   }
 
@@ -87,93 +108,114 @@ class MarketPlace extends Component {
   // }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/active')
-    console.log('listings', response)
-    this.setState({listings: response.data, isLoading: false})
+    const active = await axios.get('http://localhost:4000/market-place/active')
+    console.log('listings in marketplace', active.data)
+    this.setState({ listings: active.data, isLoading: false })
   }
 
   render() {
-    const {isLoading} = this.state;
+    const { isLoading } = this.state;
     if (this.state.click === true) {
       return <CreateListing />;
     }
 
-    if(this.state.open === true){
+    if (this.state.open === true) {
+      console.log('opening a listing will display now \n', this.state)
+      if (this.state.reserved === true) {
+        // I think this would be a good place for a notification cause
+        // the transition is jaring and you dont know what happened
+        console.log('already reserved srry')
+        return <MarketPlace />
+      }
       return <DisplayListing
-              name = {this.state.name}
-              description = {this.state.description}
-              return_date = {this.state.return_date}
-              insurance = {this.state.insurance}
-              listing_type = {this.state.listing_type}
-              total_price = {this.state.total_price}
-              rent_amount = {this.state.rent_amount}
-              policy = {this.state.policy}
-              />;
+        name={this.state.name}
+        description={this.state.description}
+        return_date={this.state.return_date}
+        insurance={this.state.insurance}
+        listing_type={this.state.listing_type}
+        total_price={this.state.total_price}
+        rent_amount={this.state.rent_amount}
+        policy={this.state.policy}
+        images={this.state.images}
+        lenderid={this.state.lenderid}
+        itemid={this.state.itemid}
+        listingid={this.state.listingid}
+      />;
     }
+    //{console.log('test listing', listing)}
+    // {console.log('test res', this.state.listings)}
     return (
       <div className='containerParent'>
-      <div className='container'>
-        <h1 className='title'>Market Place</h1>
-        <div className='itemBoard'>
-          <div className='button-wrapper'>
-            <button className='listing-button' onClick={this.onClickHandler}>
-              Create a Listing
+        <div className='container'>
+          <h1 className='title'>Market Place</h1>
+          <div className='itemBoard'>
+            <div className='button-wrapper'>
+              <button className='listing-button' onClick={this.onClickHandler}>
+                Create a Listing
             </button>
-          </div>
-
-          <div className='searchItemsWrapper'>
-            <input
-              type='text'
-              className='item-search-input'
-              placeholder='search for item'
-              maxLength='200'
-              value={this.state.search_key}
-              onChange={this.searchChangeHandler}
-            ></input>
-
-            <button className='listing-button'>
-              <Link to={{
-                pathname: '/market-place/search-results',
-                data: this.state.search_key,
-              }}
-              className='yellow'
-              >
-                Search
-              </Link>
-            </button>
-
-          </div>
-          {console.log('test res',this.state.listings)}
-          <React.Fragment>
-            {!isLoading ? (
-              Object.values(this.state.listings).map(listing => {
-                return(
-                  <div className='itemContainer' key={listing.id}>
-                    {console.log('test listing',listing)}
-                    <div className='itemImage'
-                      onClick={this.openListing.bind(this, listing)}>
-                      {/*listing.image*/}
-                      <img src={noimage} height='150' width="200" ></img>
-
-                  </div>
-                  <h5>{listing.item_name}</h5>
-                  <div className='paginate'>
-                    <Pagination
-                    items={this.state.listing}
-                    onChangePage={this.onChangePage}
-                    />
-                  </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className='spinner'>
-              <img src={Spinner} alt="loading..." />
             </div>
-              )}
+
+            <div className='searchItemsWrapper'>
+              <input
+                type='text'
+                className='item-search-input'
+                placeholder='search for item'
+                maxLength='200'
+                value={this.state.search_key}
+                onChange={this.searchChangeHandler}
+              ></input>
+
+              <button className='listing-button'>
+                <Link to={{
+                  pathname: '/market-place/search-results',
+                  data: this.state.search_key,
+                }}
+                  className='yellow'
+                >
+                  Search
+              </Link>
+              </button>
+
+            </div>
+            <React.Fragment>
+              {!isLoading ? (
+                Object.values(this.state.listings).map(listing => {
+                  return (
+                    <div className='itemContainer' key={listing.id}>
+                      <div className='itemImage'
+                        onClick={this.openListing.bind(this, listing)}>
+                        {/*listing.image*/}
+                        {/*<h1>{listing.image}</h1> */}
+                        {listing.image != null ? (
+                          <img
+                            src={parsePath(listing.image)}
+                            height='150'
+                            width='200'
+                            alt=''
+                          ></img>
+                        ) : (
+                            <img src={noimage} height='150' width="200" ></img>
+                          )}
+
+                      </div>
+                      <h5>{listing.item_name}</h5>
+                      <div className='paginate'>
+                        <Pagination
+                          items={this.state.listing}
+                          onChangePage={this.onChangePage}
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                  <div className='spinner'>
+                    <img src={Spinner} alt="loading..." />
+                  </div>
+                )}
             </React.Fragment>
+          </div>
         </div>
-      </div>
       </div>
     );
   }

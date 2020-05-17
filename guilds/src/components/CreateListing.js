@@ -6,13 +6,32 @@ import DateTimePicker from 'react-datetime-picker';
 import axios from 'axios';
 import './styles/CreateListing.css';
 
-function validate(name, description) {
+function validate(name, description,price,date,policy,insurance) {
   // true means invalid, so our conditions got reversed
-  return {
-    name: name.length === 0,
-    description: description.length === 0,
-  };
-} 
+  console.log(name.length,description.length,price.length,date.length,policy.length,insurance.length)
+  //In case of loan
+  console.log(insurance.length != 0 , price.length =='')
+  if(insurance.length!= 0 && price.length ==''){
+    return {
+      name: name.length === 0,
+      description: description.length === 0,
+      date: date.length === 0,
+      policy: policy.length === 0,
+      insurance: insurance.length === 0
+    };
+  }
+  else{
+    return {
+      name: name.length === 0,
+      description: description.length === 0,      
+      price: price.length === 0,
+      date: date.length === 0,
+      policy: policy.length === 0,
+      insurance: insurance.length === 0
+    };
+  }
+
+}
 
 // let one = "http://localhost:4000/marketplace/create";
 // let two = "http://localhost:4000/picture";
@@ -33,6 +52,7 @@ class CreateListing extends Component {
     this.state = {
       name: '',
       price: '',
+      insurance: '',
       description: '',
       option: '',
       date: '',
@@ -65,6 +85,11 @@ class CreateListing extends Component {
       price: e.currentTarget.value,
     });
   };
+  insuranceChangeHandler = (e) => {
+    this.setState({
+      insurance: e.currentTarget.value,
+    });
+  };
 
   policyChangeHandler = (e) => {
     this.setState({
@@ -83,89 +108,149 @@ class CreateListing extends Component {
 
 
   handleSubmit = async (e) => {
+
     e.preventDefault();
+    console.log('this is handle submit');
     if (!this.canBeSubmitted()) {
       alert('Unable to submit: some fields may be empty');
       return;
     } else {
       alert('submission has been completed');
       e.preventDefault();
-      console.log(this.state); //post request with axios
+      console.log(this.state,'creating an item with this'); //post request with axios
       const item = this.state;
-     await axios
+      await axios
         .post(`http://localhost:4000/market-place/create`, { item })
         .then((res) => {
           console.log(res);
           console.log(res.data);
+        }).then(res => {
+          if (this.state.picture != null) {
+            const picture = this.state.picture;
+            console.log(picture, ' in handle submit');
+            //console.log(phonenum, description, profile_picture);
+
+            const image_picture = new FormData();
+
+            image_picture.append(
+              'myImage',
+              this.state.picture,
+              this.state.picture.name
+            );
+            const config = {
+              headers: {
+                'content-type': 'multipart/form-data',
+              },
+            };
+            console.log(this.state.picture, 'name of file');
+            axios
+              .post(
+                `http://localhost:4000/market-place/picture`,
+
+                //{ phonenum, description, profile_picture },
+
+                image_picture,
+                config
+                // {
+                //   onUploadProgress: (progressEvent) => {
+                //     console.log(
+                //       'Upload progress ' +
+                //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+                //         '%'
+                //     );
+                //   },
+                // }
+              )
+              .then((res) => {
+                console.log(res, 'this is the response');
+                console.log(res.data, 'this is res.data');
+                console.log(res.statusText);
+              });
+          }
         });
-        console.log('seee if picture is null', this.state.picture);
+      console.log('seee if picture is null', this.state.picture);
 
+      // if (this.state.picture != null) {
+      //   const picture = this.state.picture;
+      //   console.log(picture, ' in handle submit');
+      //   //console.log(phonenum, description, profile_picture);
 
+      //   const image_picture = new FormData();
 
-        // if (this.state.picture != null) {
-        //   const picture = this.state.picture;
-        //   console.log(picture, ' in handle submit');
-        //   //console.log(phonenum, description, profile_picture);
-    
-        //   const image_picture = new FormData();
-    
-        //   image_picture.append(
-        //     'myImage',
-        //     this.state.picture,
-        //     this.state.picture.name
-        //   );
-        //   const config = {
-        //     headers: {
-        //       'content-type': 'multipart/form-data',
-        //     },
-        //   };
-        //   console.log(this.state.picture, 'name of file');
-        //  await axios
-        //     .post(
-        //       `http://localhost:4000/picture`,
-    
-        //       //{ phonenum, description, profile_picture },
-    
-        //       image_picture,
-        //       config
-        //       // {
-        //       //   onUploadProgress: (progressEvent) => {
-        //       //     console.log(
-        //       //       'Upload progress ' +
-        //       //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-        //       //         '%'
-        //       //     );
-        //       //   },
-        //       // }
-        //     )
-        //     .then((res) => {
-        //       console.log(res, 'this is the response');
-        //       console.log(res.data, 'this is res.data');
-        //       console.log(res.statusText);
-        //     });
-        // }
-       window.location.reload(false);
+      //   image_picture.append(
+      //     'myImage',
+      //     this.state.picture,
+      //     this.state.picture.name
+      //   );
+      //   const config = {
+      //     headers: {
+      //       'content-type': 'multipart/form-data',
+      //     },
+      //   };
+      //   console.log(this.state.picture, 'name of file');
+      //  await axios
+      //     .post(
+      //       `http://localhost:4000/picture`,
+
+      //       //{ phonenum, description, profile_picture },
+
+      //       image_picture,
+      //       config
+      //       // {
+      //       //   onUploadProgress: (progressEvent) => {
+      //       //     console.log(
+      //       //       'Upload progress ' +
+      //       //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+      //       //         '%'
+      //       //     );
+      //       //   },
+      //       // }
+      //     )
+      //     .then((res) => {
+      //       console.log(res, 'this is the response');
+      //       console.log(res.data, 'this is res.data');
+      //       console.log(res.statusText);
+      //     });
+      // }
+      //window.location.reload(false);
     }
+
+
+
+
   };
 
+
   canBeSubmitted() {
-    const empty = validate(this.state.name, this.state.description);
+    const empty = validate(this.state.name, this.state.description,this.state.price,this.state.date,this.state.policy, this.state.insurance);
     const isDisabled = Object.keys(empty).some((x) => empty[x]);
     return !isDisabled;
   }
 
-  fileSelectedHandler = (e) => {
-    //console.log(e.target.files[0]);
-    this.setState({
-      image: e.currentTarget.value,
-    });
-  };
+  // fileSelectedHandler = (e) => {
+  //   //console.log(e.target.files[0]);
+  //   this.setState({
+  //     image: e.currentTarget.value,
+  //   });
+  // };
 
   onDateChange = (date) => this.setState({ date });
   loanForm() {
     let minimumDate = new Date();
     return (
       <Fragment>
+        <br />
+        <label>Set your insurance amount in case of damage</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.insuranceChangeHandler}
+        ></input>
+          <br />
         <label>
           <strong>
             Input the time and date that you want the item to be returned
@@ -179,8 +264,6 @@ class CreateListing extends Component {
           value={this.state.date}
           minDate={minimumDate}
         />
-
-        <br />
         <br />
         <label>
           <strong>Set loan policy</strong>
@@ -230,6 +313,17 @@ class CreateListing extends Component {
           step='0.01'
           max='2500'
           onChange={this.priceChangeHandler}
+        ></input>
+        <br />
+          <label>Set your insurance amount in case of damage</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.insuranceChangeHandler}
         ></input>
         <br />
         <br />
@@ -356,8 +450,8 @@ class CreateListing extends Component {
             {this.state.option === 'sale' || this.state.option === ''
               ? this.saleForm()
               : this.state.option === 'loan'
-              ? this.loanForm()
-              : this.rentForm()}
+                ? this.loanForm()
+                : this.rentForm()}
             <br />
             <br />
             <label>Upload an image</label>

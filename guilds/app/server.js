@@ -11,7 +11,7 @@ var flash = require('connect-flash');
 var session = require('express-session');
 //var passport = require('passport');
 var request = require('request');
-
+var morgan = require('morgan'); // For Logging
 var app = express();
 
 // ---------------------------STRIPE---------------------------
@@ -69,6 +69,7 @@ var app = express();
 // ----------------------STRIPE end---------------------------
 
 app.use(cors());
+app.use(morgan('combined'));
 let User = require('./lib/routes/users/users').User;
 // app.use(
 //   session({ secret: 'capstone', resave: 'false', saveUninitialized: 'false' })
@@ -102,7 +103,9 @@ app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users')); //signup
 app.use('/auth', require('./lib/routes/auth')); //orig auth but to login
-
+app.use('/forgotpassword', require('./lib/forgotPassword'));
+app.use('/reset', require('./lib/resetPassword'));
+//app.use('/updatePasswordViaEmail', require('./lib/updatePasswordViaEmail'));
 app.use('/payment', require('./lib/routes/marketplace/payment')); // payment
 
 // app.get('/auth', async (req, res) => {

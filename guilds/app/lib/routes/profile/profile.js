@@ -38,12 +38,19 @@ const upload = multer({
 // @route GET profile/me
 // @desc  Get logged in user profile
 // @access private
-router.get('/', auth, async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
   //route profile/me ?
   try {
+    idtouse = 0
+    console.log('getting user profile with id \n',req.params)
     const { email, password } = req.body;
-
-    profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
+    if(req.params.id == -1){
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    profile = await User.getUserById([idtouse]); //gets logged in users by tokenid
 
     console.log('Print profile', profile[0]);
     if (profile == 0) {
@@ -57,15 +64,70 @@ router.get('/', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
-router.get('/guilds', auth, async (req, res) => {
+//generic get request for the user
+router.get('/', auth, async (req, res) => {
+  //route profile/me ?
+  try{
+    clearedlisting = await Listing.freeListings(req,res)
+    profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
+    console.log('Print profile', profile[0]);
+    if (profile == 0) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: 'There is no profile for this user' }] }); //checks to see if the profile is valid
+    }
+    res.status(200).json(profile[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+//gets the users guild
+router.get('/guilds/:id', auth, async (req, res) => {
   //route profile/me ?
   try {
-    console.log('at get user guilds \n')
-    userguilds = await Guild.getAllUserGuilds([req.user.id]); //gets logged in users by tokenid
+    idtouse = 0
+    console.log('at get user guilds \n',req.params)
+    if(req.params.id == -1){
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    clearedlisting = await Listing.freeListings(req,res)
+    userguilds = await Guild.getAllUserGuilds([idtouse]); //gets logged in users by tokenid
 
     console.log('all user guilds', userguilds);
     res.status(200).json(userguilds);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+//Find and view someone elses profile
+router.get('/viewprofile/:query', auth, async (req, res) => {
+  //route profile/me ?
+  try {
+    console.log('at get another users profile \n',req.params.query)
+    user = await User.getUserById([req.params.query]); //gets logged in users by tokenid
+
+    console.log('the user profiles', user);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/search/:query', auth, async (req, res) => {
+  //route profile/me ?
+  try {
+    console.log('at search for a user \n',req.params.query)
+    users = await User.searchForUser([req.params.query]); //gets logged in users by tokenid
+
+    console.log('all users', users);
+    res.status(200).json(users);
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server Error');
@@ -152,6 +214,19 @@ router.post('/', auth, async (req, res) => {
   });
 });
 
+//Gets a profile matching the passed username
+router.get('/search/:query', auth,async (req, res, next) => {
+  console.log(req.params.query);
+    try {
+      console.log('seaching for a user with ',req.params.query)
+      const users = await User.searchForUser([req.params.query],res);
+      console.log('users with that name', users.rows.length);
+      res.status(200).json(users);
+    } catch (error) {
+      console.error('error searching for a user \n', error);
+    }
+    console.log('called search for user', req.params);
+});
 // router.post('/', function (req, res) {
 //   upload(req, res, function (err) {
 //     if (err instanceof multer.MulterError) {

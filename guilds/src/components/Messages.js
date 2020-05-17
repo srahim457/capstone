@@ -4,11 +4,12 @@ import {
   NavLink,
 } from 'react-router-dom';
 import './styles/Messages.css';
+import axios from "axios";
 
 class Messages extends Component {
   constructor() {
     super();
-    this.state ={
+    this.state = {
       search_key: '',
     }
 
@@ -18,11 +19,17 @@ class Messages extends Component {
   }
 
   searchChangeHandler = (e) => {
-    e.preventDefault();
     this.setState({
       search_key: e.target.value,
     });
   };
+  async componentDidMount() {
+    const response = await axios.get('http://localhost:4000/all-guilds/') // no route for messages currently using guilds
+}
+
+  onClickHandler = (e) => {
+
+  }
 
   render() {
     return (
@@ -34,7 +41,7 @@ class Messages extends Component {
               <input
                 type='text'
                 className='item-search-input'
-                placeholder='search for item'
+                placeholder='search for a user to chat with'
                 maxLength='200'
                 value={this.state.search_key}
                 onChange={this.searchChangeHandler}
@@ -45,7 +52,7 @@ class Messages extends Component {
                   pathname: '/messages/user-search-results',
                   data: this.state.search_key,
                 }}
-                className='yellow'
+                  className='yellow'
                 >
                   Search
                 </Link>

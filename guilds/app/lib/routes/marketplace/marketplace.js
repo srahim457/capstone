@@ -24,7 +24,7 @@ const upload = multer({
   limits: { fileSize: 1000000 },
 }).single('myImage');
 
-let  itemId;
+let itemId;
 
 // @route Post
 // @desc Route to create lisiting for user
@@ -35,8 +35,8 @@ router.post('/create', auth, async (req, res) => {
   console.log('current create req \n', req.body.item);
   try {
     //assumes req.body.item is the created object item
-    
-    
+
+
     var newItem = {
       item_name: req.body.item.name,
       item_desc: req.body.item.description,
@@ -53,8 +53,8 @@ router.post('/create', auth, async (req, res) => {
       return_by: req.body.item.date,
       policy: req.body.item.policy,
       total_price: req.body.item.price,
-      rent_amount: req.body.rent_amount,
-      //insurance_amount: req.body.insurance_amount,
+      rent_amount: req.body.item.price,
+      insurance_amount: req.body.item.insurance,
       lender_id: req.user.id,
     };
     console.log('created Itemid is', newListing.item_id);
@@ -85,20 +85,20 @@ router.post('/create', auth, async (req, res) => {
 // @route UPDATE /picture
 // @desc Update users profile picture
 // @access Private
-router.post('/create/picture', auth, async (req, res) => {
+router.post('/picture', auth, async (req, res) => {
   await upload(req, res, (err) => {
     //console.log('Request ---', req.body);
     //console.log('Request file ---', req.file); //Here you get file.
     /*Now do where ever you want to do*/
 
     let path = req.file.path;
-console.log(itemId, 'PAssed item id')
+    console.log(itemId, 'Passed item id')
     const imageObj = {
       id: itemId, //item id here instead
       image_picture: path,
     };
 
-    Listing.createItemImage([imageObj], res); 
+    Listing.createItemImage([imageObj], res);
     if (!err) {
       return res.sendStatus(200).end();
     }
@@ -107,10 +107,10 @@ console.log(itemId, 'PAssed item id')
 
 
 //Gets a listing matching the passed listing id
-router.get('/:listingid', auth,async (req, res, next) => {
-  console.log(req.params.listingid);
-  if (!Number.isInteger(req.params.listingid)) {
-    console.log('not a number');
+router.get('/:listingid', auth, async (req, res, next) => {
+  console.log(req.params.listingid,parseInt(req.params.listingid,10));
+  if (!Number.isInteger(parseInt(req.params.listingid,10))) {
+    console.log('not a number in /:listingid',typeof req.params.listingid );
     next();
   } else {
     try {
@@ -123,12 +123,25 @@ router.get('/:listingid', auth,async (req, res, next) => {
     } catch (error) {
       console.error('error retrieving listing by id \n', error);
     }
-    console.log('called get listing request by listing id', req.params);
+    console.log('called get listing request by listing id', req.params.listingid);
   }
+});
+//Gets a listing matching the passed name
+router.get('/search/:query', auth,async (req, res, next) => {
+  console.log(req.params.query);
+    try {
+      console.log('seaching for a listing',req.params.query)
+      const listing = await Listing.searchForListing([req.params.query],res);
+      console.log('listing result', listing);
+      res.status(200).json(listing);
+    } catch (error) {
+      console.error('error searching for a listing \n', error);
+    }
+    console.log('called search for listing', req.params);
 });
 
 //Borrows a listing
-router.get('/:listingid/borrow', auth,async (req, res) => {
+router.get('/:listingid/borrow', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     var ids = {
@@ -145,7 +158,7 @@ router.get('/:listingid/borrow', auth,async (req, res) => {
 });
 
 //Cancels borrowing a listing in case a user decides to change their mind
-router.get('/:listingid/borrow/cancel',auth, async (req, res) => {
+router.get('/:listingid/borrow/cancel', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     const listing = await Listing.removeBorrower([req.params.listingid], res);
@@ -158,11 +171,15 @@ router.get('/:listingid/borrow/cancel',auth, async (req, res) => {
 });
 
 //Marks a listing as reserved so only one person can see it
-router.get('/:listingid/reserve',auth, async (req, res) => {
+router.get('/:listingid/reserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
-    const listing = await Listing.reserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
+    console.log('reserving listing', req.params.listingid);
+    parameters ={
+      listingid: req.params.listingid,
+      user_id: req.user.id
+    }
+    const listing = await Listing.reserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error reserving listing by id \n ', error);
@@ -171,11 +188,15 @@ router.get('/:listingid/reserve',auth, async (req, res) => {
 });
 
 //Frees a reserved listing so others can click on it
-router.get('/:listingid/unreserve',auth, async (req, res) => {
+router.get('/:listingid/unreserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
-    const listing = await Listing.unreserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
+    console.log('unreserving listing',req.params.listingid);
+    parameters ={
+      listingid: req.params.listingid,
+      user_id : req.user.id
+    }
+    const listing = await Listing.unreserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error unreserving listing by id \n', error);
@@ -184,10 +205,11 @@ router.get('/:listingid/unreserve',auth, async (req, res) => {
 });
 
 //Gets all active listings
-router.get('/active', async (req, res) => {
+router.get('/active',auth, async (req, res) => {
   try {
     const activelistings = await Listing.getAllActiveListings(req, res);
     res.status(200).json(activelistings);
+    const unreservedlistings = await Listing.freeListings(req,res)
   } catch (error) {
     console.error('error getting all active listings \n', error);
   }
@@ -195,7 +217,7 @@ router.get('/active', async (req, res) => {
 });
 
 //Gets all listings
-router.get('/', auth,async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const alllistings = await Listing.getEveryListing(req, res);
     res.status(200).json(alllistings);
@@ -207,11 +229,19 @@ router.get('/', auth,async (req, res) => {
 
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-router.get('/borrowed',auth, async (req, res) => {
+router.get('/borrowed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all borrowed items \n', req.user.id);
+    idtouse = 0
+    if(req.params.id == -1){
+      console.log('no id detected reverting to current user')
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    console.log('getting all borrowed items for  \n', idtouse);
     const alllistings = await Listing.getAllBorrowerListings(
-      req.user.id,
+      idtouse,
       res
     );
     console.log('all borrowed listings \n', alllistings.length);
@@ -224,18 +254,38 @@ router.get('/borrowed',auth, async (req, res) => {
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-router.get('/listed',auth, async (req, res) => {
+router.get('/listed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all listed items \n', req.user.id);
+    idtouse = 0
+    if(req.params.id == -1){
+      idtouse = req.user.id
+      console.log('no id detected reverting to current user \n',idtouse)
+    }
+    else{
+      idtouse = req.params.id
+    }
     const alllistings = await Listing.getAllLenderListings(
-      req.user.id,
+      idtouse,
       res
     );
+    console.log('all listed listings \n', alllistings.length);
     res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all listed listings', error);
   }
   console.log('called get all listings with lender id');
+});
+
+//"Deletes" a listing 
+router.get('/delete/:id',auth, async (req, res) => {
+  try {
+    console.log('deleting listing with id  \n', req.params.id);
+    const deleted = await Listing.delete([req.params.id],res);
+    res.status(200).json(deleted);
+  } catch (error) {
+    console.error('error deleting a listing \n ', error);
+  }
+  console.log('called delete listing with id');
 });
 
 //example;

@@ -13,49 +13,60 @@ import {
 import './styles/profile.css';
 import EditListing from './EditListing';
 import Spinner from './layout/spinner_transparent.gif';
+import NotAvailable from '../images/noimageavailable.png';
+
+function parsePath(orig) {
+  let res = orig.substr(9);
+  res = '.' + res;
+  return res;
+}
 
 class Profile_Listed extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    console.log('props profile listed rec',this.props)
     this.state = {
       isLoading: true,
-      listings: [] ,
+      listings: [],
       error: null,
+      item: []
     }
-   this.onClickHandler = this.onClickHandler.bind(this);
+    this.onClickHandler = this.onClickHandler.bind(this);
   }
 
   async componentDidMount(){
-    const response = await axios.get('http://localhost:4000/market-place/listed')
-    console.log('listings', response)
-    this.setState({listings: response.data, isLoading: false})
+    const response = await axios.get('http://localhost:4000/market-place/listed/'+this.props.userid)
+    console.log('profile listings', response)
+    this.setState({ listings: response.data, isLoading: false })
   }
 
-    /*
-    // dont need to do two seperate requests
-    // kept here for future ref in case needed
-    const[firstResp] = await Promise.all([
-      axios.get('http://localhost:4000/market-place/listed')
-    ]);
-    const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
+  /*
+  // dont need to do two seperate requests
+  // kept here for future ref in case needed
+  const[firstResp] = await Promise.all([
+    axios.get('http://localhost:4000/market-place/listed')
+  ]);
+  const secondResp = await axios.get('http://localhost:4000/item/'+firstResp.data.item_id)
 
-    // Will need to loop and get request on every item for information for every item user has
-    console.log('first \n', firstResp, 'second \n', secondResp);
+  // Will need to loop and get request on every item for information for every item user has
+  console.log('first \n', firstResp, 'second \n', secondResp);
 
-    this.setState({
-      itemname: secondResp.data.item_name,
-      itemdesc: secondResp.data.item_desc,
-      itemimg: secondResp.data.image,
-      totalprice: firstResp.data.total_price,
-      rentaltype: firstResp.data.type
-    })
-    */
+  this.setState({
+    itemname: secondResp.data.item_name,
+    itemdesc: secondResp.data.item_desc,
+    itemimg: secondResp.data.image,
+    totalprice: firstResp.data.total_price,
+    rentaltype: firstResp.data.type
+  })
+  */
 
 
   testClick(item) {
     //window.location.reload(false)
     this.setState({ name: item.name });
     this.setState({ click: true });
+    this.setState({ item: item})
+
   }
 
   onClickHandler(e) {
@@ -65,8 +76,8 @@ class Profile_Listed extends Component {
 
   render() {
       /*routes to an edit listing page*/
-        if (this.state.click === true) {
-         return <EditListing name={this.state.name} />;
+        if (this.state.click === true && this.props.canedit) {
+         return <EditListing name={this.state.name}item={this.state.item} />;
         }
 
         {/* displays either an edit listing button (if not borrowed) or borrowed button*/}
@@ -84,46 +95,65 @@ class Profile_Listed extends Component {
         }
 
         //console.log(this.state,'\n current state',isLoading,listings)
+<<<<<<< HEAD
         const {isLoading} = this.state;
         console.log('this.state \n',this.state.listings)
+=======
+    //console.log('these are the props passed to listed \n ',this.props.userid,this.state)
+
+    const {isLoading} = this.state;
+   // console.log('this.state \n',this.state.listings)
+   //{console.log('test res',listing,listing.borrower_id)}
+>>>>>>> bd02fe99ff73dfd798f0596ebe7c4b1c45b350ac
     return (
       <React.Fragment>
       <div className='ItemListWrapper'>
         {!isLoading ? (
           Object.values(this.state.listings).map(listing => {
             return(
-              <div className='item' key={listing.item_id}>
-                {console.log('test res',listing,listing.borrower_id)}
-
+              <div className='item' key={listing.item_id}>                
                 <div className='itemImageWrapper'>
-                  <h1> img {listing.image} </h1>
+                {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
+                : <img src={NotAvailable} height="100" width="100"></img>}
                 </div>
                 <div className = 'itemInfoWrapper' key = {listing}>
                   <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
                   <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
                 <hr />
                 </div>
+<<<<<<< HEAD
                 <div className='editListingButtonWrapper'>
                 {/*if the borrower_id is not null, then change the button from edit to borrowed*/}
                 {displayBorrowedOrEditListingButton(listing)}
                 {/*
+=======
+               
+                {this.props.canedit == true ? (
+                   <div className='editListingButtonWrapper'>
+>>>>>>> bd02fe99ff73dfd798f0596ebe7c4b1c45b350ac
                   <button
-                  class='edit-button'
+                  className='edit-button'
                   onClick={this.testClick.bind(this, listing)}
                   >
                   Edit Listed Item
                   </button>
+<<<<<<< HEAD
                 */}
+=======
+                  </div>
+              ):
+              ( console.log(''))
+              }
+>>>>>>> bd02fe99ff73dfd798f0596ebe7c4b1c45b350ac
                 </div>
+              );
+            })
+          ) : (
+              <div className='spinner'>
+                <img src={Spinner} alt="loading..." />
               </div>
-            );
-          })
-        ) : (
-          <div className='spinner'>
-            <img src={Spinner} alt="loading..." />
-          </div>
-        )}
-      </div>
+            )}
+        </div>
       </React.Fragment>
     );
   }
