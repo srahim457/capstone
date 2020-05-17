@@ -68,9 +68,24 @@ class Profile_Listed extends Component {
         if (this.state.click === true) {
          return <EditListing name={this.state.name} />;
         }
+
+        {/* displays either an edit listing button (if not borrowed) or borrowed button*/}
+        const displayBorrowedOrEditListingButton = (listing)=>{
+          if (listing.borrower_id!=null){
+            return <button class="edit-button" >
+                  Complete Transaction with {listing.borrower_id}
+                </button>
+          }
+          else{
+            return <button class="edit-button" onClick={this.testClick.bind(this, listing)}>
+                  Edit this Listing
+                </button>
+          }
+        }
+
         //console.log(this.state,'\n current state',isLoading,listings)
-    const {isLoading} = this.state;
-    console.log('this.state \n',this.state.listings)
+        const {isLoading} = this.state;
+        console.log('this.state \n',this.state.listings)
     return (
       <React.Fragment>
       <div className='ItemListWrapper'>
@@ -90,17 +105,15 @@ class Profile_Listed extends Component {
                 </div>
                 <div className='editListingButtonWrapper'>
                 {/*if the borrower_id is not null, then change the button from edit to borrowed*/}
-                {listing.borrower_id != nulld
-                  ? this.saleForm()
-                  : this.state.option === 'loan'
-                  ? this.loanForm()
-                  : this.rentForm()}
+                {displayBorrowedOrEditListingButton(listing)}
+                {/*
                   <button
                   class='edit-button'
                   onClick={this.testClick.bind(this, listing)}
                   >
                   Edit Listed Item
                   </button>
+                */}
                 </div>
               </div>
             );
