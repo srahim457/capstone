@@ -53,8 +53,8 @@ router.post('/create', auth, async (req, res) => {
       return_by: req.body.item.date,
       policy: req.body.item.policy,
       total_price: req.body.item.price,
-      rent_amount: req.body.rent_amount,
-      //insurance_amount: req.body.insurance_amount,
+      rent_amount: req.body.item.price,
+      insurance_amount: req.body.item.insurance,
       lender_id: req.user.id,
     };
     console.log('created Itemid is', newListing.item_id);

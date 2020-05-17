@@ -150,9 +150,16 @@ class Payment extends Component {
               <br />
               Type: {this.props.listing_type}
               <br />
-              Insurance: {this.props.insurance}
+              {this.props.listing_type === 'loan' &&
+                  <label>Price: {this.props.price}</label>
+              }
+              {this.props.listing_type != 'loan' &&
+                 <label>Insurance: {this.props.insurance}</label>
+              }
               <br />
-              Price: {this.props.price}
+              {this.props.listing_type != 'loan' &&
+                  <label>Price: {this.props.price}</label>
+              }
               <br />
               {this.props.listing_type != 'sale' &&
               <label> Return By Date &amp; Time: {format(parseISO(this.props.return_date), 'MMMM do,yyyy H:mma')}</label>   
