@@ -68,7 +68,7 @@ class MarketPlace extends Component {
   // }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/active')
+    const response = await axios.get('http://localhost:4000/market-place/search/'+this.props.location.data)
     console.log('listings', response)
     this.setState({listings: response.data, isLoading: false})
   }

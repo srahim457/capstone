@@ -126,6 +126,19 @@ router.get('/:listingid', auth, async (req, res, next) => {
     console.log('called get listing request by listing id', req.params);
   }
 });
+//Gets a listing matching the passed name
+router.get('/search/:query', auth,async (req, res, next) => {
+  console.log(req.params.query);
+    try {
+      console.log('seaching for a listing',req.params.query)
+      const listing = await Listing.searchForListing([req.params.query],res);
+      console.log('listing result', listing);
+      res.status(200).json(listing);
+    } catch (error) {
+      console.error('error searching for a listing \n', error);
+    }
+    console.log('called search for listing', req.params);
+});
 
 //Borrows a listing
 router.get('/:listingid/borrow', auth, async (req, res) => {
@@ -207,11 +220,19 @@ router.get('/', auth, async (req, res) => {
 
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-router.get('/borrowed', auth, async (req, res) => {
+router.get('/borrowed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all borrowed items \n', req.user.id);
+    idtouse = 0
+    if(req.params.id == -1){
+      console.log('no id detected reverting to current user')
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    console.log('getting all borrowed items for  \n', idtouse);
     const alllistings = await Listing.getAllBorrowerListings(
-      req.user.id,
+      idtouse,
       res
     );
     console.log('all borrowed listings \n', alllistings.length);
@@ -224,13 +245,21 @@ router.get('/borrowed', auth, async (req, res) => {
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-router.get('/listed', auth, async (req, res) => {
+router.get('/listed/:id',auth, async (req, res) => {
   try {
-    console.log('getting all listed items \n', req.user.id);
+    idtouse = 0
+    if(req.params.id == -1){
+      idtouse = req.user.id
+      console.log('no id detected reverting to current user \n',idtouse)
+    }
+    else{
+      idtouse = req.params.id
+    }
     const alllistings = await Listing.getAllLenderListings(
-      req.user.id,
+      idtouse,
       res
     );
+    console.log('all listed listings \n', alllistings.length);
     res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all listed listings', error);

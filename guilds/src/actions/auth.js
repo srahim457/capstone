@@ -110,6 +110,7 @@ export const login = (email, password) => async (dispatch) => {
   const body = JSON.stringify({ email, password });
 
   try {
+    console.log('trying to authenticate',body)
     const res = await axios.post('/auth', body, config);
 
     dispatch({
