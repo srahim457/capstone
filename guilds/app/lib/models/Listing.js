@@ -124,7 +124,7 @@ Listing.getListingByListingID = async function (req, res) {
 // Shows the newests listings first 
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND borrower_id IS NULL ORDER by time_posted DESC");
     console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -173,9 +173,8 @@ Listing.getAllLenderListings = async function (req, res) {
 //Returns listing id
 Listing.addBorrower = async function (req, res) {
   try {
-    var d = new Date();
-    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].borrower_id, req[0].listing_id, d]);
     console.log('added a borrower to listing ', req[0].listing_id, '\n')
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].borrower_id, req[0].listing_id, req[0].datecompleted]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -240,7 +239,7 @@ Listing.freeListings = async function (req, res) {
 Listing.markCompletedSale = async function (req, res) {
   try {
     console.log('marking complete', req[0])
-    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, req[0].datecompleted, req[0].listing_id]);
+    const listing = await sql.query("UPDATE guilds.listings SET completed = 'T', time_sold_expired = ($1) WHERE id = ($2) RETURNING *", [req[0].datecompleted, req[0].listing_id]);
     console.log('marked listing completed \n', listing.rows[0])
     return listing.rows[0]
   } catch (error) {

@@ -100,6 +100,8 @@ class Payment extends Component {
       itemid: this.props.itemid,
       listingid: this.props.listingid,
       listing_type: this.props.listing_type,
+      return_date: this.props.return_date,
+      insurance: this.props.insurance,
       formatted_price: 0
     };
 
