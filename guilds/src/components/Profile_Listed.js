@@ -89,6 +89,12 @@ class Profile_Listed extends Component {
                 <hr />
                 </div>
                 <div className='editListingButtonWrapper'>
+                {/*if the borrower_id is not null, then change the button from edit to borrowed*/}
+                {listing.borrower_id != nulld
+                  ? this.saleForm()
+                  : this.state.option === 'loan'
+                  ? this.loanForm()
+                  : this.rentForm()}
                   <button
                   class='edit-button'
                   onClick={this.testClick.bind(this, listing)}
