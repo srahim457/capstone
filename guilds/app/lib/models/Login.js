@@ -77,6 +77,7 @@ Login.forgotPassword = async function (req, res) {
       [req.resetPasswordToken, curr_date.toDateString(), req[0].email]
     );
     console.log('set reset pw and reset pw expire token \n');
+    console.log(curr_date, 'curr date', req[0].email, 'email', req.resetPasswordToken, 'token');
     return login.rows[0].id;
   } catch (error) {
     console.log(error);
