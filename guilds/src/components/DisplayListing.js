@@ -22,7 +22,7 @@ function parsePath(orig) {
 class DisplayListing extends Component {
   constructor(props) {
     super(props);
-    console.log('this is the props for  displayed',props)
+    console.log('this is the props for  displayed', props)
 
     this.state = {
       name: '',
@@ -63,13 +63,13 @@ class DisplayListing extends Component {
   closeButton = (e) => {
     e.preventDefault();
     // return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
-    const response = axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/unreserve')
+    const response = axios.get('http://localhost:4000/market-place/' + this.props.listingid + '/unreserve')
     window.location.reload(false);
   }
 
   async componentDidMount() {
-    console.log(' display listing mounted',this.props)
-    const response = await axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/reserve')
+    console.log(' display listing mounted', this.props)
+    const response = await axios.get('http://localhost:4000/market-place/' + this.props.listingid + '/reserve')
   }
 
   render() {
@@ -97,9 +97,9 @@ class DisplayListing extends Component {
         insurance={this.props.insurance}
         listing_type={this.props.listing_type}
         price={this.props.total_price}
-        lenderid = {this.props.lenderid}
-        itemid = {this.props.itemid}
-        listingid = {this.props.listingid}
+        lenderid={this.props.lenderid}
+        itemid={this.props.itemid}
+        listingid={this.props.listingid}
       />;
     }
 
@@ -125,10 +125,10 @@ class DisplayListing extends Component {
                   src={parsePath(images)}
                   height='350'
                   width='400'
-                  alt=''
+                  alt={this.state.name}
                 ></img>
               ) : (
-                  <img src={noimage} height='350' width="400" ></img>
+                  <img src={noimage} height='350' width="400" alt={this.state.name} ></img>
                 )}
               <br />
               <label>Item Name: </label>
