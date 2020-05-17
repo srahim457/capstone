@@ -56,9 +56,12 @@ import NotFound from './layout/NotFound';
 
 import Payment from './Payment';
 import PaymentSuccess from './PaymentSuccess';
+// import ResetPassword from './ResetPassword';
+// import ForgotPassword from './ForgotPassword';
 
 import './styles/Navigation.css';
 import FindUser from './FindUser';
+
 
 //add & import routes within content div
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
@@ -83,7 +86,6 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <Route path='/market-place/search-results' component={MarketPlaceSearchResults} />
         <Route path='/all-guilds/search-results' component={AllGuildsSearchResults} />
         <Route path='/messages/user-search-results' component={UserSearchResults} />
-
       </div>
     </BrowserRouter>
   );

@@ -1,7 +1,6 @@
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var express = require('express');
-const morgan = require("morgan"); // Loggin
 
 const http = require('http');
 var io = require('socket.io');
@@ -15,7 +14,7 @@ var flash = require('connect-flash');
 var session = require('express-session');
 //var passport = require('passport');
 var request = require('request');
-
+var morgan = require('morgan'); // For Logging
 var app = express();
 
 const server = http.createServer(app);
@@ -73,6 +72,8 @@ const server = http.createServer(app);
 // });
 
 // ----------------------STRIPE end---------------------------
+
+app.use(cors());
 app.use(morgan('combined'));
 let User = require('./lib/routes/users/users').User;
 // app.use(
@@ -96,7 +97,7 @@ var path = require('path');
 app.use(flash());
 
 require('./lib/forgotPassword.js')(app);
-require('./lib/resetPassword.js')(app);
+// require('./lib/resetPassword.js')(app);
 
 //Init Middleware
 app.use(express.json({ extended: false }));
@@ -155,7 +156,7 @@ app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users')); //signup
 app.use('/auth', require('./lib/routes/auth')); //orig auth but to login
 //app.use('/forgotpassword', require('./lib/forgotPassword'));
-//app.use('/reset', require('./lib/resetPassword'));
+app.use('/reset', require('./lib/resetPassword'));
 //app.use('/updatePasswordViaEmail', require('./lib/updatePasswordViaEmail'));
 app.use('/payment', require('./lib/routes/marketplace/payment')); // payment
 

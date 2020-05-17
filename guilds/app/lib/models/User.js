@@ -135,10 +135,10 @@ User.createUser = async function (req, res) {
   try {
     var d = new Date();
     console.log('inserting new user now \n');
-    const username = req[0].firstname +' ' + req[0].lastname;
+    const username = req[0].firstname + ' ' + req[0].lastname;
     const userentry = await sql.query(
       'INSERT INTO guilds.users(first_name,last_name,email,username,creation_date) values($1,$2,$3,$4,$5) RETURNING *',
-      [req[0].firstname, req[0].lastname, req[0].email,username, d]
+      [req[0].firstname, req[0].lastname, req[0].email, username, d]
     );
     return userentry.rows;
   } catch (error) {
@@ -193,12 +193,12 @@ User.getUserByEmail = async function (req, res) {
 };
 User.searchForUser = async function (req, res) {
   try {
-    if(req === undefined){
+    if (req === undefined) {
       console.log('undefined search')
-  }
+    }
     const users = await sql.query(
       'Select * from guilds.users where username LIKE ($1)',
-      ['%' +req + '%']
+      ['%' + req + '%']
     );
     console.log('user found with usernames like  ', req, users.rows.length);
     return users.rows;
