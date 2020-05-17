@@ -38,7 +38,7 @@ Listing.createItem = async function (req, res) {
 //Returns created item id
 Listing.createItemImage = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image, req[0].id]);
+    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image_picture, req[0].id]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -200,7 +200,7 @@ Listing.removeBorrower = async function (req, res) {
 Listing.reserveListing = async function (req, res) {
   try {
     console.log('marked listing as reserved ', req[0], '\n')
-    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'T',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id,req[0].user_id]);
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'T',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id, req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -213,7 +213,7 @@ Listing.reserveListing = async function (req, res) {
 Listing.unreserveListing = async function (req, res) {
   try {
     console.log('marked listing as unreserved ', req[0], '\n')
-    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id,req[0].user_id]);
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id, req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -254,7 +254,7 @@ Listing.markCompletedSale = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
-    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *" [req, d]);
+    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *"[req, d]);
     console.log('Deleted listing \n ')
     return listing.rows
   } catch (error) {
