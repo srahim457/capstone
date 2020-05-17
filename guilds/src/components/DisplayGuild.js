@@ -21,7 +21,7 @@ class DisplayGuild extends Component {
   constructor(props) {
     super(props);
 
-    //console.log('displayguild props passed \n ',this.props)
+    console.log('displayguild props passed \n ',this.props)
 
     this.state = {
       name: '',
