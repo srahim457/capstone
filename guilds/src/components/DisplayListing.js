@@ -129,7 +129,7 @@ class DisplayListing extends Component {
 
     if (return_date != '') {
       //Its a sale -> no valid date
-      return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
+      return_date = format(parseISO(return_date), 'MMMM do,yyyy h:mma');
     }
     const { listing } = this.state.listing_type;
     return (

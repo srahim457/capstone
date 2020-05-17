@@ -66,7 +66,7 @@ class ChatMain extends React.Component {
   render() {
     return (
       <div className="container">
-        <h3>{this.props.targetname}</h3>
+        <h3 className="chat-header">{this.props.targetname}</h3>
         <Messages messages={this.state.messages} />
         <Chat onSend={this.sendHandler} />
       </div>

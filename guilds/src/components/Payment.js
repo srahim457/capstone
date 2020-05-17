@@ -164,7 +164,7 @@ class Payment extends Component {
               }
               <br />
               {this.props.listing_type != 'sale' &&
-              <label> Return By Date &amp; Time: {format(parseISO(this.props.return_date), 'MMMM do,yyyy H:mma')}</label>   
+              <label> Return By Date &amp; Time: {format(parseISO(this.props.return_date), 'MMMM do,yyyy h:mma')}</label>   
               }            
               <br />
               {/* {this.state.greeting} */}

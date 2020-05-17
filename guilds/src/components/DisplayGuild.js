@@ -45,7 +45,6 @@ class DisplayGuild extends Component {
   }
 
   async componentDidMount(){
-
     let guildmasterinfo;    
     const response = await axios.get('http://localhost:4000/profile/'+this.props.guildmaster)
     this.setState({ guildmasterinfo: response.data, isLoading: false })

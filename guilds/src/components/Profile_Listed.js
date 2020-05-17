@@ -126,6 +126,7 @@ class Profile_Listed extends Component {
                 <div className = 'itemInfoWrapper' key = {listing}>
                   <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
                   <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
+                  <h1 className='itemInfoField'> Time Listed: {format(parseISO(listing.time_posted), 'MMMM do,yyyy h:mma')}</h1>
                 <hr />
                 </div>
                 <div className='editListingButtonWrapper'>
