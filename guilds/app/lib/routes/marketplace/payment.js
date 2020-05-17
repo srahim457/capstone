@@ -3,12 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser'); // already declared
 const exphbs = require('express-handlebars');
 let Listing = require('../../models/Listing').Listing;
+let Payment = require('../../models/Payments').Payment;
 
 const cors = require("cors");
 const stripe = require("stripe")("sk_test_zlDbmmvqhO05kEFUcfFDRzGX00yMAVDGIv");
 const { uuid } = require("uuidv4");
 
 const app = express();
+
+const auth = require('../../middleware/auth');
 
 // middleware
 app.use(express.json());
@@ -19,13 +22,14 @@ app.get("/", (req, res) => {
   res.send("Add your Stripe Secret Key to the .require('stripe') statement!");
 });
 
+
 // post payment to Stripe
-app.post('/charge', async (req, res) => {
-  console.log("Request:", req.body);
+app.post('/charge', auth, async (req, res) => {
+  console.log(req.user.id,"Request:", req.body);
 
   let error;
   let status;
-  try {
+  try {    
     const { product, token } = req.body;
 
     const customer = await stripe.customers.create({
@@ -58,6 +62,17 @@ app.post('/charge', async (req, res) => {
     );
     console.log("Charge:", { charge });
     status = "success";
+
+    final_charge = {
+      charge: charge,
+      borrower_id: req.user.id, // a lender is never going to be paying for something
+      listing_id: product.listingid,
+      listing_type: product.listing_type,
+      lender_id: product.lenderid
+    }
+
+    payresult = await Payment.newPayment([final_charge],res)
+    console.log('created payment in db')
   } catch (error) {
     console.error("Error:", error);
     status="failure";
