@@ -29,6 +29,7 @@ class Profile_Listed extends Component {
       isLoading: true,
       listings: [],
       error: null,
+      item: []
     }
     this.onClickHandler = this.onClickHandler.bind(this);
   }
@@ -64,6 +65,8 @@ class Profile_Listed extends Component {
     //window.location.reload(false)
     this.setState({ name: item.name });
     this.setState({ click: true });
+    this.setState({ item: item})
+
   }
 
   onClickHandler(e) {
@@ -74,7 +77,7 @@ class Profile_Listed extends Component {
   render() {
       /*routes to an edit listing page*/
         if (this.state.click === true && this.props.canedit) {
-         return <EditListing name={this.state.name} />;
+         return <EditListing name={this.state.name}item={this.state.item} />;
         }
         //console.log(this.state,'\n current state',isLoading,listings)
     //console.log('these are the props passed to listed \n ',this.props.userid,this.state)

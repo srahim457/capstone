@@ -147,7 +147,7 @@ Listing.getEveryListing = async function (req, res) {
 //Takes in a borrower id
 Listing.getAllBorrowerListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1) ORDER BY return_by DESC', [req]);
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1) AND L.deleted <> 'T' ORDER BY return_by DESC", [req]);
     console.log('number of listings under borrowerid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -160,7 +160,7 @@ Listing.getAllBorrowerListings = async function (req, res) {
 //This became an inner join to avoid a get request per item 5/10
 Listing.getAllLenderListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1)', [req]);
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) AND L.deleted <> 'T'", [req]);
     console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -253,7 +253,8 @@ Listing.markCompletedSale = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
-    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *" [req, d]);
+    console.log('deleting a listing with item id',req,d)
+    const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *" [req]);
     console.log('Deleted listing \n ')
     return listing.rows
   } catch (error) {

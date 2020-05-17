@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import DateTimePicker from 'react-datetime-picker';
+import axios from "axios";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 /*install this stuff for the confirmation pop-ups:
       npm install react-confirm-alert --save
@@ -19,6 +20,7 @@ also there is a delete button to delete the listing entirely
 class EditListing extends Component {
   constructor(props) {
     super(props);
+    console.log('edit listing props\n', props)
 
     this.state = {
       name: '',
@@ -68,9 +70,11 @@ class EditListing extends Component {
     });
   };
 
-  handleDeletion() {
-    this.setState({ delete_item: true });
+  async handleDeletion() {
     window.location.reload(false);
+    console.log('at delete \n', this.props.item)
+    const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+this.props.item.item_id)
+    this.setState({ delete_item: true });
   }
 
   delete() {
@@ -212,13 +216,12 @@ class EditListing extends Component {
     );
   }
   render() {
-    const { name } = this.props;
     return (
       // <div>{this.props.children}</div>
-
+      
       <div className='container-parent'>
         <div className='container'>
-          <h1 className='title'>Edit Listing: {name} </h1>
+          <h1 className='title'>Edit Listing: {this.props.item.item_name} </h1>
           <div className='button-wrapper'>
             <button className='close-button' onClick={this.reloadPage}>
               X
@@ -231,7 +234,7 @@ class EditListing extends Component {
               <input
                 type='text'
                 className='form-input'
-                placeholder={this.state.name}
+                placeholder={this.props.item.item_name}
                 maxLength='50'
                 value={this.state.name}
                 onChange={this.itemNameChangeHandler}
@@ -248,7 +251,7 @@ class EditListing extends Component {
                 maxlength='180'
                 rows='5'
                 cols='40'
-                value={this.state.description}
+                value={this.props.item.item_desc}
                 onChange={this.descriptionChangeHandler}
               />
             </div>
@@ -302,8 +305,8 @@ class EditListing extends Component {
               onChange={this.pictureChangeHandler}
             />
           </form>
-          <button>Submit</button>
-          <button onClick={this.delete}>Delete Listing</button>
+          <button className='submit-button'>Submit</button>
+          <button className='submit-button' onClick={this.delete}>Delete Listing</button>
         </div>
       </div>
     );
