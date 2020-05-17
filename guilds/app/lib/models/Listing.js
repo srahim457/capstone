@@ -69,7 +69,7 @@ Listing.createLoanListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating loan listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *', [req[0].item_id, d, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F', 'loan', 'F', 'F']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired,type,deleted,reserved,insurance_amount) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *', [req[0].item_id, d, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F', 'loan', 'F', 'F',req[0].insurance_amount]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -83,7 +83,7 @@ Listing.createRentalListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating rental listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F', 'rental', 'F', 'F']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired,type,deleted,reserved,insurance_amount) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F', 'rental', 'F', 'F',req[0].insurance_amount]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -124,7 +124,7 @@ Listing.getListingByListingID = async function (req, res) {
 // Shows the newests listings first 
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND borrower_id IS NULL ORDER by time_posted DESC");
     console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -147,7 +147,7 @@ Listing.getEveryListing = async function (req, res) {
 //Takes in a borrower id
 Listing.getAllBorrowerListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1)', [req]);
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1) AND L.deleted <> 'T' ORDER BY return_by DESC", [req]);
     console.log('number of listings under borrowerid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -160,7 +160,7 @@ Listing.getAllBorrowerListings = async function (req, res) {
 //This became an inner join to avoid a get request per item 5/10
 Listing.getAllLenderListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) ORDER BY L.time_posted DESC', [req]);
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) AND L.deleted <> 'T' ORDER BY L.time_posted DESC", [req]);
     console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -173,9 +173,8 @@ Listing.getAllLenderListings = async function (req, res) {
 //Returns listing id
 Listing.addBorrower = async function (req, res) {
   try {
-    var d = new Date();
-    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].borrower_id, req[0].listing_id, d]);
     console.log('added a borrower to listing ', req[0].listing_id, '\n')
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].borrower_id, req[0].listing_id, req[0].datecompleted]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -240,7 +239,7 @@ Listing.freeListings = async function (req, res) {
 Listing.markCompletedSale = async function (req, res) {
   try {
     console.log('marking complete', req[0])
-    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, req[0].datecompleted, req[0].listing_id]);
+    const listing = await sql.query("UPDATE guilds.listings SET completed = 'T', time_sold_expired = ($1) WHERE id = ($2) RETURNING *", [req[0].datecompleted, req[0].listing_id]);
     console.log('marked listing completed \n', listing.rows[0])
     return listing.rows[0]
   } catch (error) {
@@ -254,10 +253,12 @@ Listing.markCompletedSale = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
-    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *"[req, d]);
-    console.log('Deleted listing \n ')
+    console.log('deleting a listing with item id',req)
+    const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *",req);
+    console.log('Deleted listing \n ',listing.rows)
     return listing.rows
   } catch (error) {
+    console.log(error)
     res.status(400)
   }
 };

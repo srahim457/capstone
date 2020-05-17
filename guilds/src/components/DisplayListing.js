@@ -22,7 +22,6 @@ function parsePath(orig) {
 class DisplayListing extends Component {
   constructor(props) {
     super(props);
-    console.log('this is the props for  displayed',props)
 
     this.state = {
       name: '',
@@ -68,7 +67,6 @@ class DisplayListing extends Component {
   }
 
   async componentDidMount() {
-    console.log(' display listing mounted',this.props)
     const response = await axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/reserve')
   }
 
@@ -90,6 +88,32 @@ class DisplayListing extends Component {
 
     //for redirecting to Payment page AL
     if (this.state.open === true) {
+      console.log(this.props, '\n','listing type to redirect to payment ', this.props.listing_type)
+      if(this.props.listing_type == 'loan'){
+        return <Payment
+        name={this.props.name}
+        description={this.props.description}
+        return_date={this.props.return_date}
+        listing_type={this.props.listing_type}
+        price={this.props.insurance}
+        lenderid = {this.props.lenderid}
+        itemid = {this.props.itemid}
+        listingid = {this.props.listingid}
+      />;
+      }
+      if(this.props.listing_type == 'rental'){
+        return <Payment
+        name={this.props.name}
+        description={this.props.description}
+        insurance={this.props.insurance}
+        return_date={this.props.return_date}
+        listing_type={this.props.listing_type}
+        price={this.props.rent_amount}
+        lenderid = {this.props.lenderid}
+        itemid = {this.props.itemid}
+        listingid = {this.props.listingid}
+      />;
+      }
       return <Payment
         name={this.props.name}
         description={this.props.description}
@@ -108,7 +132,6 @@ class DisplayListing extends Component {
       return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
     }
     const { listing } = this.state.listing_type;
-    console.log(this.props, 'props', return_date)
     return (
       <div className='container-parent'>
         <div className='container'>
@@ -149,10 +172,10 @@ class DisplayListing extends Component {
               }
               {listing_type === 'rental' &&
                 <div>
+                  <label>Rent Amount :{rent_amount}</label>
+                  <br />
                   <label>Insurance Amount: </label>
                   {insurance}
-                  <br />
-                  <label>Rent Amount :{rent_amount}</label>
                   <br />
                   <label>Return time and date: {return_date}</label>
                 </div>

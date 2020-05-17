@@ -83,7 +83,7 @@ export default class ResetPassword extends Component {
     } = this.props;
     try {
       const response = await axios.put(
-        'http://localhost:3003/updatePasswordViaEmail',
+        'http://localhost:4000/updatePasswordViaEmail', //changed this localhost:4000
         {
           username,
           password,

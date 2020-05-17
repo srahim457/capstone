@@ -49,12 +49,14 @@ import MarketPlaceSearchResults from '../MarketPlaceSearch';
 import AllGuildsSearchResults from '../AllGuildsSearch';
 import Messages from '../FindUser';
 import UserSearchResults from '../UserSearch';
+import ResetPassword from '../ResetPassword';
 
 import PrivateRoute from '../routing/PrivateRoute';
 
 import Payment from '../Payment';
 import PaymentSuccess from '../PaymentSuccess';
 import FindUser from '../FindUser';
+import ForgotPassword from '../ForgotPassword';
 
 //Might import Navbar in here instead
 
@@ -64,6 +66,9 @@ const Routes = (props) => {
       <Switch>
         <Route exact path='/' component={Signup} />
         <Route path='/' component={Login} />
+        <Route component={NotFound} />
+        <Route path='/reset' component={ResetPassword} />
+        <Route path='/forgot-password' component={ForgotPassword} />
         <PrivateRoute path='/profile' component={Profile} />
         <PrivateRoute exact path='/market-place' component={MarketPlace} />
         <PrivateRoute exact path='/all-guilds' component={AllGuilds} />
@@ -76,8 +81,7 @@ const Routes = (props) => {
         {/* <Route exact path='/profile/:id' component={Profile} />
         <PrivateRoute exact path='/edit-profile' component={ProfileForm} />
         <PrivateRoute exact path='/posts' component={Posts} />
-  <PrivateRoute exact path='/posts/:id' component={Post} />*/}
-        <Route component={NotFound} />
+        <PrivateRoute exact path='/posts/:id' component={Post} />*/}
       </Switch>
     </section>
   );
