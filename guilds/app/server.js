@@ -145,14 +145,17 @@ socketIo.on('connection', socket => {
   });
 });
 
+require('./lib/forgotPassword.js')(app);
+require('./lib/resetPassword.js')(app);
+
 //Defining routes
 app.use('/market-place', require('./lib/routes/marketplace/marketplace'));
 app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users')); //signup
 app.use('/auth', require('./lib/routes/auth')); //orig auth but to login
-app.use('/forgotpassword', require('./lib/forgotPassword'));
-app.use('/reset', require('./lib/resetPassword'));
+//app.use('/forgotpassword', require('./lib/forgotPassword'));
+//app.use('/reset', require('./lib/resetPassword'));
 //app.use('/updatePasswordViaEmail', require('./lib/updatePasswordViaEmail'));
 app.use('/payment', require('./lib/routes/marketplace/payment')); // payment
 
