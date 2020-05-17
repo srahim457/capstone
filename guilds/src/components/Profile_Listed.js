@@ -22,8 +22,8 @@ function parsePath(orig) {
 }
 
 class Profile_Listed extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       isLoading: true,
       listings: [],
@@ -32,7 +32,7 @@ class Profile_Listed extends Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     const response = await axios.get('http://localhost:4000/market-place/listed/'+this.props.userid)
     console.log('listings', response)
     this.setState({ listings: response.data, isLoading: false })

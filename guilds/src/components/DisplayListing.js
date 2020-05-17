@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './styles/CreateListing.css';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, fromUnixTime } from 'date-fns';
 import { Redirect } from 'react-router-dom';
 import Payment from './Payment';
 import noimage from '../images/noimageavailable.png';
+import axios from 'axios';
 
 {
   /*uses the same css file as create listing,
@@ -59,9 +60,16 @@ class DisplayListing extends Component {
     this.setState({ open: true });
   }
 
-  closeButton() {
+  closeButton = (e) => {
+    e.preventDefault();
     // return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
+    const response = axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/unreserve')
     window.location.reload(false);
+  }
+
+  async componentDidMount() {
+    console.log(' display listing mounted',this.props)
+    const response = await axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/reserve')
   }
 
   render() {
@@ -73,7 +81,8 @@ class DisplayListing extends Component {
       return_date,
       total_price,
       rent_amount,
-      images
+      images,
+      listingid
     } = this.props;
     // types are sale, loan, rental
     //console.log('type of listing display', listing_type,this.props)
@@ -89,15 +98,14 @@ class DisplayListing extends Component {
         listing_type={this.props.listing_type}
         price={this.props.total_price}
         lenderid = {this.props.lenderid}
+        itemid = {this.props.itemid}
+        listingid = {this.props.listingid}
       />;
     }
 
     if (return_date != '') {
       //Its a sale -> no valid date
       return_date = format(parseISO(return_date), 'MMMM do,yyyy H:mma');
-    }
-    if (listing_type == 'sale') {
-      console.log('sale detected')
     }
     const { listing } = this.state.listing_type;
     console.log(this.props, 'props', return_date)

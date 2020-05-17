@@ -3,6 +3,11 @@ import axios from 'axios';
 
 import './styles/Home.css';
 
+const styleTitle = {
+  fontFamily: 'fantasy',
+  color: 'black'
+};
+
 class ForgotPassword extends Component {
   constructor() {
     super();
@@ -32,7 +37,7 @@ class ForgotPassword extends Component {
     } else {
       try {
         const response = await axios.post(
-          'http://localhost:4000/forgotPassword',
+          'http://localhost:4000/forgotpassword',
           {
             email,
           }
@@ -64,7 +69,8 @@ class ForgotPassword extends Component {
     return (
       <div>
         <form onSubmit={this.sendEmail}>
-          <label className='recovery'>Enter your email :</label>
+          <h1 style={styleTitle}>Forgot Password</h1>
+          <label className='recovery' style={styleTitle}> <strong>Enter your email </strong> :</label>
           <input
             type='email'
             id='email'
@@ -74,11 +80,11 @@ class ForgotPassword extends Component {
             onChange={this.ChangeHandler}
             placeholder='Email Address'
           ></input>
-          <button onClick={this.sendEmail}>Submit</button>
+          <button className='submit-button' onClick={this.sendEmail}>Submit</button>
 
           {showNullError && (
             <div>
-              <p>The email address cannot be null.</p>
+              <p style={styleTitle}>The email address cannot be empty.</p>
             </div>
           )}
           {showError && (

@@ -38,7 +38,6 @@ Listing.createItem = async function (req, res) {
 //Returns created item id
 Listing.createItemImage = async function (req, res) {
   try {
-
     const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image, req[0].id]);
     return listing.rows[0].id
   } catch (error) {
@@ -126,7 +125,7 @@ Listing.getListingByListingID = async function (req, res) {
 Listing.getAllActiveListings = async function (req, res) {
   try {
     const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
-    console.log('number of active listings are ', listing.rows.length, '\n', listing.rows)
+    console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
     console.log(error)
@@ -175,7 +174,7 @@ Listing.getAllLenderListings = async function (req, res) {
 Listing.addBorrower = async function (req, res) {
   try {
     var d = new Date();
-    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].user_id, req[0].listing_id, d]);
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].borrower_id, req[0].listing_id, d]);
     console.log('added a borrower to listing ', req[0].listing_id, '\n')
     return listing.rows[0].id
   } catch (error) {
@@ -200,36 +199,50 @@ Listing.removeBorrower = async function (req, res) {
 //Takes in a listing id only
 Listing.reserveListing = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET reserved = "T" where id = ($1) RETURNING *', [req]);
-    console.log('marked listing as reserved ', req, '\n')
+    console.log('marked listing as reserved ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'T',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id,req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
-    res.status(400);;
+    res.status(400);
   }
 };
+
 //Unreserves the listing
 //Takes in a listing id only
 Listing.unreserveListing = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET reserved = "F" where id = ($1) RETURNING *', [req]);
-    console.log('marked listing as unreserved ', req, '\n')
+    console.log('marked listing as unreserved ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id,req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);;
   }
 };
+
+//Unreserves the listing
+//Takes in a listing id only
+Listing.freeListings = async function (req, res) {
+  try {
+    console.log('unreserving all listings belonging to this ', req.user.id, '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = (null) where id = ($1) RETURNING *", [req.user.id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);;
+  }
+};
+
 // Updates the listing to be marked completed
 // Takes in the completed status,time,listing_id
 // Returns listing id
-Listing.markCompleted = async function (req, res) {
+Listing.markCompletedSale = async function (req, res) {
   try {
-    var d = new Date();
     console.log('marking complete', req[0])
-    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, d, req[0].listing_id]);
+    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, req[0].datecompleted, req[0].listing_id]);
     console.log('marked listing completed \n', listing.rows[0])
-    return listing.rows[0].id
+    return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);

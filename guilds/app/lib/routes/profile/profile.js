@@ -68,6 +68,7 @@ router.get('/:id', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
   //route profile/me ?
   try{
+    clearedlisting = await Listing.freeListings(req,res)
     profile = await User.getUserById([req.user.id]); //gets logged in users by tokenid
     console.log('Print profile', profile[0]);
     if (profile == 0) {
@@ -93,9 +94,10 @@ router.get('/guilds/:id', auth, async (req, res) => {
     else{
       idtouse = req.params.id
     }
+    clearedlisting = await Listing.freeListings(req,res)
     userguilds = await Guild.getAllUserGuilds([idtouse]); //gets logged in users by tokenid
 
-    console.log('all user guilds', userguilds);
+    //console.log('all user guilds', userguilds);
     res.status(200).json(userguilds);
   } catch (error) {
     console.error(error.message);
@@ -124,7 +126,7 @@ router.get('/search/:query', auth, async (req, res) => {
     console.log('at search for a user \n',req.params.query)
     users = await User.searchForUser([req.params.query]); //gets logged in users by tokenid
 
-    console.log('all users', users);
+    console.log('Total users found', users.length);
     res.status(200).json(users);
   } catch (error) {
     console.error(error.message);
@@ -210,6 +212,16 @@ router.post('/', auth, async (req, res) => {
       return res.sendStatus(200).end();
     }
   });
+});
+
+//saves the user's message
+router.post('/message/create', auth, async (req, res) => {
+  console.log(' just got a create message request', req.body)
+});
+
+//updates the user chain of messages
+router.put('/message/update', auth, async (req, res) => {
+
 });
 
 //Gets a profile matching the passed username

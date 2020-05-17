@@ -28,7 +28,8 @@ class AllGuilds extends Component {
       isLoading: true,
       description: '',
       search_key: '',
-      images: null
+      picture: null,
+      name: ''
     };
     this.onClickHandler = this.onClickHandler.bind(this);
     this.searchChangeHandler = this.searchChangeHandler.bind(this);
@@ -51,7 +52,7 @@ class AllGuilds extends Component {
     this.setState({ description: item.desc });
     this.setState({ guildmaster: item.guildmaster });
     this.setState({ open: true });
-    this.setState({ images: item.picture }); //added
+    this.setState({ picture: item.picture }); //added
   }
 
   async componentDidMount() {
@@ -67,15 +68,14 @@ class AllGuilds extends Component {
     }
 
     if (this.state.open === true) {
-      console.log(this.state, 'what im passing', this.state.guilds[0])
       return (
         <DisplayGuild
-          name={this.state.guilds[0].name}
-          description={this.state.guilds[0].guild_desc}
+          name={this.state.name}
+          description={this.state.description}
 
-          picture={this.state.guilds[0].picture}
-        // could pull first member of guild
-        //guildmaster={this.state.guildmaster}
+          picture={this.state.picture}
+          // could pull first member of guild
+          guildmaster={this.state.guildmaster}
         />
       );
     }
@@ -87,7 +87,7 @@ class AllGuilds extends Component {
         <h1 className='title'>All Guilds</h1>
         <div className='GuildBoard'>
           <div className='addGuildsButtonWrapper'>
-            <button class='add-button' onClick={this.onClickHandler}>
+            <button className='add-button' onClick={this.onClickHandler}>
               Add New Guild
             </button>
           </div>
@@ -101,7 +101,7 @@ class AllGuilds extends Component {
               value={this.state.search_key}
               onChange={this.searchChangeHandler}
             ></input>
-            <button class='search-button'>
+            <button className='search-button'>
               <Link to={{
                 pathname: '/all-guilds/search-results',
                 data: this.state.search_key,
@@ -112,7 +112,6 @@ class AllGuilds extends Component {
               </Link>
             </button>
           </div>
-          {console.log('test res', this.state.guilds)}
           <React.Fragment>
             {!isLoading ? (
               Object.values(this.state.guilds).map(guild => {

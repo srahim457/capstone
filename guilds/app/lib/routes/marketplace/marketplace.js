@@ -53,8 +53,8 @@ router.post('/create', auth, async (req, res) => {
       return_by: req.body.item.date,
       policy: req.body.item.policy,
       total_price: req.body.item.price,
-      rent_amount: req.body.rent_amount,
-      //insurance_amount: req.body.insurance_amount,
+      rent_amount: req.body.item.price,
+      insurance_amount: req.body.item.insurance,
       lender_id: req.user.id,
     };
     console.log('created Itemid is', newListing.item_id);
@@ -92,7 +92,7 @@ router.post('/picture', auth, async (req, res) => {
     /*Now do where ever you want to do*/
 
     let path = req.file.path;
-    console.log(itemId, 'PAssed item idnj jdnjsnjfgnsl')
+    console.log(itemId, 'Passed item id')
     const imageObj = {
       id: itemId, //item id here instead
       image_picture: path,
@@ -108,9 +108,9 @@ router.post('/picture', auth, async (req, res) => {
 
 //Gets a listing matching the passed listing id
 router.get('/:listingid', auth, async (req, res, next) => {
-  console.log(req.params.listingid);
-  if (!Number.isInteger(req.params.listingid)) {
-    console.log('not a number');
+  console.log(req.params.listingid,parseInt(req.params.listingid,10));
+  if (!Number.isInteger(parseInt(req.params.listingid,10))) {
+    console.log('not a number in /:listingid',typeof req.params.listingid );
     next();
   } else {
     try {
@@ -123,7 +123,7 @@ router.get('/:listingid', auth, async (req, res, next) => {
     } catch (error) {
       console.error('error retrieving listing by id \n', error);
     }
-    console.log('called get listing request by listing id', req.params);
+    console.log('called get listing request by listing id', req.params.listingid);
   }
 });
 //Gets a listing matching the passed name
@@ -174,8 +174,12 @@ router.get('/:listingid/borrow/cancel', auth, async (req, res) => {
 router.get('/:listingid/reserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
-    const listing = await Listing.reserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
+    console.log('reserving listing', req.params.listingid);
+    parameters ={
+      listingid: req.params.listingid,
+      user_id: req.user.id
+    }
+    const listing = await Listing.reserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error reserving listing by id \n ', error);
@@ -187,8 +191,12 @@ router.get('/:listingid/reserve', auth, async (req, res) => {
 router.get('/:listingid/unreserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
-    const listing = await Listing.unreserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
+    console.log('unreserving listing',req.params.listingid);
+    parameters ={
+      listingid: req.params.listingid,
+      user_id : req.user.id
+    }
+    const listing = await Listing.unreserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error unreserving listing by id \n', error);
@@ -197,10 +205,11 @@ router.get('/:listingid/unreserve', auth, async (req, res) => {
 });
 
 //Gets all active listings
-router.get('/active', async (req, res) => {
+router.get('/active',auth, async (req, res) => {
   try {
     const activelistings = await Listing.getAllActiveListings(req, res);
     res.status(200).json(activelistings);
+    const unreservedlistings = await Listing.freeListings(req,res)
   } catch (error) {
     console.error('error getting all active listings \n', error);
   }
@@ -265,6 +274,19 @@ router.get('/listed/:id',auth, async (req, res) => {
     console.error('error getting all listed listings', error);
   }
   console.log('called get all listings with lender id');
+});
+
+//"Deletes" a listing 
+router.get('/delete/:id',auth, async (req, res) => {
+  try {
+    console.log('deleting listing with id  \n', req.params.id);
+    const deleted = await Listing.delete([req.params.id],res);
+   // console.log('deleted result \n ', deleted)
+    res.status(200).json(deleted);
+  } catch (error) {
+    console.error('error deleting a listing \n ', error);
+  }
+  console.log('called delete listing with id');
 });
 
 //example;
