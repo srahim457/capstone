@@ -3,7 +3,7 @@ import './styles/profile.css';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 import Spinner from './layout/spinner_transparent.gif';
-import noimage from '../images/noimageavailable.png';
+import NotAvailable from '../images/noimageavailable.png';
 
 function parsePath(orig) {
   let res = orig.substr(9);
@@ -40,10 +40,9 @@ class Profile_Borrowed extends Component {
           Object.values(this.state.listings).map((listing) => {
             return (
               <div className='item' key={listing.item_id}>
-                <div className='itemImageWrapper'>
-
+                <div className='borrowedItemImageWrapper'>
                   {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
-                    : <img src={noimage} height="100" width="100"></img>}
+                    : <img src={NotAvailable} height="100" width="100"></img>}
                 </div>
                 <div className='itemInfoWrapper' key={listing}>
                   <h1 className='itemInfoField'> Name: {listing.item_name}</h1>

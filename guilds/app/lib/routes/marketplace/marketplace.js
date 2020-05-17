@@ -276,7 +276,7 @@ router.get('/listed/:id',auth, async (req, res) => {
   console.log('called get all listings with lender id');
 });
 
-//"Deletes" a listing 
+//"Deletes" a listing
 router.get('/delete/:id',auth, async (req, res) => {
   try {
     console.log('deleting listing with id  \n', req.params.id);

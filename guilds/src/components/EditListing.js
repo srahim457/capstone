@@ -75,6 +75,7 @@ class EditListing extends Component {
     const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+this.props.item.item_id)
     this.setState({ delete_item: true });
     window.location.reload(false);
+    console.log('at delete \n', this.props.item)
   }
 
   delete() {
@@ -218,7 +219,7 @@ class EditListing extends Component {
   render() {
     return (
       // <div>{this.props.children}</div>
-      
+
       <div className='container-parent'>
         <div className='container'>
           <h1 className='title'>Edit Listing: {this.props.item.item_name} </h1>
@@ -251,7 +252,7 @@ class EditListing extends Component {
                 maxlength='180'
                 rows='5'
                 cols='40'
-                value={this.state.description}
+                value={this.props.item.item_desc}
                 onChange={this.descriptionChangeHandler}
               />
             </div>

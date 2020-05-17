@@ -64,7 +64,7 @@ Listing.createSaleListing = async function (req, res) {
 
 //Create a new loan listing entry
 //Takes in a listing object
-//Returns created listing 
+//Returns created listing
 Listing.createLoanListing = async function (req, res) {
   try {
     var d = new Date();
@@ -121,7 +121,7 @@ Listing.getListingByListingID = async function (req, res) {
   }
 };
 //Return all listings that are not marked completed in date descending order
-// Shows the newests listings first 
+// Shows the newests listings first
 Listing.getAllActiveListings = async function (req, res) {
   try {
     const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND borrower_id IS NULL ORDER by time_posted DESC");
