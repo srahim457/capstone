@@ -9,6 +9,7 @@ import {
   NavLink,
   Switch,
 } from 'react-router-dom';
+import { format, parseISO, fromUnixTime } from 'date-fns';
 
 import './styles/profile.css';
 import EditListing from './EditListing';
@@ -95,6 +96,7 @@ class Profile_Listed extends Component {
                   <div className='itemInfoWrapper' key={listing}>
                     <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
                     <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
+                    <h1 className='itemInfoField'> Listed on: {format(parseISO(listing.time_posted), 'MMMM do,yyyy H:mma')}</h1>
                     <hr />
                   </div>
                   <div className='editListingButtonWrapper'>

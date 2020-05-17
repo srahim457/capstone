@@ -160,7 +160,7 @@ Listing.getAllBorrowerListings = async function (req, res) {
 //This became an inner join to avoid a get request per item 5/10
 Listing.getAllLenderListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1)', [req]);
+    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) ORDER BY L.time_posted DESC', [req]);
     console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
