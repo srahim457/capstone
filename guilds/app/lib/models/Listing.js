@@ -64,7 +64,7 @@ Listing.createSaleListing = async function (req, res) {
 
 //Create a new loan listing entry
 //Takes in a listing object
-//Returns created listing 
+//Returns created listing
 Listing.createLoanListing = async function (req, res) {
   try {
     var d = new Date();
@@ -121,7 +121,7 @@ Listing.getListingByListingID = async function (req, res) {
   }
 };
 //Return all listings that are not marked completed in date descending order
-// Shows the newests listings first 
+// Shows the newests listings first
 Listing.getAllActiveListings = async function (req, res) {
   try {
     const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND borrower_id IS NULL ORDER by time_posted DESC");
@@ -160,11 +160,7 @@ Listing.getAllBorrowerListings = async function (req, res) {
 //This became an inner join to avoid a get request per item 5/10
 Listing.getAllLenderListings = async function (req, res) {
   try {
-<<<<<<< HEAD
-    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) AND L.deleted <> 'T'", [req]);
-=======
     const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) AND L.deleted <> 'T' ORDER BY L.time_posted DESC", [req]);
->>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
     console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -257,15 +253,9 @@ Listing.markCompletedSale = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
-<<<<<<< HEAD
-    console.log('deleting a listing with item id',req,d)
-    const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *" [req]);
-    console.log('Deleted listing \n ')
-=======
     console.log('deleting a listing with item id',req)
     const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *",req);
     console.log('Deleted listing \n ',listing.rows)
->>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
     return listing.rows
   } catch (error) {
     console.log(error)

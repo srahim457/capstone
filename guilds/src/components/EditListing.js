@@ -71,16 +71,11 @@ class EditListing extends Component {
   };
 
   async handleDeletion() {
-<<<<<<< HEAD
-=======
     //console.log('at delete \n', this.props.item)
     const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+this.props.item.item_id)
     this.setState({ delete_item: true });
->>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
     window.location.reload(false);
     console.log('at delete \n', this.props.item)
-    const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+this.props.item.item_id)
-    this.setState({ delete_item: true });
   }
 
   delete() {
@@ -224,7 +219,7 @@ class EditListing extends Component {
   render() {
     return (
       // <div>{this.props.children}</div>
-      
+
       <div className='container-parent'>
         <div className='container'>
           <h1 className='title'>Edit Listing: {this.props.item.item_name} </h1>

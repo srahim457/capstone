@@ -276,15 +276,12 @@ router.get('/listed/:id',auth, async (req, res) => {
   console.log('called get all listings with lender id');
 });
 
-//"Deletes" a listing 
+//"Deletes" a listing
 router.get('/delete/:id',auth, async (req, res) => {
   try {
     console.log('deleting listing with id  \n', req.params.id);
     const deleted = await Listing.delete([req.params.id],res);
-<<<<<<< HEAD
-=======
    // console.log('deleted result \n ', deleted)
->>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
     res.status(200).json(deleted);
   } catch (error) {
     console.error('error deleting a listing \n ', error);
