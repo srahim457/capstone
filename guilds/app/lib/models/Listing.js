@@ -147,7 +147,7 @@ Listing.getEveryListing = async function (req, res) {
 //Takes in a borrower id
 Listing.getAllBorrowerListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1)', [req]);
+    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1) ORDER BY return_by DESC', [req]);
     console.log('number of listings under borrowerid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
