@@ -101,7 +101,7 @@ require('./lib/resetPassword.js')(app);
 //Init Middleware
 app.use(express.json({ extended: false }));
 
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 
 
@@ -114,25 +114,25 @@ console.log(`Listening on port ${'4001'}`);
 // Setup socket.io
 var connectedUsers = {}
 socketIo.on('connection', socket => {
-  
+
   const username = socket.handshake.query.username;
   console.log(`${username} connected`);
   connectedUsers[username] = socket;
-  console.log(Object.keys(connectedUsers),' users after connected')
+  console.log(Object.keys(connectedUsers), ' users after connected')
 
   socket.on('client:message', data => {
     console.log(`${data.username}: ${data.message},${data.targetname}`);
     console.log('sending a message now')
     connectedUsers[username].targetname = data.targetname
-    console.log(Object.keys(connectedUsers),'user info')
-    if(connectedUsers.hasOwnProperty(data.targetname)){
+    console.log(Object.keys(connectedUsers), 'user info')
+    if (connectedUsers.hasOwnProperty(data.targetname)) {
       console.log('the other user is connected \n')
       connectedUsers[data.targetname].emit('server:message', data);
     }
-    else{
+    else {
       console.log('the user is not connected')
-      connectedUsers[data.username].emit('not connected', finalresponse={username: data.targetname, message:'user not connected', sentby: data.username});
-    }    
+      connectedUsers[data.username].emit('not connected', finalresponse = { username: data.targetname, message: 'user not connected', sentby: data.username });
+    }
     //socket.broadcast.emit('server:message', data);
     //console.log(Object.keys(connectedUsers), connectedUsers.hasOwnProperty(data.targetname))
   });
@@ -140,8 +140,8 @@ socketIo.on('connection', socket => {
   socket.on('disconnect', () => {
     console.log(`${username} disconnected`);
     delete connectedUsers[username]
-    console.log(connectedUsers,' users after disconnected')
-    
+    console.log(connectedUsers, ' users after disconnected')
+
   });
 });
 
