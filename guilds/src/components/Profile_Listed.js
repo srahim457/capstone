@@ -12,6 +12,7 @@ import {
 
 import './styles/profile.css';
 import EditListing from './EditListing';
+import PostTransactionForm from './PostTransaction';
 import Spinner from './layout/spinner_transparent.gif';
 import NotAvailable from '../images/noimageavailable.png';
 
@@ -69,6 +70,13 @@ class Profile_Listed extends Component {
 
   }
 
+  loadPostTransactionPage(listing){
+    this.setState({ completeTransaction: true });
+    this.setState({ borrower_id: listing.borrower_id });
+    this.setState({ item_name: listing.item_name});
+    this.setState({item_id: listing.item_id});
+  }
+
   onClickHandler(e) {
     e.preventDefault();
     this.setState({ click: true });
@@ -80,10 +88,16 @@ class Profile_Listed extends Component {
          return <EditListing name={this.state.name}item={this.state.item} />;
         }
 
+        if (this.state.completeTransaction){
+          return <PostTransactionForm borrower_id={this.state.borrower_id}
+          item_name={this.state.item_name}
+          item_id={this.state.item_id}
+          />
+        }
         {/* displays either an edit listing button (if not borrowed) or borrowed button*/}
         const displayBorrowedOrEditListingButton = (listing)=>{
           if (listing.borrower_id!=null){
-            return <button class="edit-button" >
+            return <button class="edit-button" onClick={this.loadPostTransactionPage.bind(this, listing)}>
                   Complete Transaction with {listing.borrower_id}
                 </button>
           }
