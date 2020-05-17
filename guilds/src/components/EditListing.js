@@ -71,10 +71,10 @@ class EditListing extends Component {
   };
 
   async handleDeletion() {
-    window.location.reload(false);
-    console.log('at delete \n', this.props.item)
+    //console.log('at delete \n', this.props.item)
     const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+this.props.item.item_id)
     this.setState({ delete_item: true });
+    window.location.reload(false);
   }
 
   delete() {

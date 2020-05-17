@@ -281,6 +281,7 @@ router.get('/delete/:id',auth, async (req, res) => {
   try {
     console.log('deleting listing with id  \n', req.params.id);
     const deleted = await Listing.delete([req.params.id],res);
+   // console.log('deleted result \n ', deleted)
     res.status(200).json(deleted);
   } catch (error) {
     console.error('error deleting a listing \n ', error);

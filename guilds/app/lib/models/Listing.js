@@ -253,11 +253,12 @@ Listing.markCompletedSale = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
-    console.log('deleting a listing with item id',req,d)
-    const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *" [req]);
-    console.log('Deleted listing \n ')
+    console.log('deleting a listing with item id',req)
+    const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *",req);
+    console.log('Deleted listing \n ',listing.rows)
     return listing.rows
   } catch (error) {
+    console.log(error)
     res.status(400)
   }
 };
