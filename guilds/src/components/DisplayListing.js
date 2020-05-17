@@ -62,12 +62,16 @@ class DisplayListing extends Component {
   closeButton = (e) => {
     e.preventDefault();
     // return <Redirect path='/market-place' Component={MarketPlace}></Redirect>;
-    const response = axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/unreserve')
+    const response = axios.get('http://localhost:4000/market-place/' + this.props.listingid + '/unreserve')
     window.location.reload(false);
   }
 
   async componentDidMount() {
+<<<<<<< HEAD
     const response = await axios.get('http://localhost:4000/market-place/'+this.props.listingid+ '/reserve')
+=======
+    const response = await axios.get('http://localhost:4000/market-place/' + this.props.listingid + '/reserve')
+>>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
   }
 
   render() {
@@ -88,6 +92,7 @@ class DisplayListing extends Component {
 
     //for redirecting to Payment page AL
     if (this.state.open === true) {
+<<<<<<< HEAD
       console.log(this.props, '\n','listing type to redirect to payment ', this.props.listing_type)
       if(this.props.listing_type == 'loan'){
         return <Payment
@@ -113,6 +118,33 @@ class DisplayListing extends Component {
         itemid = {this.props.itemid}
         listingid = {this.props.listingid}
       />;
+=======
+      console.log(this.props, '\n', 'listing type to redirect to payment ', this.props.listing_type)
+      if (this.props.listing_type == 'loan') {
+        return <Payment
+          name={this.props.name}
+          description={this.props.description}
+          return_date={this.props.return_date}
+          listing_type={this.props.listing_type}
+          price={this.props.insurance}
+          lenderid={this.props.lenderid}
+          itemid={this.props.itemid}
+          listingid={this.props.listingid}
+        />;
+      }
+      if (this.props.listing_type == 'rental') {
+        return <Payment
+          name={this.props.name}
+          description={this.props.description}
+          insurance={this.props.insurance}
+          return_date={this.props.return_date}
+          listing_type={this.props.listing_type}
+          price={this.props.rent_amount}
+          lenderid={this.props.lenderid}
+          itemid={this.props.itemid}
+          listingid={this.props.listingid}
+        />;
+>>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
       }
       return <Payment
         name={this.props.name}
@@ -121,9 +153,9 @@ class DisplayListing extends Component {
         insurance={this.props.insurance}
         listing_type={this.props.listing_type}
         price={this.props.total_price}
-        lenderid = {this.props.lenderid}
-        itemid = {this.props.itemid}
-        listingid = {this.props.listingid}
+        lenderid={this.props.lenderid}
+        itemid={this.props.itemid}
+        listingid={this.props.listingid}
       />;
     }
 
@@ -148,10 +180,10 @@ class DisplayListing extends Component {
                   src={parsePath(images)}
                   height='350'
                   width='400'
-                  alt=''
+                  alt={this.state.name}
                 ></img>
               ) : (
-                  <img src={noimage} height='350' width="400" ></img>
+                  <img src={noimage} height='350' width="400" alt={this.state.name} ></img>
                 )}
               <br />
               <label>Item Name: </label>

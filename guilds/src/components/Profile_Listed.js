@@ -9,6 +9,7 @@ import {
   NavLink,
   Switch,
 } from 'react-router-dom';
+import { format, parseISO, fromUnixTime } from 'date-fns';
 
 import './styles/profile.css';
 import EditListing from './EditListing';
@@ -25,7 +26,6 @@ function parsePath(orig) {
 class Profile_Listed extends Component {
   constructor(props) {
     super(props);
-    console.log('props profile listed rec',this.props)
     this.state = {
       isLoading: true,
       listings: [],
@@ -35,9 +35,9 @@ class Profile_Listed extends Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  async componentDidMount(){
-    const response = await axios.get('http://localhost:4000/market-place/listed/'+this.props.userid)
-    console.log('profile listings', response)
+  async componentDidMount() {
+    const response = await axios.get('http://localhost:4000/market-place/listed/' + this.props.userid)
+    console.log('listings', response)
     this.setState({ listings: response.data, isLoading: false })
   }
 
@@ -68,6 +68,7 @@ class Profile_Listed extends Component {
     this.setState({ click: true });
     this.setState({ item: item})
 
+<<<<<<< HEAD
   }
 
   loadPostTransactionPage(listing){
@@ -75,6 +76,8 @@ class Profile_Listed extends Component {
     this.setState({ borrower_id: listing.borrower_id });
     this.setState({ item_name: listing.item_name});
     this.setState({item_id: listing.item_id});
+=======
+>>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
   }
 
   onClickHandler(e) {
@@ -86,6 +89,7 @@ class Profile_Listed extends Component {
       /*routes to an edit listing page*/
         if (this.state.click === true && this.props.canedit) {
          return <EditListing name={this.state.name}item={this.state.item} />;
+<<<<<<< HEAD
         }
 
         if (this.state.completeTransaction){
@@ -106,12 +110,15 @@ class Profile_Listed extends Component {
                   Edit this Listing
                 </button>
           }
+=======
+>>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
         }
 
         //console.log(this.state,'\n current state',isLoading,listings)
         const {isLoading} = this.state;
         console.log('this.state \n',this.state.listings)
 
+<<<<<<< HEAD
     return (
       <React.Fragment>
       <div className='ItemListWrapper'>
@@ -139,6 +146,36 @@ class Profile_Listed extends Component {
                   Edit Listed Item
                   </button>
                 */}
+=======
+    const { isLoading } = this.state;
+    console.log('this.state \n', this.state.listings)
+    return (
+      <React.Fragment>
+        <div className='ItemListWrapper'>
+          {!isLoading ? (
+            Object.values(this.state.listings).map(listing => {
+              return (
+                <div className='item' key={listing.item_id}>
+                  {console.log('test res', listing, listing.borrower_id)}
+                  <div className='itemImageWrapper'>
+                    {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
+                      : <img src={NotAvailable} height="100" width="100"></img>}
+                  </div>
+                  <div className='itemInfoWrapper' key={listing}>
+                    <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
+                    <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
+                    <h1 className='itemInfoField'> Listed on: {format(parseISO(listing.time_posted), 'MMMM do,yyyy H:mma')}</h1>
+                    <hr />
+                  </div>
+                  <div className='editListingButtonWrapper'>
+                    <button
+                      className='edit-button'
+                      onClick={this.testClick.bind(this, listing)}
+                    >
+                      Edit Listed Item
+                  </button>
+                  </div>
+>>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
                 </div>
               </div>
               );

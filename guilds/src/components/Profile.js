@@ -68,7 +68,7 @@ class Profile extends Component {
   }
   displayBorrowed() {
     // Fix until sign in redirect is fixed
-    if (this.props.location.state == null) {
+     if (this.props.location.state == null) {
       this.state.currUserId = -1
       //console.log('user id props is null')
       return <Profile_Borrowed
@@ -224,29 +224,29 @@ class Profile extends Component {
               <div className='HeaderField'>
                 {' '}
                 {/*the guild ranking*/}
-                <h2 style={styleTitle}>Rank: </h2>
+                <h3 style={styleTitle}>Rank: </h3>
                 <div className='UserField'>
-                  <h1 style={styleTitle}>
+                  <h3 style={styleTitle}>
                     {this.state.rating == null ? 'N/A' : this.state.rating}
-                  </h1>
+                  </h3>
                   <br />
                 </div>
               </div>
             </div>
             <div className='SubfieldInfoContainer'>
               <div className='HeaderSubfield'>
-                <h2 style={styleTitle}>Email: </h2>
+                <h3 style={styleTitle}>Email: </h3>
               </div>
               <div className='UserSubfield'>
-                <h2 style={styleTitle}> {this.state.email} </h2>
+                <h3 style={styleTitle}> {this.state.email} </h3>
               </div>
               <div className='HeaderSubfield'>
-                <h2 style={styleTitle} >Phone: </h2>
+                <h3 style={styleTitle} >Phone: </h3>
               </div>
               <div className='UserSubfield'>
-                <h2 style={styleTitle}>
+                <h3 style={styleTitle}>
                   {this.state.phonenum == null ? 'N/A' : this.state.phonenum}{' '}
-                </h2>
+                </h3>
               </div>
             </div>
           </div /*profileHeader*/ >

@@ -38,7 +38,7 @@ Listing.createItem = async function (req, res) {
 //Returns created item id
 Listing.createItemImage = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image, req[0].id]);
+    const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image_picture, req[0].id]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -160,7 +160,11 @@ Listing.getAllBorrowerListings = async function (req, res) {
 //This became an inner join to avoid a get request per item 5/10
 Listing.getAllLenderListings = async function (req, res) {
   try {
+<<<<<<< HEAD
     const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) AND L.deleted <> 'T'", [req]);
+=======
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) AND L.deleted <> 'T' ORDER BY L.time_posted DESC", [req]);
+>>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
     console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -199,7 +203,7 @@ Listing.removeBorrower = async function (req, res) {
 Listing.reserveListing = async function (req, res) {
   try {
     console.log('marked listing as reserved ', req[0], '\n')
-    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'T',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id,req[0].user_id]);
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'T',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id, req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -212,7 +216,7 @@ Listing.reserveListing = async function (req, res) {
 Listing.unreserveListing = async function (req, res) {
   try {
     console.log('marked listing as unreserved ', req[0], '\n')
-    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id,req[0].user_id]);
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id, req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -253,11 +257,18 @@ Listing.markCompletedSale = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
+<<<<<<< HEAD
     console.log('deleting a listing with item id',req,d)
     const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *" [req]);
     console.log('Deleted listing \n ')
+=======
+    console.log('deleting a listing with item id',req)
+    const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *",req);
+    console.log('Deleted listing \n ',listing.rows)
+>>>>>>> a0d12051d3c0b8ae88fe3240e04a1054a0315644
     return listing.rows
   } catch (error) {
+    console.log(error)
     res.status(400)
   }
 };
