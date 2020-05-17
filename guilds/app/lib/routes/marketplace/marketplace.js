@@ -53,8 +53,8 @@ router.post('/create', auth, async (req, res) => {
       return_by: req.body.item.date,
       policy: req.body.item.policy,
       total_price: req.body.item.price,
-      rent_amount: req.body.rent_amount,
-      //insurance_amount: req.body.insurance_amount,
+      rent_amount: req.body.item.price,
+      insurance_amount: req.body.item.insurance,
       lender_id: req.user.id,
     };
     console.log('created Itemid is', newListing.item_id);
@@ -92,7 +92,7 @@ router.post('/picture', auth, async (req, res) => {
     /*Now do where ever you want to do*/
 
     let path = req.file.path;
-    console.log(itemId, 'PAssed item idnj jdnjsnjfgnsl')
+    console.log(itemId, 'Passed item id')
     const imageObj = {
       id: itemId, //item id here instead
       image_picture: path,
@@ -274,6 +274,18 @@ router.get('/listed/:id',auth, async (req, res) => {
     console.error('error getting all listed listings', error);
   }
   console.log('called get all listings with lender id');
+});
+
+//"Deletes" a listing 
+router.get('/delete/:id',auth, async (req, res) => {
+  try {
+    console.log('deleting listing with id  \n', req.params.id);
+    const deleted = await Listing.delete([req.params.id],res);
+    res.status(200).json(deleted);
+  } catch (error) {
+    console.error('error deleting a listing \n ', error);
+  }
+  console.log('called delete listing with id');
 });
 
 //example;

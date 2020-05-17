@@ -26,8 +26,21 @@ Payment.newPayment = async function (req, res) {
                 datecompleted: fromUnixTime(req[0].charge.created),
                 listing_id: req[0].listing_id
             }
+            if(req[0].listing_type == 'sale'){
+            // If sale need to mark completed
             const completeListing = await Listing.markCompletedSale([listinginfo],res)
             console.log(payment.rows.length, completeListing.rows)
+            }else{
+                var borrowedinfo = {
+                    borrower_id : req[0].borrower_id,
+                    datecompleted: fromUnixTime(req[0].charge.created),
+                    listing_id : req[0].listing_id
+                }
+            const borrowedListing = await Listing.addBorrower([borrowedinfo],res)
+            console.log(payment.rows.length, borrowedListing)
+            }
+
+            // If loan/rented need to mark borrowed
         }
         else{
             res.status(400).send('Payment failed')

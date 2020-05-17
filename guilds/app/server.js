@@ -11,7 +11,7 @@ var flash = require('connect-flash');
 var session = require('express-session');
 //var passport = require('passport');
 var request = require('request');
-
+var morgan = require('morgan'); // For Logging
 var app = express();
 
 // ---------------------------STRIPE---------------------------
@@ -69,6 +69,7 @@ var app = express();
 // ----------------------STRIPE end---------------------------
 
 app.use(cors());
+app.use(morgan('combined'));
 let User = require('./lib/routes/users/users').User;
 // app.use(
 //   session({ secret: 'capstone', resave: 'false', saveUninitialized: 'false' })
