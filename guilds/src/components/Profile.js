@@ -35,7 +35,7 @@ const styleTitle = {
 
 function parsePath(orig) {
   let res = orig.substr(9);
-  res = '.' + res;
+  //res = '.' + res;
   return res;
 }
 
@@ -69,7 +69,7 @@ class Profile extends Component {
   }
   displayBorrowed() {
     // Fix until sign in redirect is fixed
-     if (this.props.location.state == null) {
+    if (this.props.location.state == null) {
       this.state.currUserId = -1
       //console.log('user id props is null')
       return <Profile_Borrowed
@@ -200,27 +200,27 @@ class Profile extends Component {
         userid={this.state.currUserId} />;
     }
 
-    const printRating = ()=>{
-      if (this.state.rating >= 4.8){
+    const printRating = () => {
+      if (this.state.rating >= 4.8) {
         return 'SSS Rank'
       }
-      else if (this.state.rating < 4.8 && this.state.rating >= 4){
+      else if (this.state.rating < 4.8 && this.state.rating >= 4) {
         return 'Chivalrous'
       }
-      else if (this.state.rating < 4 && this.state.rating > 3){
+      else if (this.state.rating < 4 && this.state.rating > 3) {
         return 'Nobleman'
       }
-      else if (this.state.rating === 3){
+      else if (this.state.rating === 3) {
         return 'Guildsman'
       }
 
-      else if (this.state.rating < 3 && this.state.rating >=2 ){
+      else if (this.state.rating < 3 && this.state.rating >= 2) {
         return 'Layman'
       }
-      else if (this.state.rating < 2 && this.state.rating >= 1){
+      else if (this.state.rating < 2 && this.state.rating >= 1) {
         return 'Lacks Luster'
       }
-      else{
+      else {
         return 'Nincompoop'
       }
     }

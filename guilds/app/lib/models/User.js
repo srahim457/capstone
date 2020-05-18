@@ -15,11 +15,12 @@ var User = function (user) {
 //Returns the user row
 User.updateRating = async function (req, res) {
   try {
+    console.log('updating rating with',req[0])
     const user = await sql.query(
-      'UPDATE guilds.users SET rating=($2) WHERE user_id = ($1) RETURNING *',
-      [req[0].userid, req[0].rating]
+      'UPDATE guilds.users SET rating=($2) WHERE id = ($1) RETURNING *',
+      [req[0].userid, req[0].newrank]
     );
-    console.log('updated user rating \n');
+    console.log('updated user rating \n',user.rows[0].id,user.rows[0].rating);
     return user.rows[0];
   } catch (error) {
     console.log(error);

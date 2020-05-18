@@ -70,7 +70,8 @@ class Profile_Listed extends Component {
 
   }
 
-  loadPostTransactionPage(listing){
+  async loadPostTransactionPage(listing){
+    console.log('post transaction for',listing)
     this.setState({ completeTransaction: true });
     this.setState({ borrower_id: listing.borrower_id });
     this.setState({ item_name: listing.item_name});
@@ -92,13 +93,14 @@ class Profile_Listed extends Component {
           return <PostTransactionForm borrower_id={this.state.borrower_id}
           item_name={this.state.item_name}
           item_id={this.state.item_id}
+          item_image={this.state.item_image}
           />
         }
         {/* displays either an edit listing button (if not borrowed) or borrowed button*/}
         const displayBorrowedOrEditListingButton = (listing)=>{
           if (listing.borrower_id!=null){
             return <button class="edit-button" onClick={this.loadPostTransactionPage.bind(this, listing)}>
-                  Complete Transaction with {listing.borrower_id}
+                  Item Borrowed! Click to Complete
                 </button>
           }
           else{
@@ -110,7 +112,6 @@ class Profile_Listed extends Component {
 
         //console.log(this.state,'\n current state',isLoading,listings)
         const {isLoading} = this.state;
-        console.log('this.state \n',this.state.listings)
 
     return (
       <React.Fragment>

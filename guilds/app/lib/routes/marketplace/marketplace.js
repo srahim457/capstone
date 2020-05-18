@@ -227,6 +227,18 @@ router.get('/', auth, async (req, res) => {
   console.log('called get all listings');
 });
 
+//Gets all listings
+router.put('/rate/:id', auth, async (req, res) => {
+  try {
+    console.log('transaction rated marking completed ', req.params.id)
+    const alllistings = await Listing.markCompleted(req.params.id);
+    return res.status(200).json(alllistings);
+  } catch (error) {
+    console.error('error getting all listings\n', error);
+  }
+  console.log('called get all listings');
+});
+
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
 router.get('/borrowed/:id',auth, async (req, res) => {
