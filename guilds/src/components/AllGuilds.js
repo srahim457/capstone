@@ -29,7 +29,8 @@ class AllGuilds extends Component {
       description: '',
       search_key: '',
       picture: null,
-      name: ''
+      name: '',
+      guildid: ''
     };
     this.onClickHandler = this.onClickHandler.bind(this);
     this.searchChangeHandler = this.searchChangeHandler.bind(this);
@@ -53,6 +54,7 @@ class AllGuilds extends Component {
     this.setState({ guildmaster: item.creator_id });
     this.setState({ open: true });
     this.setState({ picture: item.picture }); //added
+    this.setState({ guildid: item.id})
   }
 
   async componentDidMount() {
@@ -72,10 +74,9 @@ class AllGuilds extends Component {
         <DisplayGuild
           name={this.state.name}
           description={this.state.description}
-
           picture={this.state.picture}
-          // could pull first member of guild
           guildmaster={this.state.guildmaster}
+          guildid={this.state.guildid}
         />
       );
     }

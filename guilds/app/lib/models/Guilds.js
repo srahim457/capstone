@@ -78,7 +78,7 @@ Guilds.addUserToGuild = async function (req, res) {
         return guild.rows[0]
     } catch (error) {
         console.log(error);
-        res.status(400);
+        res.status(200).json(error);
     }
 };
 //Search for all guilds that match the name provided
