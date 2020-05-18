@@ -6,29 +6,40 @@ import DateTimePicker from 'react-datetime-picker';
 import axios from 'axios';
 import './styles/CreateListing.css';
 
-function validate(name, description,price,date,policy,insurance) {
+function validate(name,option,description,price,date,policy,insurance) {
   // true means invalid, so our conditions got reversed
-  console.log(name.length,description.length,price.length,date.length,policy.length,insurance.length)
-  //In case of loan
-  console.log(insurance.length != 0 , price.length =='')
-  if(insurance.length!= 0 && price.length ==''){
+  //console.log(name.length,option,description.length,price.length,date.length,policy.length,insurance.length)
+  if(option == ""){
+    console.log('option is blank')
     return {
+      option: option.length === 0
+    }
+  }
+  if(option == 'sale'){
+    return{
+      name: name.length === 0,
+      description: description.length === 0,
+      price: price.length === 0,
+    }
+  }
+  if(option == 'loan'){
+    return{
       name: name.length === 0,
       description: description.length === 0,
       date: date.length === 0,
       policy: policy.length === 0,
       insurance: insurance.length === 0
-    };
+    }
   }
   else{
+    // it is a rental
     return {
       name: name.length === 0,
-      description: description.length === 0,      
+      description: description.length === 0,
+      date: date.length === 0,
+      policy: policy.length === 0,
       price: price.length === 0,
-      //TODO: breaks on sale
-    //  date: date.length === 0,
-    //  policy: policy.length === 0,
-    //  insurance: insurance.length === 0
+      insurance: insurance.length === 0
     };
   }
 
@@ -223,7 +234,7 @@ class CreateListing extends Component {
 
 
   canBeSubmitted() {
-    const empty = validate(this.state.name, this.state.description,this.state.price,this.state.date,this.state.policy, this.state.insurance);
+    const empty = validate(this.state.name,this.state.option, this.state.description,this.state.price,this.state.date,this.state.policy, this.state.insurance);
     const isDisabled = Object.keys(empty).some((x) => empty[x]);
     return !isDisabled;
   }
