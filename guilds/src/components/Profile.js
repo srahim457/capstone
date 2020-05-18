@@ -145,7 +145,8 @@ class Profile extends Component {
       email: firstResp.data.email,
       phonenum: firstResp.data.phonenum,
       online: firstResp.data.online,
-      rating: firstResp.data.rating,
+      //rating: firstResp.data.rating,
+      rating: 1,
       picture: firstResp.data.profile_picture,
       description: firstResp.data.description,
       guilds: secondResp.data,
@@ -166,7 +167,7 @@ class Profile extends Component {
       console.log(this.state.canedit)
     }
     //console.log('these are the props passed to profile \n ',this.props.location.state.userid)
-    //this is someone elses profile 
+    //this is someone elses profile
     {
       /*if the edit profile button is pressed it will redirect*/
     }
@@ -174,6 +175,31 @@ class Profile extends Component {
     if (this.state.click === true && this.state.canedit == true) {
       return <EditProfile
         userid={this.state.currUserId} />;
+    }
+
+    const printRating = ()=>{
+      if (this.state.rating >= 4.8){
+        return 'SSS Rank'
+      }
+      else if (this.state.rating < 4.8 && this.state.rating >= 4){
+        return 'Chivalrous'
+      }
+      else if (this.state.rating < 4 && this.state.rating > 3){
+        return 'Nobleman'
+      }
+      else if (this.state.rating === 3){
+        return 'Guildsman'
+      }
+
+      else if (this.state.rating < 3 && this.state.rating >=2 ){
+        return 'Layman'
+      }
+      else if (this.state.rating < 2 && this.state.rating >= 1){
+        return 'Lacks Luster'
+      }
+      else{
+        return 'Nincompoop'
+      }
     }
 
     return (
@@ -227,7 +253,7 @@ class Profile extends Component {
                 <h3 style={styleTitle}>Rank: </h3>
                 <div className='UserField'>
                   <h3 style={styleTitle}>
-                    {this.state.rating == null ? 'N/A' : this.state.rating}
+                    {this.state.rating == null ? 'N/A' : printRating()}
                   </h3>
                   <br />
                 </div>
