@@ -36,7 +36,7 @@ class Profile_Listed extends Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/listed/' + this.props.userid)
+    const response = await axios.get('http://localhost:4000/market-place/complete/' + this.props.userid)
     console.log('listings', response)
     this.setState({ listings: response.data, isLoading: false })
   }
@@ -86,7 +86,7 @@ class Profile_Listed extends Component {
                 <div className = 'itemInfoWrapper' key = {listing}>
                   <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
                   <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
-                  <h1 className='itemInfoField'> Time Listed: {format(parseISO(listing.time_posted), 'MMMM do,yyyy h:mma')}</h1>
+                  <h1 className='itemInfoField'> Time Completed: {format(parseISO(listing.time_sold_expired), 'MMMM do,yyyy h:mma')}</h1>
                 <hr />
                 </div>
               </div>

@@ -217,6 +217,25 @@ router.get('/active',auth, async (req, res) => {
 });
 
 //Gets all listings
+router.get('/complete/:id', auth, async (req, res) => {
+  try {
+    idtouse = 0
+    if(req.params.id == -1){
+      console.log('no id detected reverting to current user')
+      idtouse = req.user.id
+    }
+    else{
+      idtouse = req.params.id
+    }
+    const alllistings = await Listing.getAllCompletedListings(idtouse, res);
+    res.status(200).json(alllistings);
+  } catch (error) {
+    console.error('error getting all completed  listings\n', error);
+  }
+  console.log('called get all completed listings');
+});
+
+//Gets all listings
 router.get('/', auth, async (req, res) => {
   try {
     const alllistings = await Listing.getEveryListing(req, res);
@@ -227,7 +246,7 @@ router.get('/', auth, async (req, res) => {
   console.log('called get all listings');
 });
 
-//Gets all listings
+//Marks a transaction complete
 router.put('/rate/:id', auth, async (req, res) => {
   try {
     console.log('transaction rated marking completed ', req.params.id)
