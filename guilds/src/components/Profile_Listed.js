@@ -112,7 +112,6 @@ class Profile_Listed extends Component {
 
         //console.log(this.state,'\n current state',isLoading,listings)
         const {isLoading} = this.state;
-        console.log('this.state \n',this.state.listings)
 
     return (
       <React.Fragment>

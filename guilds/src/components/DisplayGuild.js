@@ -30,7 +30,8 @@ class DisplayGuild extends Component {
       close: false,
       picture: null,
       guildmasterinfo: [],
-      isLoading:  true
+      isLoading:  true,
+      guildid: ''
     };
     this.closeButton = this.closeButton.bind(this);
   }
@@ -44,6 +45,19 @@ class DisplayGuild extends Component {
     e.preventDefault();
   }
 
+  async joinGuild(e){
+    console.log('joining guild',e,this.props)
+    const response = await axios.put('http://localhost:4000/all-guilds/addtoguild/' +e)
+    console.log('joining guild response ', response)
+    
+    if(response.data.constraint == "no_double_joining_guild"){
+      console.log('already part of this guild ')
+      alert('Already a member of this guild');
+      return <AllGuilds />;
+    }
+    //this.setState({ listings: response.data, isLoading: false })
+  }
+
   async componentDidMount(){
     let guildmasterinfo;    
     const response = await axios.get('http://localhost:4000/profile/'+this.props.guildmaster)
@@ -51,7 +65,7 @@ class DisplayGuild extends Component {
   }
 
   render() {
-    var { name, description, guildmaster, picture } = this.props;
+    var { name, description, guildmaster, picture,guildid } = this.props;
     if (this.state.close === true) {
       return <AllGuilds />;
     }
@@ -99,7 +113,7 @@ class DisplayGuild extends Component {
             </div>
 
           </form>
-          <button className="submit-button">Join Guild</button>
+          <button className="submit-button" onClick={this.joinGuild.bind(this,guildid)}>Join Guild</button>
         </div>
       </div>
     );
