@@ -48,7 +48,7 @@ class Messages extends Component {
   // Redirect to the user profile
   openUser(item) {
     console.log('user info that i clicked on ', item)
-    this.setState({ redirect: '/profile/viewprofile/' + item.id, userid: item.id, picture: item.picture });
+    this.setState({ redirect: '/profile/viewprofile/' + item.id, userid: item.id, picture: item.profile_picture });
   }
   openChat(item) {
     console.log('opening a chat', item)
