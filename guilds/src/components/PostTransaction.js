@@ -12,7 +12,7 @@ function parsePath(orig) {
   return res;
 }
 
-class CreateListing extends Component {
+class PostTransaction extends Component {
   constructor(props) {
     super(props);
 
@@ -176,4 +176,4 @@ s
   }
 }
 
-export default CreateListing;
+export default PostTransaction;
