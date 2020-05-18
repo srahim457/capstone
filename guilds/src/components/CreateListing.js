@@ -23,7 +23,7 @@ function validate(name, description,price,date,policy,insurance) {
   else{
     return {
       name: name.length === 0,
-      description: description.length === 0,      
+      description: description.length === 0,
       price: price.length === 0,
       date: date.length === 0,
       policy: policy.length === 0,
@@ -212,7 +212,7 @@ class CreateListing extends Component {
       //       console.log(res.statusText);
       //     });
       // }
-      //window.location.reload(false);
+      window.location.reload(false);
     }
 
 

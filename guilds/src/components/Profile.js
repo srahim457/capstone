@@ -12,6 +12,7 @@ import axios from 'axios';
 import './styles/profile.css';
 import Profile_Borrowed from './Profile_Borrowed';
 import Profile_Listed from './Profile_Listed';
+import Profile_Completed from './Profile_Completed';
 import EditProfile from './EditProfile';
 import LaserLouis from '../images/LaserLouis.jpg';
 import NotAvailable from '../images/noimageavailable.png';
@@ -54,7 +55,7 @@ class Profile extends Component {
       profile: {},
       guilds: [],
       click: false, //added to see if it respond on click
-      testToken: false,
+      testToken: 0,
       currUserId: 0,
       // Check to see if current viewer is allowed to edit
       canedit: true,
@@ -101,11 +102,34 @@ class Profile extends Component {
     }
   }
 
+  //I copied the function above
+  displayCompleted() {
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
+      this.state.currUserId = -1
+      //console.log('user id props is null')
+      return <Profile_Completed
+        userid={-1}
+        canedit={this.state.canedit}
+      />;
+    }
+    else {
+      return <Profile_Completed
+        userid={this.props.location.state.userid}
+        canedit={this.state.canedit}
+      />;
+    }
+  }
+
+
   listings() {
-    this.setState({ testToken: false });
+    this.setState({ testToken: 0 });
   }
   borrowed() {
-    this.setState({ testToken: true });
+    this.setState({ testToken: 1 });
+  }
+  completed() {
+    this.setState({ testToken: 2 });
   }
 
   async componentDidMount() {
@@ -145,8 +169,7 @@ class Profile extends Component {
       email: firstResp.data.email,
       phonenum: firstResp.data.phonenum,
       online: firstResp.data.online,
-      //rating: firstResp.data.rating,
-      rating: 1,
+      rating: firstResp.data.rating,
       picture: firstResp.data.profile_picture,
       description: firstResp.data.description,
       guilds: secondResp.data,
@@ -308,7 +331,7 @@ class Profile extends Component {
               <button
                 onClick={this.listings.bind(this)}
                 className={
-                  this.state.testToken === false
+                  this.state.testToken === 0
                     ? 'PageSwitcher__Item_profile_active'
                     : 'PageSwitcher__Item_profile'
                 }
@@ -318,17 +341,28 @@ class Profile extends Component {
               <button
                 onClick={this.borrowed.bind(this)}
                 className={
-                  this.state.testToken === true
+                  this.state.testToken === 1
                     ? 'PageSwitcher__Item_profile_active'
                     : 'PageSwitcher__Item_profile'
                 }
               >{this.state.firstname + "'s"} Borrowed Items
               </button>
+              <button
+                onClick={this.completed.bind(this)}
+                className={
+                  this.state.testToken === 2
+                    ? 'PageSwitcher__Item_profile_completedTransaction_active'
+                    : 'PageSwitcher__Item_profile'
+                }
+              >{this.state.firstname + "'s"} Completed Transactions
+              </button>
             </div>
             {/*these components can be found in Profile_Borrowed.js and Profile_Listed.js*/}
-            {this.state.testToken === true
+            {this.state.testToken === 1
               ? this.displayBorrowed()
-              : this.displayListings()}
+              : this.state.testToken === 2
+                ? this.displayCompleted()
+                : this.displayListings()}
             {/*
             <Route path='/profile-listed' component={Profile_Listed}></Route>
             <Route path='/profile' component={Profile_Borrowed}></Route>

@@ -174,7 +174,7 @@ h2 {
 .PageSwitcher__Item_profile {
   background-color: #4c5d72;
   color: #9da6b1;
-  padding: 10px 200px;
+  padding: 10px 100px;
   cursor: pointer;
   font-size: 0.9em;
   border: none;
@@ -191,7 +191,19 @@ h2 {
 .PageSwitcher__Item_profile_active {
   background-color: red;
   color: yellow;
-  padding: 10px 200px;
+  padding: 10px 90px;
+  cursor: pointer;
+  font-size: 0.9em;
+  border: none;
+  outline: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.PageSwitcher__Item_profile_completedTransaction_active {
+  background-color: green;
+  color: yellow;
+  padding: 10px 90px;
   cursor: pointer;
   font-size: 0.9em;
   border: none;
