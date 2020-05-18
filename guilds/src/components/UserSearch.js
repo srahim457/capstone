@@ -12,7 +12,7 @@ import ChatMain from './ChatMain';
 
 function parsePath(orig) {
   let res = orig.substr(9);
-  res = '.' + res;
+  //res = '.' + res;
   return res;
 }
 
@@ -94,13 +94,14 @@ class Messages extends Component {
                         {/*listing.image*/}
                         {user.profile_picture != null ? (
                           <img
-                            src={window.location.origin + parsePath(user.profile_picture)}
-                            height='100'
-                            width='100'
+                            src={parsePath(user.profile_picture)}
+                            height='150'
+                            width='200'
                             alt='image'
                           ></img>
+
                         ) : (
-                            <img src={noimage} height='150' width="200" ></img>
+                            <img src={noimage} height='150' width="200" alt='no image'></img>
                           )}
                       </div>
                       <h5>{user.username}</h5>
