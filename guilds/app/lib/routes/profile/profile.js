@@ -64,6 +64,19 @@ router.get('/:id', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+// updates a user's ranking
+router.put('/ranking/update/:id', auth, async (req, res) => {
+  //route profile/me ?
+  try{
+    console.log('updating this user ranking ',req.params.id,req.body)
+    newrank = await User.updateRating([req.body]); //gets logged in users by tokenid
+    return res.status(200).json(newrank.rows);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 //generic get request for the user
 router.get('/', auth, async (req, res) => {
   //route profile/me ?
