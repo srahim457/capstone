@@ -202,6 +202,9 @@ import axios from 'axios';
 import Profile from './Profile';
 import './styles/Home.css';
 
+import { toast } from "react-toastify"; // notifaction
+import "react-toastify/dist/ReactToastify.css"; //notification layout (default green)
+
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: '',
@@ -228,7 +231,7 @@ const Login = ({ login, isAuthenticated }) => {
 
   if (isAuthenticated) {
     return (<Redirect to='/profile' ></Redirect>), window.location.reload();
-  }
+  } 
 
   return (
     <Fragment>
