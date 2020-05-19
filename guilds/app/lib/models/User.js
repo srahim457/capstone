@@ -17,7 +17,7 @@ User.updateRating = async function (req, res) {
   try {
     console.log('updating rating with',req[0])
     const updatedrate = await sql.query('UPDATE guilds.users SET number_of_reviews=number_of_reviews + 1 WHERE id = ($1) RETURNING *',[req[0].userid])
-    console.log('updated rating',updatedrate.rows)
+   // console.log('updated rating',updatedrate.rows[0].rating)
     const user = await sql.query(
       'UPDATE guilds.users SET rating=($2) WHERE id = ($1) RETURNING *',
       [req[0].userid, req[0].newrank]
