@@ -4,6 +4,12 @@ import MarketPlace from './MarketPlace';
 import axios from 'axios';
 import './styles/EditProfile.css';
 
+const stylePic = {
+  display: 'flex',
+  justifycontent: 'center'
+}
+
+
 class EditProfile extends Component {
   constructor(props) {
     super(props);
@@ -171,12 +177,12 @@ class EditProfile extends Component {
         <div className='container'>
           <h1 className='title'>Edit Profile</h1>
           <form onSubmit={this.handleSubmit} className='form-fields'>
-              <div className='button-wrapper'>
-                <button className='close-button' onClick={this.closeButton}>
-                  X
+            <div className='button-wrapper'>
+              <button className='close-button' onClick={this.closeButton}>
+                X
                 </button>
-              </div>
-              {/*</div>
+            </div>
+            {/*</div>
               <label>User's Name: </label>
               <input
                 type='text'
@@ -226,7 +232,8 @@ class EditProfile extends Component {
                 onChange={this.descriptionChangeHandler}
               />
             </div>
-            <div className='class="form-group files '>
+
+            <div className='form-group files '>
               <label>Profile Picture: </label>
               <input
                 className='form-control'
@@ -236,6 +243,7 @@ class EditProfile extends Component {
                 onChange={this.pictureChangeHandler}
               />
             </div>
+
           </form>
           <button className='submit-button' onClick={this.handleSubmit}>
             Submit
