@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node guilds/app/server.js",
     "heroku-postbuild": "cd guilds/app && npm install && npm build",
-    "start": "node guilds/srcserver.js"  
+    "start": "node guilds/src/server.js"  
   },
   "repository": {
     "type": "git",
