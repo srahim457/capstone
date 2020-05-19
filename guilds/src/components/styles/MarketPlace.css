@@ -97,3 +97,9 @@
 .yellow {
   color: yellow;
 }
+
+.footer{
+  color: yellow;
+  display:flex;
+  justify-content:center;
+}

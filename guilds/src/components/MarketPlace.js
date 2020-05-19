@@ -228,6 +228,9 @@ class MarketPlace extends Component {
                 )}
             </React.Fragment>
           </div>
+          <div className='footer'>
+            Need help? Contact us GuildsTeam499@gmail.com
+          </div>
         </div>
       </div>
     );
