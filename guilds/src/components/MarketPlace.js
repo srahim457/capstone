@@ -86,6 +86,8 @@ class MarketPlace extends Component {
     this.setState({ itemid: item.item_id })
     this.setState({ listingid: item.id })
     this.setState({ reserved: response.data[0].reserved })
+    this.setState({ username: item.username})
+    this.setState({ rating: item.rating})
 
     console.log('this.state after assigned', this.state)
     this.setState({ open: true }); // moved to the end because of a race condition
@@ -140,6 +142,8 @@ class MarketPlace extends Component {
         lenderid={this.state.lenderid}
         itemid={this.state.itemid}
         listingid={this.state.listingid}
+        username={this.state.username}
+        rating={this.state.rating}
       />;
     }
     //{console.log('test listing', listing)}
