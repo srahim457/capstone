@@ -4,13 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "heroku-prebuild": "cd guilds && npm install", 
+    "heroku-prebuild": "cd guilds/app && npm install && cd guilds/src && npm install", 
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node guilds/app/server.js",
-    "heroku-postbuild": "cd guilds/app && npm install && npm build",
-    "start": "node server.js",
-    "heroku-postbuild": "cd guilds/app && npm install && npm start"
-  
+    "heroku-postbuild": "cd guilds/app && npm install && npm build && cd guilds/src",
+    "start": "node server.js"  
   },
   "repository": {
     "type": "git",
