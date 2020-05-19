@@ -80,7 +80,9 @@ class DisplayListing extends Component {
       total_price,
       rent_amount,
       images,
-      listingid
+      listingid,
+      username,
+      rating
     } = this.props;
     // types are sale, loan, rental
     //console.log('type of listing display', listing_type,this.props)
@@ -191,8 +193,7 @@ class DisplayListing extends Component {
               }
               <br />
               <div>
-                <label><strong>Posted By: </strong></label>
-                {/*name and rating*/}
+                <label><strong>Posted By: {username} {Math.round((rating+ Number.EPSILON) * 100)/100} </strong></label>                
               </div>
             </div>
           </form>
