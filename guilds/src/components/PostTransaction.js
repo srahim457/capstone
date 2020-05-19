@@ -48,38 +48,41 @@ async submitHandler() {
       alert('You must select a rating to complete the transaction!')
     }
     else{
-    //time for math!
-    console.log('this state', this.state.borrowedprofile)
-      console.log('The user id is: ', this.state.borrowedprofile.borrower_id)
-      //pull the users current rank and number of reviews so far (not including this one)
-      let curr_rank = this.state.borrowedprofile.ratingnumber_of_reviews
-      let curr_reviews = this.state.borrowedprofile.number_of_reviews
-      //multiply the users current rank by the number of reviews = current sum
-      let curr_sum = curr_rank * curr_reviews
-      //add the new rating value to the current sum = new sum
-      let new_sum = curr_sum + this.state.score
-      //add 1 to the current number of reviews = new num reviews
-      let new_num_reviews = curr_reviews + 1
-      //divide the new sum by the new sum reviews = new rank
-      let new_rank = new_sum/new_num_reviews
-      //push new rank to the back end
-      console.log('The new rank is: ', new_rank)
-      //set the current listed item to deleted
-      console.log('The item id is: ', this.state.item_id)
-
+      const borrowerProfileResponse = await axios.get('http://localhost:4000/profile/'+ this.state.borrower_id)
+      const borrowerProfile = borrowerProfileResponse.data
+      this.setState({ borrowedprofile: borrowerProfile, isLoading: false })
+      //time for math!
+    //console.log('this state', this.state.borrowedprofile)
+    //console.log('The user id is: ', this.state.borrowedprofile.id)
+    //pull the users current rank and number of reviews so far (not including this one)
+    let curr_rank = this.state.borrowedprofile.rating
+    let curr_reviews = this.state.borrowedprofile.number_of_reviews
+    //multiply the users current rank by the number of reviews = current sum
+    let curr_sum = curr_rank * curr_reviews
+    //add the new rating value to the current sum = new sum
+    let new_sum = curr_sum + this.state.score
+    //add 1 to the current number of reviews = new num reviews
+    let new_num_reviews = curr_reviews + 1
+    //divide the new sum by the new sum reviews = new rank
+    let new_rank = new_sum/new_num_reviews
+    //push new rank to the back end
+    console.log('The new rank is: ', new_rank)
+    //set the current listed item to deleted
+    console.log('The item id is: ', this.state.item_id)
+      
       var datatoupdate={newrank: new_rank, userid: this.state.borrower_id}
-
-      const[firstResp,secondResp] = await Promise.all([
+      const[firstResp,secondResp] = await Promise.all([        
         axios.put('http://localhost:4000/profile/ranking/update/'+ this.state.borrower_id,datatoupdate),
         axios.put('http://localhost:4000/market-place/rate/' + this.state.item_id)
       ]);
       console.log('borrowed profile', firstResp.data)
       console.log('completed item', secondResp.data)
-      this.setState({ borrowedprofile: firstResp.data, isLoading: false })
+
+    
       //alert the submission and refresh the page
       alert('Transaction Complete!')
       
-      this.reloadPage()
+      //this.reloadPage()
     }
   }
 s
