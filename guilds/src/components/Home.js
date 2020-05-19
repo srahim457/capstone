@@ -14,6 +14,10 @@ import ForgotPassword from './ForgotPassword';
 import guildlogo from '../images/guildslogo.png';
 import '../App.css';
 
+// const styleTitle = {
+//   float: 'Left'
+// }
+
 class Home extends Component {
   render() {
     return (

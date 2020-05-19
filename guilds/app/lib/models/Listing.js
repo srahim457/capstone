@@ -23,7 +23,7 @@ var Listing = function (listing) {
 Listing.createItem = async function (req, res) {
   try {
     console.log('creating item  with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.item_info(item_name,item_desc,image) VALUES($1,$2,$3) RETURNING *', [req[0].item_name,req[0].item_desc, req[0].picture]);
+    const listing = await sql.query('INSERT INTO guilds.item_info(item_name,item_desc,image) VALUES($1,$2,$3) RETURNING *', [req[0].item_name, req[0].item_desc, req[0].picture]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -37,7 +37,7 @@ Listing.createItem = async function (req, res) {
 //Takes in an item object
 //Returns created item id
 Listing.createItemImage = async function (req, res) {
-  try {   
+  try {
     const listing = await sql.query('UPDATE guilds.item_info SET image = ($1) WHERE id = ($2) RETURNING *', [req[0].image_picture, req[0].id]);
     return listing.rows[0].id
   } catch (error) {
@@ -54,7 +54,7 @@ Listing.createSaleListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating sale listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].lender_id, 'F', 'F','sale','F', 'F']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,total_price,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', [req[0].item_id, d, req[0].total_price, req[0].lender_id, 'F', 'F', 'sale', 'F', 'F']);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -64,12 +64,12 @@ Listing.createSaleListing = async function (req, res) {
 
 //Create a new loan listing entry
 //Takes in a listing object
-//Returns created listing 
+//Returns created listing
 Listing.createLoanListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating loan listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *', [req[0].item_id, d, req[0].return_by,req[0].policy, req[0].lender_id, 'F', 'F','loan','F', 'F']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,return_by,policy,lender_id,completed,expired,type,deleted,reserved,insurance_amount) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *', [req[0].item_id, d, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F', 'loan', 'F', 'F',req[0].insurance_amount]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -83,7 +83,7 @@ Listing.createRentalListing = async function (req, res) {
   try {
     var d = new Date();
     console.log('creating rental listing with ', req[0])
-    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired,type,deleted,reserved) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F','rental','F', 'F']);
+    const listing = await sql.query('INSERT INTO guilds.listings(item_id,time_posted,rent_amount,return_by,policy,lender_id,completed,expired,type,deleted,reserved,insurance_amount) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *', [req[0].item_id, d, req[0].rent_amount, req[0].return_by, req[0].policy, req[0].lender_id, 'F', 'F', 'rental', 'F', 'F',req[0].insurance_amount]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
@@ -93,9 +93,14 @@ Listing.createRentalListing = async function (req, res) {
 
 Listing.searchForListing = async function (req, res) {
   try {
-    console.log('search for a listing containing ', req)
-    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND I.item_name LIKE '%($1)%' ORDER by time_posted DESC", [req]);
-    return listing.rows
+    if (req === undefined) {
+      console.log('undefined search')
+    } else {
+      console.log('search for a listing containing ', req)
+      const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND I.item_name LIKE ($1) ORDER by time_posted DESC", ['%' + req + '%']);
+      return listing.rows
+    }
+
   } catch (error) {
     console.log(error)
     res.status(400);
@@ -116,11 +121,11 @@ Listing.getListingByListingID = async function (req, res) {
   }
 };
 //Return all listings that are not marked completed in date descending order
-// Shows the newests listings first 
+// Shows the newests listings first
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' ORDER by time_posted DESC");
-    console.log('number of active listings are ', listing.rows.length, '\n',listing.rows)
+    const listing = await sql.query("Select I.*,L.*,U.username,U.rating,U.id as userid FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id LEFT OUTER JOIN guilds.users AS U ON U.id = L.lender_id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND borrower_id IS NULL ORDER by time_posted DESC ,U.rating DESC");
+    console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
     console.log(error)
@@ -142,7 +147,7 @@ Listing.getEveryListing = async function (req, res) {
 //Takes in a borrower id
 Listing.getAllBorrowerListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1)', [req]);
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where borrower_id = ($1) AND L.deleted <> 'T' ORDER BY return_by DESC", [req]);
     console.log('number of listings under borrowerid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -155,8 +160,21 @@ Listing.getAllBorrowerListings = async function (req, res) {
 //This became an inner join to avoid a get request per item 5/10
 Listing.getAllLenderListings = async function (req, res) {
   try {
-    const listing = await sql.query('Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1)', [req]);
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where lender_id = ($1) AND L.deleted <> 'T' AND completed <> 'T' ORDER BY L.borrower_id ASC, L.time_posted DESC", [req]);
     console.log('number of listings under lenderid ', req, ' are ', listing.rows.length, '\n')
+    return listing.rows
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Return all listings that are marked completed under a user id
+//Takes in a user id
+Listing.getAllCompletedListings = async function (req, res) {
+  try {
+    console.log('getting all the completed listings of',req)
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where( lender_id = ($1) OR borrower_id = ($1)) AND L.deleted <> 'T' AND completed = 'T' ORDER BY L.time_sold_expired DESC", [req]);
+    console.log('number of completed listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
     console.log(error)
@@ -168,9 +186,8 @@ Listing.getAllLenderListings = async function (req, res) {
 //Returns listing id
 Listing.addBorrower = async function (req, res) {
   try {
-    var d = new Date();
-    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].user_id, req[0].listing_id,d]);
     console.log('added a borrower to listing ', req[0].listing_id, '\n')
+    const listing = await sql.query('UPDATE guilds.listings SET borrower_id = ($1),time_borrowed = ($3) WHERE id = ($2) RETURNING *', [req[0].borrower_id, req[0].listing_id, req[0].datecompleted]);
     return listing.rows[0].id
   } catch (error) {
     console.log(error)
@@ -194,36 +211,112 @@ Listing.removeBorrower = async function (req, res) {
 //Takes in a listing id only
 Listing.reserveListing = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET reserved = "T" where id = ($1) RETURNING *', [req]);
-    console.log('marked listing as reserved ', req, '\n')
+    console.log('marked listing as reserved ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'T',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id, req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
-    res.status(400);;
+    res.status(400);
   }
 };
+
 //Unreserves the listing
 //Takes in a listing id only
 Listing.unreserveListing = async function (req, res) {
   try {
-    const listing = await sql.query('UPDATE guilds.listings SET reserved = "F" where id = ($1) RETURNING *', [req]);
-    console.log('marked listing as unreserved ', req, '\n')
+    console.log('marked listing as unreserved ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = ($2) where id = ($1) RETURNING *", [req[0].listing_id, req[0].user_id]);
     return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);;
   }
 };
+
+//Unreserves the listing
+//Takes in a listing id only
+Listing.freeListings = async function (req, res) {
+  try {
+    console.log('unreserving all listings belonging to this ', req.user.id, '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = (null) where id = ($1) RETURNING *", [req.user.id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);;
+  }
+};
+
+//Updates the listing with new info
+//Takes in a listing object
+Listing.updateSaleListing = async function (req, res) {
+  try {
+    console.log('updating a sale listing with new info ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET total_price = ($1), type = ($2),policy = ($3) where item_id = ($4) RETURNING *", [req[0].price,req[0].type,req[0].policy,req[0].item_id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Updates the listing with new info
+//Takes in a listing object
+Listing.updateLoanListing = async function (req, res) {
+  try {
+    console.log('updating a loan listing with new info ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET total_price = ($1), type = ($2),return_by = ($3), policy = ($4), insurance = ($5) where item_id = ($6) RETURNING *", [req[0].price,req[0].type,req[0].return_by,req[0].policy,req[0].insurance,req[0].item_id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Updates the listing with new info
+//Takes in a listing object
+Listing.updateRentalListing = async function (req, res) {
+  try {
+    console.log('updating a rental listing with new info ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET total_price = ($1), type = ($2),return_by = ($3), policy = ($4), insurance = ($5) where item_id = ($6) RETURNING *", [req[0].price,req[0].type,req[0].return_by,req[0].policy,req[0].insurance,req[0].item_id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Updates the item with new info
+//Takes in an item object
+Listing.updateItem = async function (req, res) {
+  try {
+    console.log('updating an item with new info ', req[0], '\n')
+    const item = await sql.query("UPDATE guilds.item_info SET item_name = ($1),item_desc = ($2),image = ($3) where id = ($4) RETURNING *", [req[0].item_name,req[0].item_desc,req[0].image,req[0].item_id]);
+    return item.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);;
+  }
+};
+
 // Updates the listing to be marked completed
 // Takes in the completed status,time,listing_id
 // Returns listing id
+Listing.markCompletedSale = async function (req, res) {
+  try {
+    console.log('marking complete', req[0])
+    const listing = await sql.query("UPDATE guilds.listings SET completed = 'T', time_sold_expired = ($1) WHERE id = ($2) RETURNING *", [req[0].datecompleted, req[0].listing_id]);
+    console.log('marked listing completed \n', listing.rows[0])
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//After a user rates the transaction mark the item completed
 Listing.markCompleted = async function (req, res) {
   try {
     var d = new Date();
-    console.log('marking complete', req[0])
-    const listing = await sql.query('UPDATE guilds.listings SET completed = ($1), time_sold_expired = ($2) WHERE id = ($3) RETURNING *', [req[0].completed, d, req[0].listing_id]);
-    console.log('marked listing completed \n', listing.rows[0])
-    return listing.rows[0].id
+    console.log('marking complete after being rated', req,d)
+    const listing = await sql.query("UPDATE guilds.listings SET completed = 'T', time_sold_expired = ($2) WHERE item_id = ($1) RETURNING *", [req,d]);
+    console.log('marked listing completed after rating \n', listing.rows[0])
+    return listing.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);
@@ -235,10 +328,12 @@ Listing.markCompleted = async function (req, res) {
 Listing.delete = async function (req, res) {
   try {
     var d = new Date()
-    const listing = await sql.query("UPDATE guilds.listings SET delete = 'T',expired = 'T',time_sold_expired = ($2) WHERE id = ($1) RETURNING *" [req,d]);
-    console.log('Deleted listing \n ')
+    console.log('deleting a listing with item id',req)
+    const listing = await sql.query("UPDATE guilds.listings SET deleted = 'T',expired = 'T' WHERE item_id = ($1) RETURNING *",req);
+    console.log('Deleted listing \n ',listing.rows)
     return listing.rows
   } catch (error) {
+    console.log(error)
     res.status(400)
   }
 };

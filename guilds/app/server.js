@@ -2,6 +2,9 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var express = require('express');
 
+const http = require('http');
+var io = require('socket.io');
+
 // connection configurations
 //require('dotenv').config();
 const PORT = process.env.PORT || 4000;
@@ -11,8 +14,10 @@ var flash = require('connect-flash');
 var session = require('express-session');
 //var passport = require('passport');
 var request = require('request');
-
+var morgan = require('morgan'); // For Logging
 var app = express();
+
+const server = http.createServer(app);
 
 // ---------------------------STRIPE---------------------------
 // with handlebars
@@ -69,6 +74,7 @@ var app = express();
 // ----------------------STRIPE end---------------------------
 
 app.use(cors());
+app.use(morgan('combined'));
 let User = require('./lib/routes/users/users').User;
 // app.use(
 //   session({ secret: 'capstone', resave: 'false', saveUninitialized: 'false' })
@@ -91,10 +97,57 @@ var path = require('path');
 app.use(flash());
 
 require('./lib/forgotPassword.js')(app);
-require('./lib/resetPassword.js')(app);
+// require('./lib/resetPassword.js')(app);
 
 //Init Middleware
 app.use(express.json({ extended: false }));
+
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
+
+
+const socketIo = io(server);
+
+// Start listening
+server.listen(process.env.PORT || 4001);
+console.log(`Listening on port ${'4001'}`);
+
+// Setup socket.io
+var connectedUsers = {}
+socketIo.on('connection', socket => {
+
+  const username = socket.handshake.query.username;
+  console.log(`${username} connected`);
+  connectedUsers[username] = socket;
+  console.log(Object.keys(connectedUsers), ' users after connected')
+
+  socket.on('client:message', data => {
+    console.log(`${data.username}: ${data.message},${data.targetname}`);
+    console.log('sending a message now')
+    connectedUsers[username].targetname = data.targetname
+    console.log(Object.keys(connectedUsers), 'user info')
+    if (connectedUsers.hasOwnProperty(data.targetname)) {
+      console.log('the other user is connected \n')
+      connectedUsers[data.targetname].emit('server:message', data);
+    }
+    else {
+      console.log('the user is not connected')
+      connectedUsers[data.username].emit('not connected', finalresponse = { username: data.targetname, message: 'user not connected', sentby: data.username });
+    }
+    //socket.broadcast.emit('server:message', data);
+    //console.log(Object.keys(connectedUsers), connectedUsers.hasOwnProperty(data.targetname))
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`${username} disconnected`);
+    delete connectedUsers[username]
+    console.log(connectedUsers, ' users after disconnected')
+
+  });
+});
+
+require('./lib/forgotPassword.js')(app);
+require('./lib/resetPassword.js')(app);
 
 //Defining routes
 app.use('/market-place', require('./lib/routes/marketplace/marketplace'));
@@ -102,7 +155,9 @@ app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));
 app.use('/signup', require('./lib/routes/users/users')); //signup
 app.use('/auth', require('./lib/routes/auth')); //orig auth but to login
-
+//app.use('/forgotpassword', require('./lib/forgotPassword'));
+app.use('/reset', require('./lib/resetPassword'));
+//app.use('/updatePasswordViaEmail', require('./lib/updatePasswordViaEmail'));
 app.use('/payment', require('./lib/routes/marketplace/payment')); // payment
 
 // app.get('/auth', async (req, res) => {

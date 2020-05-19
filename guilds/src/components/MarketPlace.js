@@ -18,6 +18,12 @@ function parsePath(orig) {
   return res;
 }
 
+const styleTitle = {
+  fontFamily: 'fantasy',
+  font: 'bold'
+};
+
+
 class MarketPlace extends Component {
   constructor() {
     super();
@@ -28,7 +34,7 @@ class MarketPlace extends Component {
       click: false, //added to see if it respond on click
       open: false,
       name: '',
-      id: '',
+      listingid: '',
       description: '',
       insurance: '',
       return_date: '',
@@ -40,7 +46,10 @@ class MarketPlace extends Component {
       pageOfItems: [],
       search_key: '',
       lenderid: '',
-      borrowerid: ''
+      borrowerid: '',
+      itemid: '',
+      reserved: false,
+      currentuserid: ''
     }
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
@@ -68,7 +77,9 @@ class MarketPlace extends Component {
   };
 
 
-  openListing(item) {
+  async openListing(item) {
+    const response = await axios.get('http://localhost:4000/market-place/' + item.id)
+    console.log('checking if reserved ', response.data[0].reserved)
     console.log('open listing wth item', item)
     this.setState({ name: item.item_name });
     this.setState({ description: item.item_desc });
@@ -78,8 +89,18 @@ class MarketPlace extends Component {
     this.setState({ total_price: item.total_price });
     this.setState({ policy: item.policy });
     this.setState({ rent_amount: item.rent_amount });
-    this.setState({ open: true });
-    this.setState({ lenderid: item.lender_id});
+    this.setState({ lenderid: item.lender_id });
+    this.setState({ itemid: item.item_id })
+    this.setState({ listingid: item.id })
+    this.setState({ reserved: response.data[0].reserved })
+    this.setState({ username: item.username })
+    this.setState({ rating: item.rating })
+    this.setState({ lenderid: item.userid })
+
+    console.log('this.state after assigned', this.state)
+    this.setState({ open: true }); // moved to the end because of a race condition
+
+
     if (item.return_by === null) {
       this.setState({ return_date: '' });
     }
@@ -97,9 +118,14 @@ class MarketPlace extends Component {
   // }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/active')
-    console.log('listings', response)
-    this.setState({ listings: response.data, isLoading: false })
+    const [firstResp, secondResp] = await Promise.all([
+      axios.get('http://localhost:4000/market-place/active'),
+      // Getting the current profile of the user
+      axios.get('http://localhost:4000/profile/' + -1)
+    ]);
+    console.log('listings in marketplace', firstResp.data)
+    this.setState({ listings: firstResp.data, isLoading: false, currentuserid: secondResp.data.id })
+    console.log(this.state.lenderid, 'current user id')
   }
 
   render() {
@@ -109,6 +135,13 @@ class MarketPlace extends Component {
     }
 
     if (this.state.open === true) {
+      console.log('opening a listing will display now \n', this.state)
+      if (this.state.reserved === true) {
+        // I think this would be a good place for a notification cause
+        // the transition is jaring and you dont know what happened
+        console.log('already reserved srry')
+        return <MarketPlace />
+      }
       return <DisplayListing
         name={this.state.name}
         description={this.state.description}
@@ -120,8 +153,15 @@ class MarketPlace extends Component {
         policy={this.state.policy}
         images={this.state.images}
         lenderid={this.state.lenderid}
+        itemid={this.state.itemid}
+        listingid={this.state.listingid}
+        username={this.state.username}
+        rating={this.state.rating}
+        currentuserid={this.state.currentuserid}
       />;
     }
+    //{console.log('test listing', listing)}
+    // {console.log('test res', this.state.listings)}
     return (
       <div className='containerParent'>
         <div className='container'>
@@ -155,13 +195,11 @@ class MarketPlace extends Component {
               </button>
 
             </div>
-            {console.log('test res', this.state.listings)}
             <React.Fragment>
               {!isLoading ? (
                 Object.values(this.state.listings).map(listing => {
                   return (
-                    <div className='itemContainer' key={listing.id}>
-                      {console.log('test listing', listing)}
+                    <div className='someContainer' key={listing.id}>
                       <div className='itemImage'
                         onClick={this.openListing.bind(this, listing)}>
                         {/*listing.image*/}
@@ -169,22 +207,32 @@ class MarketPlace extends Component {
                         {listing.image != null ? (
                           <img
                             src={parsePath(listing.image)}
-                            height='150'
+                            height='200'
                             width='200'
                             alt=''
                           ></img>
                         ) : (
-                            <img src={noimage} height='150' width="200" ></img>
+                            <img src={noimage} height='200' width="200" ></img>
                           )}
-
                       </div>
-                      <h5>{listing.item_name}</h5>
+                      <div>
+                        <h5 style={styleTitle}>{listing.item_name}</h5>
+                        {this.state.currentuserid == listing.lender_id &&
+                          <h6>View Your listing</h6>
+                        }
+                        {this.state.currentuserid != listing.lender_id &&
+                          <h6>Posted By: {listing.username} {Math.round((listing.rating + Number.EPSILON) * 100) / 100}/5</h6>
+                        }
+                      </div>
+
+
                       <div className='paginate'>
                         <Pagination
                           items={this.state.listing}
                           onChangePage={this.onChangePage}
                         />
                       </div>
+
                     </div>
                   );
                 })
@@ -194,6 +242,9 @@ class MarketPlace extends Component {
                   </div>
                 )}
             </React.Fragment>
+          </div>
+          <div className='footer'>
+            Need help? Contact us GuildsTeam499@gmail.com
           </div>
         </div>
       </div>

@@ -9,9 +9,11 @@ import {
   NavLink,
   Switch,
 } from 'react-router-dom';
+import { format, parseISO, fromUnixTime } from 'date-fns';
 
 import './styles/profile.css';
 import EditListing from './EditListing';
+import PostTransactionForm from './PostTransaction';
 import Spinner from './layout/spinner_transparent.gif';
 import NotAvailable from '../images/noimageavailable.png';
 
@@ -22,18 +24,19 @@ function parsePath(orig) {
 }
 
 class Profile_Listed extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       isLoading: true,
       listings: [],
       error: null,
+      item: []
     }
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:4000/market-place/listed')
+    const response = await axios.get('http://localhost:4000/market-place/listed/' + this.props.userid)
     console.log('listings', response)
     this.setState({ listings: response.data, isLoading: false })
   }
@@ -63,6 +66,16 @@ class Profile_Listed extends Component {
     //window.location.reload(false)
     this.setState({ name: item.name });
     this.setState({ click: true });
+    this.setState({ item: item})
+
+  }
+
+  async loadPostTransactionPage(listing){
+    console.log('post transaction for',listing)
+    this.setState({ completeTransaction: true });
+    this.setState({ borrower_id: listing.borrower_id });
+    this.setState({ item_name: listing.item_name});
+    this.setState({item_id: listing.item_id});
   }
 
   onClickHandler(e) {
@@ -71,42 +84,68 @@ class Profile_Listed extends Component {
   }
 
   render() {
-    /*routes to an edit listing page*/
-    if (this.state.click === true) {
-      return <EditListing name={this.state.name} />;
-    }
-    //console.log(this.state,'\n current state',isLoading,listings)
-    const { isLoading } = this.state;
-    console.log('this.state \n', this.state.listings)
+      /*routes to an edit listing page*/
+        if (this.state.click === true && this.props.canedit) {
+         return <EditListing name={this.state.name}item={this.state.item}itemid={this.state.item.item_id} />;
+        }
+
+        if (this.state.completeTransaction){
+          return <PostTransactionForm borrower_id={this.state.borrower_id}
+          item_name={this.state.item_name}
+          item_id={this.state.item_id}
+          item_image={this.state.item_image}
+          />
+        }
+        {/* displays either an edit listing button (if not borrowed) or borrowed button*/}
+        const displayBorrowedOrEditListingButton = (listing)=>{
+          if (listing.borrower_id!=null && this.props.canedit){
+            return <button class="edit-button" onClick={this.loadPostTransactionPage.bind(this, listing)}>
+                  Item Borrowed! Click to Complete
+                </button>
+          }
+          else if(this.props.canedit){
+            return <button class="edit-button" onClick={this.testClick.bind(this, listing)}>
+                  Edit this Listing
+                </button>
+          }
+          else {
+            return <br/>
+          }
+        }
+
+        //console.log(this.state,'\n current state',isLoading,listings)
+        const {isLoading} = this.state;
+
     return (
       <React.Fragment>
-        <div className='ItemListWrapper'>
-          {!isLoading ? (
-            Object.values(this.state.listings).map(listing => {
-              return (
-                <div className='item' key={listing.item_id}>
-                  {console.log('test res', listing, listing.borrower_id)}
-
-                  <div className='itemImageWrapper'>
-                    {/* <h1> img {listing.image} </h1> */}
-
-                    {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
-                      : <img src={NotAvailable} height="100" width="100"></img>}
-                  </div>
-                  <div className='itemInfoWrapper' key={listing}>
-                    <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
-                    <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
-                    <hr />
-                  </div>
-                  <div className='editListingButtonWrapper'>
-                    <button
-                      class='edit-button'
-                      onClick={this.testClick.bind(this, listing)}
-                    >
-                      Edit Listed Item
-                  </button>
-                  </div>
+      <div className='ItemListWrapper'>
+        {!isLoading ? (
+          Object.values(this.state.listings).map(listing => {
+            return(
+              <div className='item' key={listing.item_id}>
+                <div className='itemImageWrapper'>
+                {listing.image != null ? <img src={parsePath(listing.image)} height="100" width="100"></img>
+                : <img src={NotAvailable} height="100" width="100"></img>}
                 </div>
+                <div className = 'itemInfoWrapper' key = {listing}>
+                  <h1 className='itemInfoField'> Name: {listing.item_name}</h1>
+                  <h1 className='itemInfoField'> Desc: {listing.item_desc}</h1>
+                  <h1 className='itemInfoField'> Time Listed: {format(parseISO(listing.time_posted), 'MMMM do,yyyy h:mma')}</h1>
+                <hr />
+                </div>
+                <div className='editListingButtonWrapper'>
+                {/*if the borrower_id is not null, then change the button from edit to borrowed*/}
+                {displayBorrowedOrEditListingButton(listing)}
+                {/*
+                  <button
+                  className='edit-button'
+                  onClick={this.testClick.bind(this, listing)}
+                  >
+                  Edit Listed Item
+                  </button>
+                */}
+                </div>
+              </div>
               );
             })
           ) : (

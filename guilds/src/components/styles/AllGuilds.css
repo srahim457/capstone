@@ -105,6 +105,30 @@ relevant files: Profile.js
   left: 100px;
 }
 
+.spinner {
+  display: block;
+  width: 200px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  float: none;
+  position: relative;
+  align-items: center;
+}
+
 .yellow {
   color: yellow;
+}
+
+.spinner {
+  display: block;
+  width: 200px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  float: none;
+  position: relative;
+  align-items: center;
 }

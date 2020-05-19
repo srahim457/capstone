@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './styles/CreateListing.css';
 import AllGuilds from './AllGuilds';
 import noimage from '../images/noimageavailable.png';
+import axios from 'axios';
 {/*uses the same css file as create listing,
 because the layout is exactly the same except
 when editing the form fields should be filled with existing information
@@ -20,12 +21,17 @@ class DisplayGuild extends Component {
   constructor(props) {
     super(props);
 
+    console.log('displayguild props passed \n ',this.props)
+
     this.state = {
       name: '',
       description: '',
       guildmaster: '',
       close: false,
       picture: null,
+      guildmasterinfo: [],
+      isLoading:  true,
+      guildid: ''
     };
     this.closeButton = this.closeButton.bind(this);
   }
@@ -39,9 +45,29 @@ class DisplayGuild extends Component {
     e.preventDefault();
   }
 
+  async joinGuild(e){
+    console.log('joining guild',e,this.props)
+    const response = await axios.put('http://localhost:4000/all-guilds/addtoguild/' +e)
+    console.log('joining guild response ', response)
+    alert('You have joined this guild!');
+    window.location.reload(false);
+
+    if(response.data.constraint === "no_double_joining_guild"){
+      console.log('already part of this guild ')
+      alert('Already a member of this guild');
+      return <AllGuilds />;
+    }
+    //this.setState({ listings: response.data, isLoading: false })
+  }
+
+  async componentDidMount(){
+    let guildmasterinfo;
+    const response = await axios.get('http://localhost:4000/profile/'+this.props.guildmaster)
+    this.setState({ guildmasterinfo: response.data, isLoading: false })
+  }
+
   render() {
-    var { name, description, guildmaster, picture } = this.props;
-    console.log(this.props, 'props')
+    var { name, description, guildmaster, picture,guildid } = this.props;
     if (this.state.close === true) {
       return <AllGuilds />;
     }
@@ -83,9 +109,13 @@ class DisplayGuild extends Component {
               <label> Description:</label>
               {description}
             </div>
+            <div>
+              <label> Guild Master: </label>
+              {this.state.guildmasterinfo.username}
+            </div>
 
           </form>
-          <button className="submit-button">Join Guild</button>
+          <button className="submit-button" onClick={this.joinGuild.bind(this,guildid)}>Join Guild</button>
         </div>
       </div>
     );

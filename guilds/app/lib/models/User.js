@@ -15,11 +15,14 @@ var User = function (user) {
 //Returns the user row
 User.updateRating = async function (req, res) {
   try {
+    console.log('updating rating with',req[0])
+    const updatedrate = await sql.query('UPDATE guilds.users SET number_of_reviews=number_of_reviews + 1 WHERE id = ($1) RETURNING *',[req[0].userid])
+   // console.log('updated rating',updatedrate.rows[0].rating)
     const user = await sql.query(
-      'UPDATE guilds.users SET rating=($2) WHERE user_id = ($1) RETURNING *',
-      [req[0].userid, req[0].rating]
+      'UPDATE guilds.users SET rating=($2) WHERE id = ($1) RETURNING *',
+      [req[0].userid, req[0].newrank]
     );
-    console.log('updated user rating \n');
+    console.log('updated user rating \n',user.rows[0].id,user.rows[0].rating);
     return user.rows[0];
   } catch (error) {
     console.log(error);
@@ -135,9 +138,10 @@ User.createUser = async function (req, res) {
   try {
     var d = new Date();
     console.log('inserting new user now \n');
+    const username = req[0].firstname + ' ' + req[0].lastname;
     const userentry = await sql.query(
-      'INSERT INTO guilds.users(first_name,last_name,email,creation_date) values($1,$2,$3,$4) RETURNING *',
-      [req[0].firstname, req[0].lastname, req[0].email, d]
+      'INSERT INTO guilds.users(first_name,last_name,email,username,creation_date,number_of_reviews,rating) values($1,$2,$3,$4,$5,$6,$7) RETURNING *',
+      [req[0].firstname, req[0].lastname, req[0].email, username, d,0,0]
     );
     return userentry.rows;
   } catch (error) {
@@ -185,6 +189,22 @@ User.getUserByEmail = async function (req, res) {
     );
     console.log('user found with info ', req, user.rows.length);
     return user.rows;
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+User.searchForUser = async function (req, res) {
+  try {
+    if (req === undefined) {
+      console.log('undefined search')
+    }
+    const users = await sql.query(
+      'Select * from guilds.users where username LIKE ($1)',
+      ['%' + req + '%']
+    );
+    console.log('user found with usernames like  ', req, users.rows.length);
+    return users.rows;
   } catch (error) {
     console.log(error);
     res.status(400);

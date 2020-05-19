@@ -2,6 +2,7 @@ import React, { Component, useState, useRef, useEffect } from "react";
 // import Pagination from './Pagination';
 import axios from "axios";
 import "./styles/Payment.css";
+import { Link } from 'react-router-dom';
 
 import itemChest from "../images/item_chest.png";
 
@@ -23,6 +24,12 @@ class PaymentSuccess extends Component {
     return_date: "DateTime",
   };
 
+  // for testing message display after n milliseconds
+  // test() {
+  //   // setTimeout(function(){ alert("Hello"); }, 5000)
+  //   setTimeout(function() {window.location.reload()}, 5000)
+  // }
+
   render() {
     return (
       <div className="containerParent">
@@ -39,21 +46,33 @@ class PaymentSuccess extends Component {
                 Thank you. <br/>Your payment has been submitted.
               </h1>
               <img src={itemChest} height="200" width="200"></img>
-              <p class="lead">
+              {/* <p class="lead">
                 Name: {this.item.name}
                 <br />
                 Amount Paid: ${this.item.price /10} <br/>
                 {this.item.type} until {this.item.return_date}
                 <br />
-              </p>
+              </p> */}
             </div>
             {/* <h1 class="display-3">Thank You</h1> */}
             <p class="lead">
-              {this.item.lender} has been notified <br/>and will be in contact with you soon.
+              The lender will be in contact with you as soon as they can.
             </p>
-            <a href="/market-place" class="btn btn-light btn-lg">
+            {/* <a href="/market-place" class="button">
               Return to Marketplace
-            </a>
+            </a> */}
+
+            <button className='listing-button'>
+                <Link to={{
+                  pathname: '/market-place'
+                }}
+                  className='yellow'
+                >
+                  Return to Marketplace
+              </Link>
+              </button>
+              { this.test() }
+              {/* { alert("Hello") } */}
           </div>
         </div>
       </div>

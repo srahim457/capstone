@@ -14,7 +14,10 @@ class AllGuilds extends Component {
       open: false,
       guilds: [],
       isLoading: true,
-      description: ''
+      description: '',
+      picture: null,
+      name: '',
+      guildid: ''
     };
     this.onClickHandler = this.onClickHandler.bind(this);
   }
@@ -24,11 +27,13 @@ class AllGuilds extends Component {
     this.setState({ click: true });
   }
   openGuild(item) {
-    console.log('open guild listing with', item)
+    console.log('open guild listing with search', item)
     this.setState({ name: item.name });
-    this.setState({ description: item.desc });
-    this.setState({ guildmaster: item.guildmaster });
+    this.setState({ description: item.guild_desc });
+    this.setState({ guildmaster: item.creator_id });
     this.setState({ open: true });
+    this.setState({ picture: item.picture }); //added
+    this.setState({ guildid: item.id})
   }
 
   async componentDidMount() {
@@ -42,13 +47,14 @@ class AllGuilds extends Component {
     const { data } = this.props.location;
 
     if (this.state.open === true) {
-      console.log(this.state, 'what im passing', this.state.guilds[0])
+      console.log(this.state, 'what im passing', this.state)
       return (
         <DisplayGuild
-          name={this.state.guilds[0].name}
-          description={this.state.guilds[0].guild_desc}
-        // could pull first member of guild
-        //guildmaster={this.state.guildmaster}
+          name={this.state.name}
+          description={this.state.description}
+          guildmaster={this.state.guildmaster}
+          picture={this.state.picture}
+          guildid={this.state.guildid}
         />
       );
     }

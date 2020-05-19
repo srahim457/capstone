@@ -36,7 +36,9 @@ class Payment extends Component {
       payment_status: '',
       lendersearch: [],
       firstname: '',
-      lastname: ''
+      lastname: '',
+      lenderid: '',
+      formatted_price: 0
     };
 
     // for listing
@@ -60,7 +62,8 @@ class Payment extends Component {
     this.setState({ user: userresponse.data, isLoading: false })
     this.setState({
       firstname: userresponse.data.first_name,
-      lastname: userresponse.data.last_name
+      lastname: userresponse.data.last_name,
+      lenderid: this.props.lenderid
   })
 }
 
@@ -85,23 +88,38 @@ class Payment extends Component {
   //   console.log({ token, addresses })
   // }
 
+  // // refreshes page after 6 seconds
+  // refreshPage() {
+  //   // setTimeout(function(){ alert("Hello"); }, 5000)
+  //   setTimeout(function() {window.location.reload()}, 6000)
+  // }
+
   render() {
-    console.log('in render \n ',this.props)
+    console.log('in render for payment \n ',this.props)
     // this will get passed to stripe form
     // Stripe form takes care of everything else
     const product = {
       name: this.props.name,
       price: 4.50,
-      description: this.props.description
+      description: this.props.description,
+      lenderid: this.props.lenderid,
+      itemid: this.props.itemid,
+      listingid: this.props.listingid,
+      listing_type: this.props.listing_type,
+      return_date: this.props.return_date,
+      insurance: this.props.insurance,
+      formatted_price: 0
     };
 
+    var formatted_price = Number(this.props.price.replace(/[^0-9.-]+/g,""))
+    product.formatted_price = formatted_price
     // submits stripe payment for and returns 'success' or 'error' status
     async function handleToken(token) {
       // console.log({ token, addresses });
       const response = await axios.post('http://localhost:4000/payment/charge',
         {
         token,
-        product
+        product,
         }
       );
       const { status }  = response.data;
@@ -109,10 +127,14 @@ class Payment extends Component {
       if (status === 'success') {
         toast('Success! Check email for details',
         { type: 'success' })
+        
+        // refreshes page after 6 seconds
+        setTimeout(function() {window.location.reload()}, 5000)
       } else {
         toast('Something went wrong',
         { type: 'error' })
       }
+
       // will require a POST to backend and marking listing paid for + unavailable
     }
 
@@ -140,11 +162,20 @@ class Payment extends Component {
               <br />
               Type: {this.props.listing_type}
               <br />
-              Insurance: {this.props.insurance}
+              {this.props.listing_type === 'loan' &&
+                  <label>Price: {this.props.price}</label>
+              }
+              {this.props.listing_type != 'loan' &&
+                 <label>Insurance: {this.props.insurance}</label>
+              }
               <br />
-              Price: {this.props.price}
-                <br />
-                Return By Date &amp; Time: {format(parseISO(this.props.return_date), 'MMMM do,yyyy H:mma')}
+              {this.props.listing_type != 'loan' &&
+                  <label>Price: {this.props.price}</label>
+              }
+              <br />
+              {this.props.listing_type != 'sale' &&
+              <label> Return By Date &amp; Time: {format(parseISO(this.props.return_date), 'MMMM do,yyyy h:mma')}</label>   
+              }            
               <br />
               {/* {this.state.greeting} */}
             </p>
@@ -156,7 +187,7 @@ class Payment extends Component {
               stripeKey="pk_test_Ci5vDkQD1gwMM6faugOYBC0B00IddzaMye"
               token={handleToken}
               billingAddress
-              amount={product.price * 100}
+              amount={formatted_price * 100}
               name={product.name}
             />
           </div>

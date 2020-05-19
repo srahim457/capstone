@@ -8,6 +8,7 @@ import {
 import './styles/AllGuilds.css';
 import CreateGuild from './CreateGuild';
 import DisplayGuild from './DisplayGuild';
+import Spinner from './layout/spinner_transparent.gif';
 import noimage from '../images/noimageavailable.png';
 import axios from 'axios';
 
@@ -28,7 +29,9 @@ class AllGuilds extends Component {
       isLoading: true,
       description: '',
       search_key: '',
-      images: null
+      picture: null,
+      name: '',
+      guildid: ''
     };
     this.onClickHandler = this.onClickHandler.bind(this);
     this.searchChangeHandler = this.searchChangeHandler.bind(this);
@@ -48,10 +51,11 @@ class AllGuilds extends Component {
   openGuild(item) {
     console.log('open guild listing with', item)
     this.setState({ name: item.name });
-    this.setState({ description: item.desc });
-    this.setState({ guildmaster: item.guildmaster });
+    this.setState({ description: item.guild_desc });
+    this.setState({ guildmaster: item.creator_id });
     this.setState({ open: true });
-    this.setState({ images: item.picture }); //added
+    this.setState({ picture: item.picture }); //added
+    this.setState({ guildid: item.id})
   }
 
   async componentDidMount() {
@@ -67,15 +71,13 @@ class AllGuilds extends Component {
     }
 
     if (this.state.open === true) {
-      console.log(this.state, 'what im passing', this.state.guilds[0])
       return (
         <DisplayGuild
-          name={this.state.guilds[0].name}
-          description={this.state.guilds[0].guild_desc}
-
-          picture={this.state.guilds[0].picture}
-        // could pull first member of guild
-        //guildmaster={this.state.guildmaster}
+          name={this.state.name}
+          description={this.state.description}
+          picture={this.state.picture}
+          guildmaster={this.state.guildmaster}
+          guildid={this.state.guildid}
         />
       );
     }
@@ -87,7 +89,7 @@ class AllGuilds extends Component {
         <h1 className='title'>All Guilds</h1>
         <div className='GuildBoard'>
           <div className='addGuildsButtonWrapper'>
-            <button class='add-button' onClick={this.onClickHandler}>
+            <button className='add-button' onClick={this.onClickHandler}>
               Add New Guild
             </button>
           </div>
@@ -101,7 +103,7 @@ class AllGuilds extends Component {
               value={this.state.search_key}
               onChange={this.searchChangeHandler}
             ></input>
-            <button class='search-button'>
+            <button className='search-button'>
               <Link to={{
                 pathname: '/all-guilds/search-results',
                 data: this.state.search_key,
@@ -112,7 +114,6 @@ class AllGuilds extends Component {
               </Link>
             </button>
           </div>
-          {console.log('test res', this.state.guilds)}
           <React.Fragment>
             {!isLoading ? (
               Object.values(this.state.guilds).map(guild => {
@@ -141,7 +142,9 @@ class AllGuilds extends Component {
                 );
               })
             ) : (
-                <h3>Loading</h3>
+              <div className='spinner'>
+                <img src={Spinner} alt="loading..." />
+              </div>
               )}
           </React.Fragment>
         </div>

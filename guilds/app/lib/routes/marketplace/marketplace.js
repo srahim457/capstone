@@ -53,8 +53,8 @@ router.post('/create', auth, async (req, res) => {
       return_by: req.body.item.date,
       policy: req.body.item.policy,
       total_price: req.body.item.price,
-      rent_amount: req.body.rent_amount,
-      //insurance_amount: req.body.insurance_amount,
+      rent_amount: req.body.item.price,
+      insurance_amount: req.body.item.insurance,
       lender_id: req.user.id,
     };
     console.log('created Itemid is', newListing.item_id);
@@ -92,7 +92,7 @@ router.post('/picture', auth, async (req, res) => {
     /*Now do where ever you want to do*/
 
     let path = req.file.path;
-    console.log(itemId, 'PAssed item idnj jdnjsnjfgnsl')
+    console.log(itemId, 'Passed item id')
     const imageObj = {
       id: itemId, //item id here instead
       image_picture: path,
@@ -108,9 +108,9 @@ router.post('/picture', auth, async (req, res) => {
 
 //Gets a listing matching the passed listing id
 router.get('/:listingid', auth, async (req, res, next) => {
-  console.log(req.params.listingid);
-  if (!Number.isInteger(req.params.listingid)) {
-    console.log('not a number');
+  console.log(req.params.listingid, parseInt(req.params.listingid, 10));
+  if (!Number.isInteger(parseInt(req.params.listingid, 10))) {
+    console.log('not a number in /:listingid', typeof req.params.listingid);
     next();
   } else {
     try {
@@ -123,8 +123,21 @@ router.get('/:listingid', auth, async (req, res, next) => {
     } catch (error) {
       console.error('error retrieving listing by id \n', error);
     }
-    console.log('called get listing request by listing id', req.params);
+    console.log('called get listing request by listing id', req.params.listingid);
   }
+});
+//Gets a listing matching the passed name
+router.get('/search/:query', auth, async (req, res, next) => {
+  console.log(req.params.query);
+  try {
+    console.log('seaching for a listing', req.params.query)
+    const listing = await Listing.searchForListing([req.params.query], res);
+    console.log('listing result', listing);
+    res.status(200).json(listing);
+  } catch (error) {
+    console.error('error searching for a listing \n', error);
+  }
+  console.log('called search for listing', req.params);
 });
 
 //Borrows a listing
@@ -161,8 +174,12 @@ router.get('/:listingid/borrow/cancel', auth, async (req, res) => {
 router.get('/:listingid/reserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
-    const listing = await Listing.reserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
+    console.log('reserving listing', req.params.listingid);
+    parameters = {
+      listingid: req.params.listingid,
+      user_id: req.user.id
+    }
+    const listing = await Listing.reserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error reserving listing by id \n ', error);
@@ -174,8 +191,12 @@ router.get('/:listingid/reserve', auth, async (req, res) => {
 router.get('/:listingid/unreserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
-    const listing = await Listing.unreserveListing([req.params.listingid], res);
-    console.log('reserving listing', listing);
+    console.log('unreserving listing', req.params.listingid);
+    parameters = {
+      listingid: req.params.listingid,
+      user_id: req.user.id
+    }
+    const listing = await Listing.unreserveListing([parameters], res);
     res.status(200).json(listing);
   } catch (error) {
     console.error('error unreserving listing by id \n', error);
@@ -184,14 +205,34 @@ router.get('/:listingid/unreserve', auth, async (req, res) => {
 });
 
 //Gets all active listings
-router.get('/active', async (req, res) => {
+router.get('/active', auth, async (req, res) => {
   try {
     const activelistings = await Listing.getAllActiveListings(req, res);
     res.status(200).json(activelistings);
+    const unreservedlistings = await Listing.freeListings(req, res)
   } catch (error) {
     console.error('error getting all active listings \n', error);
   }
   console.log('called get active listings');
+});
+
+//Gets all listings
+router.get('/complete/:id', auth, async (req, res) => {
+  try {
+    idtouse = 0
+    if (req.params.id == -1) {
+      console.log('no id detected reverting to current user')
+      idtouse = req.user.id
+    }
+    else {
+      idtouse = req.params.id
+    }
+    const alllistings = await Listing.getAllCompletedListings(idtouse, res);
+    res.status(200).json(alllistings);
+  } catch (error) {
+    console.error('error getting all completed  listings\n', error);
+  }
+  console.log('called get all completed listings');
 });
 
 //Gets all listings
@@ -205,13 +246,88 @@ router.get('/', auth, async (req, res) => {
   console.log('called get all listings');
 });
 
+//Marks a transaction complete
+router.put('/rate/:id', auth, async (req, res) => {
+  try {
+    console.log('transaction rated marking completed ', req.params.id)
+    const alllistings = await Listing.markCompleted(req.params.id);
+    return res.status(200).json(alllistings);
+  } catch (error) {
+    console.error('error getting all listings\n', error);
+  }
+  console.log('called get all listings');
+});
+//Edits a listing with the item id passed
+router.put('/:id', auth, async (req, res) => {
+  try {
+    console.log(' editing the listing ', req.params.id, req.body.toUpdate)
+    itemId = req.params.id; //added to update picture
+    var newItemInfo = req.body.toUpdate.newItem
+    var itemToUpdate = {
+      item_id: req.params.id,
+      item_name: newItemInfo.name,
+      item_desc: newItemInfo.description,
+      //image: newItemInfo.image
+    }
+
+
+    const updatedItem = await Listing.updateItem([itemToUpdate], res)
+    if (newItemInfo.option == 'sale') {
+      var listingToUpdate = {
+        item_id: req.params.id,
+        price: newItemInfo.price,
+        type: newItemInfo.option,
+        policy: newItemInfo.policy
+      }
+      const updatedListings = await Listing.updateSaleListing([listingToUpdate], res);
+      return res.status(200).json(updatedListings);
+    } else if (newItemInfo.option == 'loan') {
+      var listingToUpdate = {
+        item_id: req.params.id,
+        price: '',
+        type: newItemInfo.option,
+        return_by: newItemInfo.date,
+        policy: newItemInfo.policy,
+        insurance: newItemInfo.insurance
+      }
+      const updatedListings = await Listing.updateLoanListing([listingToUpdate], res);
+      return res.status(200).json(updatedListings);
+    }
+    else {
+      //At this point its a rental
+      var listingToUpdate = {
+        item_id: req.params.id,
+        price: newItemInfo.price,
+        type: newItemInfo.option,
+        return_by: newItemInfo.date,
+        policy: newItemInfo.policy,
+        insurance: newItemInfo.insurance
+      }
+      const updatedListings = await Listing.updateRentalListing([listingToUpdate], res);
+      return res.status(200).json(updatedListings);
+    }
+
+  } catch (error) {
+    console.error('error getting all listings\n', error);
+  }
+  console.log('called get all listings');
+});
+
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-router.get('/borrowed', auth, async (req, res) => {
+router.get('/borrowed/:id', auth, async (req, res) => {
   try {
-    console.log('getting all borrowed items \n', req.user.id);
+    idtouse = 0
+    if (req.params.id == -1) {
+      console.log('no id detected reverting to current user')
+      idtouse = req.user.id
+    }
+    else {
+      idtouse = req.params.id
+    }
+    console.log('getting all borrowed items for  \n', idtouse);
     const alllistings = await Listing.getAllBorrowerListings(
-      req.user.id,
+      idtouse,
       res
     );
     console.log('all borrowed listings \n', alllistings.length);
@@ -224,18 +340,39 @@ router.get('/borrowed', auth, async (req, res) => {
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-router.get('/listed', auth, async (req, res) => {
+router.get('/listed/:id', auth, async (req, res) => {
   try {
-    console.log('getting all listed items \n', req.user.id);
+    idtouse = 0
+    if (req.params.id == -1) {
+      idtouse = req.user.id
+      console.log('no id detected reverting to current user \n', idtouse)
+    }
+    else {
+      idtouse = req.params.id
+    }
     const alllistings = await Listing.getAllLenderListings(
-      req.user.id,
+      idtouse,
       res
     );
+    console.log('all listed listings \n', alllistings.length);
     res.status(200).json(alllistings);
   } catch (error) {
     console.error('error getting all listed listings', error);
   }
   console.log('called get all listings with lender id');
+});
+
+//"Deletes" a listing
+router.get('/delete/:id', auth, async (req, res) => {
+  try {
+    console.log('deleting listing with id  \n', req.params.id);
+    const deleted = await Listing.delete([req.params.id], res);
+    // console.log('deleted result \n ', deleted)
+    res.status(200).json(deleted);
+  } catch (error) {
+    console.error('error deleting a listing \n ', error);
+  }
+  console.log('called delete listing with id');
 });
 
 //example;

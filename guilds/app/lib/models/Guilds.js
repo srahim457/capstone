@@ -27,11 +27,11 @@ Guilds.updateGuildsInformation = async function (req, res) {
 Guilds.createGuilds = async function (req, res) {
     try {
         var d = new Date();
-        console.log('inserting new guilds now \n ', req)
+        console.log('inserting new guilds now \n ', req[0])
         // privacy not implemented yet
         //const guild = await sql.query("INSERT INTO guilds.guilds(name,picture,public,desc) values($1,$2,$3,$4,$5) RETURNING *", [req[0].name, req[0].picture, req[0].public, req[0].desc,d])
-        const guild = await sql.query("INSERT INTO guilds.guilds(name,guild_desc,date_created) values($1,$2,$3) RETURNING *", [req[0].name, req[0].desc, d])
-        console.log(guild.rows[0], '\n result')
+        const guild = await sql.query("INSERT INTO guilds.guilds(name,picture,guild_desc,date_created,creator_id) values($1,$2,$3,$4,$5) RETURNING *", [req[0].guild.name, req[0].guild.picture,req[0].guild.desc,d,req[0].userid])
+        console.log(guild.rows[0],'\n result')
         return guild.rows[0]
     } catch (error) {
         console.log(error);
@@ -78,7 +78,7 @@ Guilds.addUserToGuild = async function (req, res) {
         return guild.rows[0]
     } catch (error) {
         console.log(error);
-        res.status(400);
+        res.status(200).json(error);
     }
 };
 //Search for all guilds that match the name provided
@@ -123,7 +123,7 @@ Guilds.getAllUserGuilds = async function (req, res) {
         // in case of privacy
         //const guilds = await sql.query("SELECT * from guilds WHERE private <> 'F'", [req])
         //const guilds = await sql.query("SELECT * from guilds.guilds.joined WHERE user_id = ($1) ORDER BY name ASC")
-        const guilds = await sql.query("SELECT G.name from guilds.guilds AS G INNER JOIN guilds.guilds_joined AS GJ ON G.id = GJ.guild_id WHERE user_id = ($1) ORDER BY name ASC", req);
+        const guilds = await sql.query("SELECT G.* from guilds.guilds AS G INNER JOIN guilds.guilds_joined AS GJ ON G.id = GJ.guild_id WHERE user_id = ($1) ORDER BY name ASC", req);
         console.log('number of guilds under userid ', req, 'are', guilds.rows.length, '\n')
         return guilds.rows
     } catch (error) {

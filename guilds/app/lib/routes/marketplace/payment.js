@@ -3,30 +3,33 @@ const express = require('express');
 const bodyParser = require('body-parser'); // already declared
 const exphbs = require('express-handlebars');
 let Listing = require('../../models/Listing').Listing;
+let Payment = require('../../models/Payments').Payment;
 
 const cors = require("cors");
 const stripe = require("stripe")("sk_test_zlDbmmvqhO05kEFUcfFDRzGX00yMAVDGIv");
-const uuid = require("uuid");
-const auth = require('../../middleware/auth');
+const { uuid } = require("uuidv4");
 
 const app = express();
+
+const auth = require('../../middleware/auth');
 
 // middleware
 app.use(express.json());
 app.use(cors());
 
 // Testing route
-app.get("/", auth, (req, res) => {
+app.get("/", (req, res) => {
   res.send("Add your Stripe Secret Key to the .require('stripe') statement!");
 });
 
+
 // post payment to Stripe
 app.post('/charge', auth, async (req, res) => {
-  console.log("Request:", req.body);
+  console.log(req.user.id,"Request:", req.body);
 
   let error;
   let status;
-  try {
+  try {    
     const { product, token } = req.body;
 
     const customer = await stripe.customers.create({
@@ -37,7 +40,7 @@ app.post('/charge', auth, async (req, res) => {
     const idempotency_key = uuid();
     const charge = await stripe.charges.create(
       {
-        amount: product.price * 100,
+        amount: product.formatted_price * 100,
         currency: "usd",
         customer: customer.id,
         receipt_email: token.email,
@@ -59,6 +62,17 @@ app.post('/charge', auth, async (req, res) => {
     );
     console.log("Charge:", { charge });
     status = "success";
+
+    final_charge = {
+      charge: charge,
+      borrower_id: req.user.id, // a lender is never going to be paying for something
+      listing_id: product.listingid,
+      listing_type: product.listing_type,
+      lender_id: product.lenderid
+    }
+
+    payresult = await Payment.newPayment([final_charge],res)
+    console.log('created payment in db')
   } catch (error) {
     console.error("Error:", error);
     status="failure";

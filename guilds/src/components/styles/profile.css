@@ -160,8 +160,8 @@ h2 {
   margin-left: auto;
   margin-right: auto;
   float: none;
-  width: 250px;
-  height: 50px;
+  width: auto;
+  min-height: 50px;
 }
 
 /*-------------------Listing tab stuff-----------------------------*/
@@ -174,7 +174,7 @@ h2 {
 .PageSwitcher__Item_profile {
   background-color: #4c5d72;
   color: #9da6b1;
-  padding: 10px 200px;
+  padding: 10px 100px;
   cursor: pointer;
   font-size: 0.9em;
   border: none;
@@ -191,7 +191,19 @@ h2 {
 .PageSwitcher__Item_profile_active {
   background-color: red;
   color: yellow;
-  padding: 10px 200px;
+  padding: 10px 90px;
+  cursor: pointer;
+  font-size: 0.9em;
+  border: none;
+  outline: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.PageSwitcher__Item_profile_completedTransaction_active {
+  background-color: green;
+  color: yellow;
+  padding: 10px 90px;
   cursor: pointer;
   font-size: 0.9em;
   border: none;
@@ -236,7 +248,7 @@ h2 {
   background-color: #3b000b;
   display: block;
   width: 650px;
-  height: 150px;
+  min-height: 150px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 50px;
@@ -251,20 +263,29 @@ h2 {
   color: yellow;
   display: inline-block;
   position: relative;
-  left: 50px;
-  top: 25px;
+  width: 100px;
+  height: 100px;
+}
+
+.borrowedItemImageWrapper {
+  /*space where the picture of an item will go*/
+  background-color: brown;
+  color: yellow;
+  display: inline-block;
+  position: relative;
+  bottom: 30px;
+  left: 40px;
   width: 100px;
   height: 100px;
 }
 
 .itemInfoWrapper {
   color: yellow;
-  display: block;
-  position: absolute;
-  left: 180px;
-  top: 25px;
+  display: inline-block;
+  position: relative;
+  left: 100px;
   width: 400px;
-  height: 100px;
+  min-height: 100px;
 }
 
 .itemInfoField {
@@ -275,7 +296,6 @@ h2 {
 }
 
 .editListingButtonWrapper {
-  background-color: black;
   position: absolute;
   display: block;
   width: 115px;

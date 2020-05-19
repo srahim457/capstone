@@ -3,6 +3,11 @@ import axios from 'axios';
 
 import './styles/Home.css';
 
+const styleTitle = {
+  fontFamily: 'fantasy',
+  color: 'black'
+};
+
 class ForgotPassword extends Component {
   constructor() {
     super();
@@ -14,47 +19,86 @@ class ForgotPassword extends Component {
     };
   }
 
-  ChangeHandler = (e) => {
+  // ChangeHandler = (e) => {
+  //   this.setState({
+  //     email: e.target.value,
+  //   });
+  // };
+  handleChange = name => (event) => {
     this.setState({
-      emailn: e.currentTarget.value,
+      [name]: event.target.value,
     });
   };
 
-  sendEmail = async (e) => {
+  // sendEmail = async (e) => {
+  //   e.preventDefault();
+  //   const { email } = this.state;
+  //   if (email === '') {
+  //     this.setState({
+  //       showError: false,
+  //       messageFromServer: '',
+  //       showNullError: true,
+  //     });
+  //   } else {
+  //     try {
+  //       const response = await axios.post(
+  //         'http://localhost:4000/forgotpassword',
+
+  //         this.state.email,
+
+  //       );
+  //       console.log(response.data);
+  //       if (response.data === 'recovery email sent') {
+  //         this.setState({
+  //           showError: false,
+  //           messageFromServer: 'recovery email sent',
+  //           showNullError: false,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error(error.response.data);
+  //       if (error.response.data === 'email not in db') {
+  //         this.setState({
+  //           showError: true,
+  //           messageFromServer: '',
+  //           showNullError: false,
+  //         });
+  //       }
+  //     }
+  //   }
+  // };
+
+  sendEmail = (e) => {
     e.preventDefault();
-    const { email } = this.state;
-    if (email === '') {
+    //const { email } = this.state;
+    console.log(this.state.email, '     email');
+    if (this.state.email === '') {
       this.setState({
         showError: false,
         messageFromServer: '',
-        showNullError: true,
+        //showNullError: true,
       });
     } else {
-      try {
-        const response = await axios.post(
-          'http://localhost:4000/forgotPassword',
-          {
-            email,
+      axios
+        .post('http://localhost:4000/forgotpassword',
+          this.state.email ,
+        )
+        .then(response => {
+          console.log(response.data);
+          if (response.data === 'email not in db') {
+            this.setState({
+              showError: true,
+              messageFromServer: '',
+            });
+          } else if (response.data === 'recovery email sent') {
+            this.setState({
+              showError: false,
+              messageFromServer: 'recovery email sent',
+              //showNullError: false,
+            });
           }
-        );
-        console.log(response.data);
-        if (response.data === 'recovery email sent') {
-          this.setState({
-            showError: false,
-            messageFromServer: 'recovery email sent',
-            showNullError: false,
-          });
-        }
-      } catch (error) {
-        console.error(error.response.data);
-        if (error.response.data === 'email not in db') {
-          this.setState({
-            showError: true,
-            messageFromServer: '',
-            showNullError: false,
-          });
-        }
-      }
+          // }
+        });
     }
   };
 
@@ -64,26 +108,28 @@ class ForgotPassword extends Component {
     return (
       <div>
         <form onSubmit={this.sendEmail}>
-          <label className='recovery'>Enter your email :</label>
+          <h1 style={styleTitle}>Forgot Password</h1>
+          <label className='recovery' style={styleTitle}> <strong>Enter your email </strong> :</label>
           <input
+            style={styleTitle}
             type='email'
             id='email'
             label='email'
             className='recovery'
             value={email}
-            onChange={this.ChangeHandler}
+            onChange={this.handleChange('email')}
             placeholder='Email Address'
           ></input>
-          <button onClick={this.sendEmail}>Submit</button>
+          <button className='submit-button'>Submit</button>
 
           {showNullError && (
             <div>
-              <p>The email address cannot be null.</p>
+              <p style={styleTitle}>The email address cannot be empty.</p>
             </div>
           )}
           {showError && (
             <div>
-              <p>
+              <p style={styleTitle}>
                 That email address isn&apos;t recognized. Please try again or
                 register for a new account.
               </p>
@@ -91,7 +137,7 @@ class ForgotPassword extends Component {
           )}
           {messageFromServer === 'recovery email sent' && (
             <div>
-              <h3>Password Reset Email Successfully Sent!</h3>
+              <h3 style={styleTitle}>Password Reset Email Successfully Sent!</h3>
             </div>
           )}
         </form>

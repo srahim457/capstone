@@ -36,7 +36,11 @@ router.post('/create', auth, async (req, res) => {
     //req.body.guild needed
     // as createguild passes a guild object
 
-    const createdGuild = await Guild.createGuilds([req.body.guild], res)
+    newguild = {
+      guild: req.body.guild,
+      userid: req.user.id
+    }
+    const createdGuild = await Guild.createGuilds([newguild], res)
 
     guildId = createdGuild.id;
 
@@ -49,7 +53,7 @@ router.post('/create', auth, async (req, res) => {
     console.log(createdGuild, 'created guild ')
     res.status(200).json(createdGuild)
   } catch (error) {
-    console.log('error with create listing', error)
+    console.log('error with create guild', error)
   }
 });
 
@@ -83,9 +87,22 @@ router.get('/', auth, async (req, res) => {
   try {
     console.log('recieved get all guilds request')
     const allguilds = await Guild.getAllGuilds([req.body], res)
+    const freelistings = await Listing.freeListings(req,res)
     res.status(200).json(allguilds)
   } catch (error) {
-    console.log('error with getting all listings', error)
+    console.log('error with getting all guilds', error)
+  }
+});
+
+//Adds a user to a guild
+router.put('/addtoguild/:id', auth, async (req, res) => {
+  try {
+    console.log('recieved add to guilds request',req.params.id)
+    addRequest={userid: req.user.id, guildid: req.params.id}
+    const added = await Guild.addUserToGuild([addRequest], res)
+    res.status(200).json(added)
+  } catch (error) {
+    console.log('error with added a user to the guild', error)
   }
 });
 
@@ -97,7 +114,7 @@ router.get('/search/:query', auth, async (req, res) => {
     const allguilds = await Guild.searchForGuilds(req.params.query)
     res.status(200).json(allguilds)
   } catch (error) {
-    console.log('error with getting all listings', error)
+    console.log('error with searching for a guild', error)
   }
 });
 

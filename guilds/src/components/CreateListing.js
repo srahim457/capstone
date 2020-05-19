@@ -6,12 +6,44 @@ import DateTimePicker from 'react-datetime-picker';
 import axios from 'axios';
 import './styles/CreateListing.css';
 
-function validate(name, description) {
+function validate(name, option, description, price, date, policy, insurance) {
   // true means invalid, so our conditions got reversed
-  return {
-    name: name.length === 0,
-    description: description.length === 0,
-  };
+  //console.log(name.length,option,description.length,price.length,date.length,policy.length,insurance.length)
+  if (option == "") {
+    console.log('option is blank')
+    return {
+      option: option.length === 0
+    }
+  }
+  if (option == 'sale') {
+    return {
+      name: name.length === 0,
+      description: description.length === 0,
+      price: price.length === 0,
+    }
+  }
+  if (option == 'loan') {
+    return {
+      name: name.length === 0,
+      description: description.length === 0,
+      date: date.length === 0,
+      policy: policy.length === 0,
+      insurance: insurance.length === 0
+    }
+  }
+  else {
+    // it is a rental
+    return {
+      name: name.length === 0,
+      description: description.length === 0,
+      price: price.length === 0,
+      date: date.length === 0,
+      policy: policy.length === 0,
+      price: price.length === 0,
+      insurance: insurance.length === 0
+    };
+  }
+
 }
 
 // let one = "http://localhost:4000/marketplace/create";
@@ -33,6 +65,7 @@ class CreateListing extends Component {
     this.state = {
       name: '',
       price: '',
+      insurance: '',
       description: '',
       option: '',
       date: '',
@@ -65,6 +98,11 @@ class CreateListing extends Component {
       price: e.currentTarget.value,
     });
   };
+  insuranceChangeHandler = (e) => {
+    this.setState({
+      insurance: e.currentTarget.value,
+    });
+  };
 
   policyChangeHandler = (e) => {
     this.setState({
@@ -85,14 +123,14 @@ class CreateListing extends Component {
   handleSubmit = async (e) => {
 
     e.preventDefault();
-    console.log('this si handlesubmit11');
+    console.log('this is handle submit');
     if (!this.canBeSubmitted()) {
       alert('Unable to submit: some fields may be empty');
       return;
     } else {
       alert('submission has been completed');
       e.preventDefault();
-      console.log(this.state); //post request with axios
+      console.log(this.state, 'creating an item with this'); //post request with axios
       const item = this.state;
       await axios
         .post(`http://localhost:4000/market-place/create`, { item })
@@ -187,7 +225,7 @@ class CreateListing extends Component {
       //       console.log(res.statusText);
       //     });
       // }
-      //window.location.reload(false);
+      window.location.reload(false);
     }
 
 
@@ -197,7 +235,7 @@ class CreateListing extends Component {
 
 
   canBeSubmitted() {
-    const empty = validate(this.state.name, this.state.description);
+    const empty = validate(this.state.name, this.state.option, this.state.description, this.state.price, this.state.date, this.state.policy, this.state.insurance);
     const isDisabled = Object.keys(empty).some((x) => empty[x]);
     return !isDisabled;
   }
@@ -214,6 +252,18 @@ class CreateListing extends Component {
     let minimumDate = new Date();
     return (
       <Fragment>
+        <br />
+        <label>Set your insurance amount in case of damage</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.insuranceChangeHandler}
+        ></input>
+        <br />
         <label>
           <strong>
             Input the time and date that you want the item to be returned
@@ -227,8 +277,6 @@ class CreateListing extends Component {
           value={this.state.date}
           minDate={minimumDate}
         />
-
-        <br />
         <br />
         <label>
           <strong>Set loan policy</strong>
@@ -278,6 +326,17 @@ class CreateListing extends Component {
           step='0.01'
           max='2500'
           onChange={this.priceChangeHandler}
+        ></input>
+        <br />
+        <label>Set your insurance amount in case of damage</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.insuranceChangeHandler}
         ></input>
         <br />
         <br />

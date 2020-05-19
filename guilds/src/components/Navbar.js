@@ -42,7 +42,7 @@ import {
 } from 'react-router-dom';
 
 import MarketPlace from './MarketPlace';
-import Messages from './Messages';
+import Messages from './FindUser';
 import Profile from './Profile.js';
 import AllGuilds from './AllGuilds';
 import MarketPlaceSearchResults from './MarketPlaceSearch';
@@ -56,8 +56,12 @@ import NotFound from './layout/NotFound';
 
 import Payment from './Payment';
 import PaymentSuccess from './PaymentSuccess';
+// import ResetPassword from './ResetPassword';
+// import ForgotPassword from './ForgotPassword';
 
 import './styles/Navigation.css';
+import FindUser from './FindUser';
+
 
 //add & import routes within content div
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
@@ -67,7 +71,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <NavLink to='/profile'>Profile</NavLink>
         <NavLink to='/market-place'>Market Place</NavLink>
         <NavLink to='/all-guilds'>All Guilds</NavLink>
-        <NavLink to='/messages'>Messages</NavLink>
+        <NavLink to='/messages'>Community</NavLink>
         <a onClick={logout} href='#!'>
           Logout
         </a>
@@ -75,14 +79,13 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       <div className='content'>
         <Route path='/profile' component={Profile} />
         <Route exact path='/market-place' component={MarketPlace} />
-        <Route exact path='/messages' component={Messages} />
+        <Route exact path='/messages' component={FindUser} />
         <Route exact path='/all-guilds' component={AllGuilds} />
         <Route path='/payment' component={Payment} />
         <Route path='/payment-success' component={PaymentSuccess} />
         <Route path='/market-place/search-results' component={MarketPlaceSearchResults} />
         <Route path='/all-guilds/search-results' component={AllGuildsSearchResults} />
         <Route path='/messages/user-search-results' component={UserSearchResults} />
-
       </div>
     </BrowserRouter>
   );

@@ -12,6 +12,7 @@ import axios from 'axios';
 import './styles/profile.css';
 import Profile_Borrowed from './Profile_Borrowed';
 import Profile_Listed from './Profile_Listed';
+import Profile_Completed from './Profile_Completed';
 import EditProfile from './EditProfile';
 import LaserLouis from '../images/LaserLouis.jpg';
 import NotAvailable from '../images/noimageavailable.png';
@@ -26,20 +27,22 @@ import NotAvailable from '../images/noimageavailable.png';
 
 // const element = <Nombre name='Profile' />;
 
+
+const styleTitle = {
+  fontFamily: 'fantasy',
+  color: 'black'
+};
+
+
 function parsePath(orig) {
   let res = orig.substr(9);
-  res = '.' + res;
+  //res = '.' + res;
   return res;
 }
 
 class Profile extends Component {
   constructor() {
     super();
-
-    const exampleArrayGuilds = [...Array(10).keys()].map((i) => ({
-      id: i + 1,
-      name: 'Guild ' + (i + 1),
-    }));
 
     this.state = {
       firstname: '',
@@ -53,8 +56,10 @@ class Profile extends Component {
       profile: {},
       guilds: [],
       click: false, //added to see if it respond on click
-      testToken: false,
-      exampleArrayGuilds: exampleArrayGuilds,
+      testToken: 0,
+      currUserId: 0,
+      // Check to see if current viewer is allowed to edit
+      canedit: true,
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -64,22 +69,74 @@ class Profile extends Component {
     this.setState({ click: true });
   }
   displayBorrowed() {
-    return <Profile_Borrowed />;
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
+      this.state.currUserId = -1
+      //console.log('user id props is null')
+      return <Profile_Borrowed
+        userid={-1}
+        canedit={this.state.canedit}
+      />;
+    }
+    else {
+      return <Profile_Borrowed
+        userid={this.props.location.state.userid}
+        canedit={this.state.canedit}
+      />;
+    }
   }
   displayListings() {
-    return <Profile_Listed />;
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
+      this.state.currUserId = -1
+      //console.log('user id props is null')
+      return <Profile_Listed
+        userid={-1}
+        canedit={this.state.canedit}
+      />;
+    }
+    else {
+      return <Profile_Listed
+        userid={this.props.location.state.userid}
+        canedit={this.state.canedit}
+      />;
+    }
   }
 
+  //I copied the function above
+  displayCompleted() {
+    // Fix until sign in redirect is fixed
+    if (this.props.location.state == null) {
+      this.state.currUserId = -1
+      //console.log('user id props is null')
+      return <Profile_Completed
+        userid={-1}
+        canedit={this.state.canedit}
+      />;
+    }
+    else {
+      return <Profile_Completed
+        userid={this.props.location.state.userid}
+        canedit={this.state.canedit}
+      />;
+    }
+  }
+
+
   listings() {
-    this.setState({ testToken: false });
+    this.setState({ testToken: 0 });
   }
   borrowed() {
-    this.setState({ testToken: true });
+    this.setState({ testToken: 1 });
+  }
+  completed() {
+    this.setState({ testToken: 2 });
   }
 
   async componentDidMount() {
     let firstname;
     let lastname;
+    let username;
     let email;
     let phonenum;
     let online;
@@ -87,15 +144,20 @@ class Profile extends Component {
     let picture;
     let description;
     let guilds;
+    let loggedinuser;
 
-
-    const [firstResp, secondResp] = await Promise.all([
-      axios.get('http://localhost:4000/profile'),
-      axios.get('http://localhost:4000/profile/guilds')
+    //console.log('getting profile results for',this.state.currUserId,this.props.location.state.userid)
+    if (this.props.location.state != null) {
+      this.state.currUserId = this.props.location.state.userid
+    }
+    const [firstResp, secondResp, thirdResp] = await Promise.all([
+      axios.get('http://localhost:4000/profile/' + this.state.currUserId),
+      axios.get('http://localhost:4000/profile/guilds/' + this.state.currUserId),
+      axios.get('http://localhost:4000/profile/')
     ]);
     const profile = firstResp.data;
     this.setState({ profile });
-    //console.log(res.data.email);
+    //console.log(res.datacompon.email);
     //console.log(res.data.email);
     //response = res.data;
 
@@ -104,6 +166,7 @@ class Profile extends Component {
     this.setState({
       firstname: firstResp.data.first_name,
       lastname: firstResp.data.last_name,
+      username: firstResp.data.username,
       email: firstResp.data.email,
       phonenum: firstResp.data.phonenum,
       online: firstResp.data.online,
@@ -111,17 +174,56 @@ class Profile extends Component {
       picture: firstResp.data.profile_picture,
       description: firstResp.data.description,
       guilds: secondResp.data,
+      userid: firstResp.data.id,
+      loggedinuser: thirdResp.data.id
     });
 
     // console.log(picture, 'getting PATH');
+    console.log('current user profile', firstResp.data)
+    console.log('current user guilds', this.state.guilds)
+    console.log('current logged in profile', thirdResp.data)
   }
 
   render() {
+    if (this.state.userid != this.state.loggedinuser) {
+      console.log('VIEWING SOMEONE ELSES PROFILE \n')
+      this.state.canedit = false;
+      console.log(this.state.canedit)
+    }
+    //console.log('these are the props passed to profile \n ',this.props.location.state.userid)
+    //this is someone elses profile
     {
       /*if the edit profile button is pressed it will redirect*/
     }
-    if (this.state.click === true) {
-      return <EditProfile />;
+    console.log('able to edit ? ', this.state.canedit)
+    if (this.state.click === true && this.state.canedit == true) {
+      return <EditProfile
+        userid={this.state.currUserId} />;
+    }
+
+    const printRating = () => {
+      if (this.state.rating >= 4.8) {
+        return 'SSS Rank'
+      }
+      else if (this.state.rating < 4.8 && this.state.rating >= 4) {
+        return 'Chivalrous'
+      }
+      else if (this.state.rating < 4 && this.state.rating > 3) {
+        return 'Nobleman'
+      }
+      else if (this.state.rating === 3) {
+        return 'Guildsman'
+      }
+
+      else if (this.state.rating < 3 && this.state.rating >= 2) {
+        return 'Layman'
+      }
+      else if (this.state.rating < 2 && this.state.rating >= 1) {
+        return 'Lacks Luster'
+      }
+      else {
+        return 'Nincompoop'
+      }
     }
 
     return (
@@ -152,9 +254,13 @@ class Profile extends Component {
             </div>
             <div className='button-container'>
               {/*the button that change the page to edit profile information*/}
-              <button className='edit-button' onClick={this.onClickHandler}>
-                Edit
-              </button>
+              {this.state.canedit == true ? (
+                <button className='edit-button' onClick={this.onClickHandler}>
+                  Edit
+                </button>
+              ) :
+                (console.log(''))
+              }
             </div>
             <div className='UserInfoContainer'>
               <div className='HeaderField'>
@@ -162,56 +268,57 @@ class Profile extends Component {
                 {/*the username*/}
                 <h1>Name: </h1>
                 <div className='UserField'>
-                  <h1>{this.state.firstname + ' ' + this.state.lastname}</h1>
+                  <h1 style={styleTitle}>{this.state.firstname + ' ' + this.state.lastname}</h1>
                 </div>
               </div>
               <div className='HeaderField'>
                 {' '}
                 {/*the guild ranking*/}
-                <h1>Rank: </h1>
+                <h3 style={styleTitle}>Rank: </h3>
                 <div className='UserField'>
-                  <h1>
-                    {this.state.rating == null ? 'N/A' : this.state.rating}
-                  </h1>
+                  <h3 style={styleTitle}>
+                    {this.state.rating == null ? 'N/A' : printRating()}
+                  </h3>
+                  <br />
                 </div>
               </div>
             </div>
             <div className='SubfieldInfoContainer'>
               <div className='HeaderSubfield'>
-                <h2>Email: </h2>
+                <h3 style={styleTitle}>Email: </h3>
               </div>
               <div className='UserSubfield'>
-                <h2> {this.state.email} </h2>
+                <h3 style={styleTitle}> {this.state.email} </h3>
               </div>
               <div className='HeaderSubfield'>
-                <h2>Phone: </h2>
+                <h3 style={styleTitle} >Phone: </h3>
               </div>
               <div className='UserSubfield'>
-                <h2>
+                <h3 style={styleTitle}>
                   {this.state.phonenum == null ? 'N/A' : this.state.phonenum}{' '}
-                </h2>
+                </h3>
               </div>
             </div>
           </div /*profileHeader*/ >
 
           <div className='additionalUserInfoPortion'>
             {/*contains the list of the guilds the user is apart of and user bio*/}
-            <h1>Bio:</h1>
+            <h1 style={styleTitle}>Bio:</h1>
             <div className='userBioSection'>
-              <h1>
+              <h1 style={styleTitle}>
                 {this.state.description}
               </h1>
             </div>
             <div className='userGuildListTitle'>
               <div className='centerText'>
-                <h1>Affiliated Guilds</h1>
+                <h1 >Affiliated Guilds</h1>
               </div>
             </div>
             <React.Fragment>
               <div className='guildnamelistcontainer'>
                 {Object.values(this.state.guilds).map((guild) => (
                   <div className='guildnamecontainer' key={guild.id}>
-                    <h2> Guild: {guild.name} </h2>
+                    <h2 style={styleTitle}> Guild: {guild.name} </h2>
                   </div>
                 ))}
               </div>
@@ -225,28 +332,38 @@ class Profile extends Component {
               <button
                 onClick={this.listings.bind(this)}
                 className={
-                  this.state.testToken === false
+                  this.state.testToken === 0
                     ? 'PageSwitcher__Item_profile_active'
                     : 'PageSwitcher__Item_profile'
                 }
               >
-                My Listed Items
+                {this.state.firstname + "'s"} Listed Items
               </button>
               <button
                 onClick={this.borrowed.bind(this)}
                 className={
-                  this.state.testToken === true
+                  this.state.testToken === 1
                     ? 'PageSwitcher__Item_profile_active'
                     : 'PageSwitcher__Item_profile'
                 }
-              >
-                My Borrowed Items
+              >{this.state.firstname + "'s"} Borrowed Items
+              </button>
+              <button
+                onClick={this.completed.bind(this)}
+                className={
+                  this.state.testToken === 2
+                    ? 'PageSwitcher__Item_profile_completedTransaction_active'
+                    : 'PageSwitcher__Item_profile'
+                }
+              >{this.state.firstname + "'s"} Completed Transactions
               </button>
             </div>
             {/*these components can be found in Profile_Borrowed.js and Profile_Listed.js*/}
-            {this.state.testToken === true
+            {this.state.testToken === 1
               ? this.displayBorrowed()
-              : this.displayListings()}
+              : this.state.testToken === 2
+                ? this.displayCompleted()
+                : this.displayListings()}
             {/*
             <Route path='/profile-listed' component={Profile_Listed}></Route>
             <Route path='/profile' component={Profile_Borrowed}></Route>
