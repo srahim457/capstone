@@ -5,7 +5,7 @@
   margin-left: auto;
   margin-right: auto;
   width: 1000px;
-  min-height: 100vh;
+  min-height: 950px;
   float: none;
   position: relative;
 }
@@ -18,21 +18,16 @@
   height: 20px;
 }
 
-.user-search-input {
+.item-search-input {
   background-color: #f3e055;
   border-color: #f3e055;
-  margin-left: 120px;
-  margin-right: 40px;
-  margin-top: 90px;
-  width: 700px;
-  height: 40px;
+  width: 200px;
 }
 
-.search-user-button {
+.listing-button {
   color: #f3e055;
   background-color: #3b000b;
   border-color: #f3e055;
-  height: 40px;
 }
 
 .yellow {
