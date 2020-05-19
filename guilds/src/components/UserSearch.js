@@ -96,13 +96,13 @@ class Messages extends Component {
                         {user.profile_picture != null ? (
                           <img
                             src={parsePath(user.profile_picture)}
-                            height='150'
+                            height='200'
                             width='200'
                             alt='image'
                           ></img>
 
                         ) : (
-                            <img src={noimage} height='150' width="200" alt='no image'></img>
+                            <img src={noimage} height='200' width="200" alt='no image'></img>
                           )}
                       </div>
                       <h5>{user.username}</h5>
@@ -122,9 +122,9 @@ class Messages extends Component {
                   );
                 })
               ) : (
-                <div className='spinner'>
-                  <img src={Spinner} alt="loading..." />
-                </div>
+                  <div className='spinner'>
+                    <img src={Spinner} alt="loading..." />
+                  </div>
                 )}
             </React.Fragment>
           </div>

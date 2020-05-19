@@ -93,9 +93,9 @@ class MarketPlace extends Component {
     this.setState({ itemid: item.item_id })
     this.setState({ listingid: item.id })
     this.setState({ reserved: response.data[0].reserved })
-    this.setState({ username: item.username})
-    this.setState({ rating: item.rating})
-    this.setState({ lenderid: item.userid})
+    this.setState({ username: item.username })
+    this.setState({ rating: item.rating })
+    this.setState({ lenderid: item.userid })
 
     console.log('this.state after assigned', this.state)
     this.setState({ open: true }); // moved to the end because of a race condition
@@ -118,13 +118,13 @@ class MarketPlace extends Component {
   // }
 
   async componentDidMount() {
-    const[firstResp,secondResp] = await Promise.all([        
+    const [firstResp, secondResp] = await Promise.all([
       axios.get('http://localhost:4000/market-place/active'),
       // Getting the current profile of the user
       axios.get('http://localhost:4000/profile/' + -1)
     ]);
     console.log('listings in marketplace', firstResp.data)
-    this.setState({ listings: firstResp.data, isLoading: false ,currentuserid: secondResp.data.id})
+    this.setState({ listings: firstResp.data, isLoading: false, currentuserid: secondResp.data.id })
     console.log(this.state.lenderid, 'current user id')
   }
 
@@ -217,11 +217,11 @@ class MarketPlace extends Component {
                       </div>
                       <div>
                         <h5 style={styleTitle}>{listing.item_name}</h5>
-                        {this.state.currentuserid == listing.lender_id  &&
-                          <label>View Your listing</label>
+                        {this.state.currentuserid == listing.lender_id &&
+                          <h6>View Your listing</h6>
                         }
-                        {this.state.currentuserid != listing.lender_id  &&
-                          <h6>Posted By: {listing.username} {Math.round((listing.rating+ Number.EPSILON) * 100)/100}/5</h6>
+                        {this.state.currentuserid != listing.lender_id &&
+                          <h6>Posted By: {listing.username} {Math.round((listing.rating + Number.EPSILON) * 100) / 100}/5</h6>
                         }
                       </div>
 
