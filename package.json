@@ -9,7 +9,7 @@
     "start": "node guilds/app/server.js",
     "heroku-postbuild": "cd guilds/app && npm install && npm build",
     "start": "node server.js",
-    "heroku-postbuild": "cd app && npm start"
+    "heroku-postbuild": "cd guilds/app && npm start"
   
   },
   "repository": {
