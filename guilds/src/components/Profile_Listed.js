@@ -86,7 +86,7 @@ class Profile_Listed extends Component {
   render() {
       /*routes to an edit listing page*/
         if (this.state.click === true && this.props.canedit) {
-         return <EditListing name={this.state.name}item={this.state.item} />;
+         return <EditListing name={this.state.name}item={this.state.item}itemid={this.state.item.item_id} />;
         }
 
         if (this.state.completeTransaction){
@@ -98,15 +98,18 @@ class Profile_Listed extends Component {
         }
         {/* displays either an edit listing button (if not borrowed) or borrowed button*/}
         const displayBorrowedOrEditListingButton = (listing)=>{
-          if (listing.borrower_id!=null){
+          if (listing.borrower_id!=null && this.props.canedit){
             return <button class="edit-button" onClick={this.loadPostTransactionPage.bind(this, listing)}>
                   Item Borrowed! Click to Complete
                 </button>
           }
-          else{
+          else if(this.props.canedit){
             return <button class="edit-button" onClick={this.testClick.bind(this, listing)}>
                   Edit this Listing
                 </button>
+          }
+          else {
+            return <br/>
           }
         }
 

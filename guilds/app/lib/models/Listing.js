@@ -173,7 +173,7 @@ Listing.getAllLenderListings = async function (req, res) {
 Listing.getAllCompletedListings = async function (req, res) {
   try {
     console.log('getting all the completed listings of',req)
-    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where( lender_id = ($1) OR borrower_id = ($1)) AND L.deleted <> 'T' AND completed = 'T' ORDER BY L.borrower_id ASC, L.time_sold_expired DESC", [req]);
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where( lender_id = ($1) OR borrower_id = ($1)) AND L.deleted <> 'T' AND completed = 'T' ORDER BY L.time_sold_expired DESC", [req]);
     console.log('number of completed listings under lenderid ', req, ' are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
