@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import './styles/Messages.css';
 import Pagination from './Pagination';
+import Spinner from './layout/spinner_transparent.gif';
 import noimage from '../images/noimageavailable.png'
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
@@ -121,7 +122,9 @@ class Messages extends Component {
                   );
                 })
               ) : (
-                  <h3>Loading</h3>
+                <div className='spinner'>
+                  <img src={Spinner} alt="loading..." />
+                </div>
                 )}
             </React.Fragment>
           </div>

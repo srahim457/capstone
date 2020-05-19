@@ -8,6 +8,7 @@ import {
 import './styles/AllGuilds.css';
 import CreateGuild from './CreateGuild';
 import DisplayGuild from './DisplayGuild';
+import Spinner from './layout/spinner_transparent.gif';
 import noimage from '../images/noimageavailable.png';
 import axios from 'axios';
 
@@ -141,7 +142,9 @@ class AllGuilds extends Component {
                 );
               })
             ) : (
-                <h3>Loading</h3>
+              <div className='spinner'>
+                <img src={Spinner} alt="loading..." />
+              </div>
               )}
           </React.Fragment>
         </div>
