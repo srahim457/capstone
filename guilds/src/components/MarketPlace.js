@@ -18,6 +18,12 @@ function parsePath(orig) {
   return res;
 }
 
+const styleTitle = {
+  fontFamily: 'fantasy',
+  font: 'bold'
+};
+
+
 class MarketPlace extends Component {
   constructor() {
     super();
@@ -86,8 +92,8 @@ class MarketPlace extends Component {
     this.setState({ itemid: item.item_id })
     this.setState({ listingid: item.id })
     this.setState({ reserved: response.data[0].reserved })
-    this.setState({ username: item.username})
-    this.setState({ rating: item.rating})
+    this.setState({ username: item.username })
+    this.setState({ rating: item.rating })
 
     console.log('this.state after assigned', this.state)
     this.setState({ open: true }); // moved to the end because of a race condition
@@ -185,7 +191,7 @@ class MarketPlace extends Component {
               {!isLoading ? (
                 Object.values(this.state.listings).map(listing => {
                   return (
-                    <div className='itemContainer' key={listing.id}>
+                    <div className='someContainer' key={listing.id}>
                       <div className='itemImage'
                         onClick={this.openListing.bind(this, listing)}>
                         {/*listing.image*/}
@@ -193,23 +199,25 @@ class MarketPlace extends Component {
                         {listing.image != null ? (
                           <img
                             src={parsePath(listing.image)}
-                            height='150'
+                            height='200'
                             width='200'
                             alt=''
                           ></img>
                         ) : (
-                            <img src={noimage} height='150' width="200" ></img>
+                            <img src={noimage} height='200' width="200" ></img>
                           )}
-
                       </div>
-                      <h3>{listing.item_name}</h3>
-                        <h10>Posted By: {listing.username} {Math.round((listing.rating+ Number.EPSILON) * 100)/100}/5</h10>
+                      <div>
+                        <h5 style={styleTitle}>{listing.item_name}</h5>
+                        <h6>Posted By: {listing.username} {Math.round((listing.rating + Number.EPSILON) * 100) / 100}/5</h6>
+                      </div>
                       <div className='paginate'>
                         <Pagination
                           items={this.state.listing}
                           onChangePage={this.onChangePage}
                         />
                       </div>
+
                     </div>
                   );
                 })

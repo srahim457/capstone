@@ -57,7 +57,7 @@
   float: none;
   position: relative;
 }
-.itemContainer {
+.someContainer {
   background-image: url(../../images/parchment_background.jpg);
   display: inline-block;
   width: 200px;
@@ -76,8 +76,8 @@
   background-color: brown;
   color: yellow;
   display: flex;
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
 }
 
 .searchItemsWrapper{
