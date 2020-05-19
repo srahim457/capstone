@@ -40,14 +40,14 @@ class FindUser extends Component {
             <div className='searchItemsWrapper'>
               <input
                 type='text'
-                className='item-search-input'
+                className='user-search-input'
                 placeholder='Type In a User here'
                 maxLength='200'
                 value={this.state.search_key}
                 onChange={this.searchChangeHandler}
               ></input>
 
-              <button className='listing-button'>
+              <button className='search-user-button'>
                 <Link to={{
                   pathname: '/messages/user-search-results',
                   data: this.state.search_key,
