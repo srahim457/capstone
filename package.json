@@ -7,8 +7,8 @@
     "heroku-prebuild": "cd guilds/src && npm install", 
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node guilds/app/server.js",
-    "heroku-postbuild": "cd guilds/app && npm install && npm build && cd guilds/src",
-    "start": "node server.js"  
+    "heroku-postbuild": "cd guilds/app && npm install && npm build",
+    "start": "node guilds/srcserver.js"  
   },
   "repository": {
     "type": "git",
