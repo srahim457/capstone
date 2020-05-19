@@ -36,10 +36,7 @@ function validate(name, option, description, price, date, policy, insurance) {
     return {
       name: name.length === 0,
       description: description.length === 0,
-<<<<<<< HEAD
       price: price.length === 0,
-=======
->>>>>>> e8c35e043b055ea367f1843ba0ae4b92713d5495
       date: date.length === 0,
       policy: policy.length === 0,
       price: price.length === 0,

@@ -157,6 +157,7 @@ class DisplayListing extends Component {
               <label>Item Name: </label>
               {name}
             </div>
+
             <div>
               {/* make into a description box */}
               <label>Item Description: </label>
@@ -189,6 +190,9 @@ class DisplayListing extends Component {
                 </div>
               }
               <br />
+              <div>
+                <label><strong>Posted By: </strong></label>
+                {/*name and rating*/}
             </div>
           </form>
           <button className="submit-button" onClick={this.onClickListing}>Checkout</button>
