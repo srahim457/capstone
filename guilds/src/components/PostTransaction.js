@@ -38,7 +38,7 @@ class PostTransaction extends Component {
   reloadPage (){
     window.location.reload(false)
   }
-  
+
 
 async submitHandler() {
   console.log('in submit handler')
@@ -69,20 +69,20 @@ async submitHandler() {
     console.log('The new rank is: ', new_rank)
     //set the current listed item to deleted
     console.log('The item id is: ', this.state.item_id)
-      
+
       var datatoupdate={newrank: new_rank, userid: this.state.borrower_id}
-      const[firstResp,secondResp] = await Promise.all([        
+      const[firstResp,secondResp] = await Promise.all([
         axios.put('http://localhost:4000/profile/ranking/update/'+ this.state.borrower_id,datatoupdate),
         axios.put('http://localhost:4000/market-place/rate/' + this.state.item_id)
       ]);
       console.log('borrowed profile', firstResp.data)
       console.log('completed item', secondResp.data)
 
-    
+
       //alert the submission and refresh the page
       alert('Transaction Complete!')
-      
-      //this.reloadPage()
+
+      this.reloadPage()
     }
   }
 s
@@ -111,14 +111,14 @@ s
           <div className='itemImageWrapper'>{this.state.borrowedprofile.profile_picture!= null ? <img src = {parsePath(this.state.borrowedprofile.profile_picture)} height="100" width="100"></img> : <img src={NotAvailable} height="100" width="100"></img>}
           </div></h1>
           <br/>
-          <h2 className='title'> The item: {this.state.item_name} 
+          <h2 className='title'> The item: {this.state.item_name}
           <div className='itemImageWrapper'>{this.state.item_image!= null ? <img src = {parsePath(this.state.item_image)} height="100" width="100"></img> : <img src={NotAvailable} height="100" width="100"></img>}
           </div></h2>
           <div className='button-wrapper'>
             <button className='close-button' onClick = {this.reloadPage}>X</button>
           </div>
           <div className='form-fields'>
-            <h3>What Rating would you like to give to {this.state.borrowedprofile.first_name} </h3>     
+            <h3>What Rating would you like to give to {this.state.borrowedprofile.first_name} </h3>
             <div>
             <br />
             <input
@@ -172,7 +172,7 @@ s
             <img src={Spinner} alt="loading..." />
           </div>
           )}
-        
+
       </div>
       </React.Fragment>
     );
