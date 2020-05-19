@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "heroku-prebuild": "cd guilds/app && npm install ", 
+    "heroku-prebuild": "cd guilds/src && npm install ", 
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd guilds/src && npm start",
     "heroku-postbuild": "cd guilds/app && npm install && npm build && node server.js"
