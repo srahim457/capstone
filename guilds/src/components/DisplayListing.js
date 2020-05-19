@@ -64,8 +64,8 @@ class DisplayListing extends Component {
     e.preventDefault();
     this.setState({ open: true });
   }
-  onEditListing (item_passed) {
-    console.log('chose to edit listing',this.props)
+  onEditListing(item_passed) {
+    console.log('chose to edit listing', this.props)
     this.setState({ edit: true, item: this.props });
   }
 
@@ -95,8 +95,8 @@ class DisplayListing extends Component {
       rating
     } = this.props;
 
-    if(this.state.edit === true){
-      return <EditListing name={this.props.name}item={this.state.item} />
+    if (this.state.edit === true) {
+      return <EditListing name={this.props.name} item={this.state.item} />
     }
 
 
@@ -150,85 +150,85 @@ class DisplayListing extends Component {
       return_date = format(parseISO(return_date), 'MMMM do,yyyy h:mma');
     }
     const { listing } = this.state.listing_type;
-    const {isLoading} = this.state;
+    const { isLoading } = this.state;
     return (
       <React.Fragment>
-      <div className='container-parent'>
-        {!isLoading ? (
-        <div className='container'>
-          <h1 className='title'>{this.state.name}</h1>
-          <form onSubmit={this.handleSubmit} className='form-fields'>
-            <div>
-              <div className='button-wrapper'>
-                <button onClick={this.closeButton} className='close-button'>X</button>
-              </div>
-              <br />
-              {/*<label>{images}:</label>*/}
-              {images != null ? (
-                <img
-                  src={parsePath(images)}
-                  height='350'
-                  width='400'
-                  alt={this.state.name}
-                ></img>
-              ) : (
-                  <img src={noimage} height='350' width="400" alt={this.state.name} ></img>
-                )}
-              <br />
-              <label>Item Name: </label>
-              {name}
-            </div>
+        <div className='container-parent'>
+          {!isLoading ? (
+            <div className='container'>
+              <h1 className='title'>{this.state.name}</h1>
+              <form onSubmit={this.handleSubmit} className='form-fields'>
+                <div>
+                  <div className='button-wrapper'>
+                    <button onClick={this.closeButton} className='close-button'>X</button>
+                  </div>
+                  <br />
+                  {/*<label>{images}:</label>*/}
+                  {images != null ? (
+                    <img
+                      src={parsePath(images)}
+                      height='350'
+                      width='400'
+                      alt={this.state.name}
+                    ></img>
+                  ) : (
+                      <img src={noimage} height='350' width="400" alt={this.state.name} ></img>
+                    )}
+                  <br />
+                  <label>Item Name: </label>
+                  {name}
+                </div>
 
-            <div>
-              {/* make into a description box */}
-              <label>Item Description: </label>
-              {description}
-            </div>
-            <div>
-              <label>Type of Listing: </label>{listing_type}
-              {listing_type === 'sale' &&
                 <div>
-                  <label>Total Price: </label>
-                  {total_price}
+                  {/* make into a description box */}
+                  <label>Item Description: </label>
+                  {description}
                 </div>
-              }
-              {listing_type === 'rental' &&
                 <div>
-                  <label>Rent Amount :{rent_amount}</label>
+                  <label>Type of Listing: </label>{listing_type}
+                  {listing_type === 'sale' &&
+                    <div>
+                      <label>Total Price: </label>
+                      {total_price}
+                    </div>
+                  }
+                  {listing_type === 'rental' &&
+                    <div>
+                      <label>Rent Amount :{rent_amount}</label>
+                      <br />
+                      <label>Insurance Amount: </label>
+                      {insurance}
+                      <br />
+                      <label>Return time and date: {return_date}</label>
+                    </div>
+                  }
+                  {listing_type === 'loan' &&
+                    <div>
+                      <label>Insurance Amount : </label>
+                      {insurance}
+                      <br />
+                      <label>Return time and date :{return_date}</label>
+                    </div>
+                  }
                   <br />
-                  <label>Insurance Amount: </label>
-                  {insurance}
-                  <br />
-                  <label>Return time and date: {return_date}</label>
+                  <div>
+                    {this.props.currentuserid == this.props.lenderid &&
+                      <label> This is your listing</label>
+                    }
+                    {this.props.currentuserid != this.props.lenderid &&
+                      <label><strong>Posted By: {username} {Math.round((rating + Number.EPSILON) * 100) / 100}/5 </strong></label>
+                    }
+                  </div>
                 </div>
+              </form>
+              {this.props.currentuserid == this.props.lenderid &&
+                <button className="submit-button" onClick={this.onEditListing.bind(this, this.state.item)}>Edit Your Listing</button>
               }
-              {listing_type === 'loan' &&
-                <div>
-                  <label>Insurance Amount : </label>
-                  {insurance}
-                  <br />
-                  <label>Return time and date :{return_date}</label>
-                </div>
+              {this.props.currentuserid != this.props.lenderid &&
+                <button className="submit-button" onClick={this.onClickListing}>Checkout</button>
               }
-              <br />
-              <div>
-                {this.props.currentuserid == this.props.lenderid &&
-                  <label> This is your listing</label>
-                }
-                {this.props.currentuserid != this.props.lenderid &&                  
-                  <label><strong>Posted By: {username} {Math.round((rating+ Number.EPSILON) * 100)/100}/5 </strong></label>    
-                }            
-              </div>
-            </div>
-          </form>
-          {this.props.currentuserid == this.props.lenderid &&
-            <button className="submit-button" onClick={this.onEditListing.bind(this,this.state.item)}>Edit Your Listing</button>
-          }
-          {this.props.currentuserid != this.props.lenderid &&
-            <button className="submit-button" onClick={this.onClickListing}>Checkout</button>
-            }
 
-                </div>
+            </div>
           ) : (
               <div className='spinner'>
                 <img src={Spinner} alt="loading..." />

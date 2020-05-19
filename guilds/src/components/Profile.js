@@ -202,27 +202,28 @@ class Profile extends Component {
     }
 
     const printRating = () => {
-      if (this.state.rating >= 4.8) {
-        return 'SSS Rank'
+      let rating = this.state.rating;
+      if (rating >= 4.8) {
+        return 'SSS Rank Score: '
       }
-      else if (this.state.rating < 4.8 && this.state.rating >= 4) {
-        return 'Chivalrous'
+      else if (rating < 4.8 && rating >= 4) {
+        return 'Chivalrous Score: '
       }
-      else if (this.state.rating < 4 && this.state.rating > 3) {
-        return 'Nobleman'
+      else if (rating < 4 && rating > 3) {
+        return 'Nobleman Score: '
       }
-      else if (this.state.rating === 3) {
-        return 'Guildsman'
+      else if (rating === 3) {
+        return 'Guildsman Score: '
       }
 
-      else if (this.state.rating < 3 && this.state.rating >= 2) {
-        return 'Layman'
+      else if (rating < 3 && rating >= 2) {
+        return 'Layman Score: '
       }
-      else if (this.state.rating < 2 && this.state.rating >= 1) {
-        return 'Lacks Luster'
+      else if (rating < 2 && rating >= 1) {
+        return 'Lacks Luster Score: '
       }
       else {
-        return 'Nincompoop'
+        return 'Nincompoop Score: '
       }
     }
 
@@ -274,10 +275,15 @@ class Profile extends Component {
               <div className='HeaderField'>
                 {' '}
                 {/*the guild ranking*/}
-                <h3 style={styleTitle}>Rank: </h3>
+                <h2 style={styleTitle}>Rank (out of 5): </h2>
                 <div className='UserField'>
                   <h3 style={styleTitle}>
-                    {this.state.rating == null ? 'N/A' : printRating()}
+                    {this.state.rating == null ? 'N/A'
+                      : printRating()}
+
+                    {this.state.rating !== null ? this.state.rating
+                        : ''}
+
                   </h3>
                   <br />
                 </div>
