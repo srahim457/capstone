@@ -88,6 +88,12 @@ class Payment extends Component {
   //   console.log({ token, addresses })
   // }
 
+  // // refreshes page after 6 seconds
+  // refreshPage() {
+  //   // setTimeout(function(){ alert("Hello"); }, 5000)
+  //   setTimeout(function() {window.location.reload()}, 6000)
+  // }
+
   render() {
     console.log('in render for payment \n ',this.props)
     // this will get passed to stripe form
@@ -121,10 +127,14 @@ class Payment extends Component {
       if (status === 'success') {
         toast('Success! Check email for details',
         { type: 'success' })
+        
+        // refreshes page after 6 seconds
+        setTimeout(function() {window.location.reload()}, 5000)
       } else {
         toast('Something went wrong',
         { type: 'error' })
       }
+
       // will require a POST to backend and marking listing paid for + unavailable
     }
 
