@@ -33,6 +33,7 @@ const styleTitle = {
   color: 'black'
 };
 
+
 function parsePath(orig) {
   let res = orig.substr(9);
   //res = '.' + res;

@@ -191,7 +191,7 @@ class DisplayListing extends Component {
               <br />
             </div>
           </form>
-          <button onClick={this.onClickListing}>Checkout</button>
+          <button className="submit-button" onClick={this.onClickListing}>Checkout</button>
         </div>
       </div>
     );
