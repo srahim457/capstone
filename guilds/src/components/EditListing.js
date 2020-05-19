@@ -80,12 +80,12 @@ class EditListing extends Component {
   async handleDeletion() {
     //console.log('at delete \n', this.props.item)
     var itemidToUse = 0
-    if(this.props.item.item_id == undefined){
+    if (this.props.item.item_id == undefined) {
       itemidToUse = this.props.item.itemid
-    }else{
+    } else {
       itemidToUse = this.props.item.item_id
-    }  
-    const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+itemidToUse)
+    }
+    const deletingitem = await axios.get('http://localhost:4000/market-place/delete/' + itemidToUse)
     this.setState({ delete_item: true });
     window.location.reload(false);
     console.log('at delete \n', this.props.item)
@@ -107,17 +107,61 @@ class EditListing extends Component {
       ],
     });
   }
-  handleSubmit = async (e)=> {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('current state at submit',this.state,'props',this.props.item)
+    console.log('current state at submit', this.state, 'props', this.props.item)
     var itemidToUse = 0
-    if(this.props.item.item_id == undefined){
+    if (this.props.item.item_id == undefined) {
       itemidToUse = this.props.item.itemid
-    }else{
+    } else {
       itemidToUse = this.props.item.item_id
-    }  
-    var toUpdate={ newItem:this.state, itemID:itemidToUse}
-    await axios.put('http://localhost:4000/market-place/'+itemidToUse,{toUpdate})    
+    }
+    var toUpdate = { newItem: this.state, itemID: itemidToUse }
+    await axios.put('http://localhost:4000/market-place/' + itemidToUse, { toUpdate })
+    if (this.state.image != null) {
+      alert(this.state.image);
+      const image = this.state.image;
+      console.log(image, ' in handle submit');
+      //console.log(phonenum, description, profile_picture);
+
+      const listing_picture = new FormData();
+
+      listing_picture.append(
+        'myImage',
+        this.state.image,
+        this.state.image.name
+      );
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+      console.log(this.state.image, 'name of file');
+      await axios
+        .post(
+          `http://localhost:4000/market-place/picture`,
+
+          //{ phonenum, description, profile_picture },
+
+          listing_picture,
+          config
+          // {
+          //   onUploadProgress: (progressEvent) => {
+          //     console.log(
+          //       'Upload progress ' +
+          //         Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+          //         '%'
+          //     );
+          //   },
+          // }
+        )
+        .then((res) => {
+          console.log(res, 'this is the response');
+          console.log(res.data, 'this is res.data');
+          console.log(res.statusText);
+        });
+    }
+
   }
 
   reloadPage() {
@@ -131,7 +175,7 @@ class EditListing extends Component {
 
   pictureChangeHandler = (e) => {
     this.setState({
-      picture: e.target.files[0],
+      image: e.target.files[0],
       loaded: 0,
     });
     //console.log(this.state.picture, '$$$$');
