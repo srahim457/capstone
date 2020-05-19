@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/srahim457/capstone/issues"
   },
-  "homepage": "https://github.com/srahim457/capstone#readme"
+  "homepage": "https://github.com/srahim457/capstone#readme",
+  "proxy": "http://localhost:4000"
 }
