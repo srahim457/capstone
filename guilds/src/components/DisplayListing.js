@@ -193,7 +193,7 @@ class DisplayListing extends Component {
               }
               <br />
               <div>
-                <label><strong>Posted By: {username} {Math.round((rating+ Number.EPSILON) * 100)/100} </strong></label>                
+                <label><strong>Posted By: {username} {Math.round((rating+ Number.EPSILON) * 100)/100}/5 </strong></label>                
               </div>
             </div>
           </form>

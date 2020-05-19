@@ -203,7 +203,7 @@ class MarketPlace extends Component {
 
                       </div>
                       <h3>{listing.item_name}</h3>
-                        <h10>Posted By: {listing.username} {Math.round((listing.rating+ Number.EPSILON) * 100)/100}</h10>
+                        <h10>Posted By: {listing.username} {Math.round((listing.rating+ Number.EPSILON) * 100)/100}/5</h10>
                       <div className='paginate'>
                         <Pagination
                           items={this.state.listing}
