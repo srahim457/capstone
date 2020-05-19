@@ -138,8 +138,8 @@ User.createUser = async function (req, res) {
     console.log('inserting new user now \n');
     const username = req[0].firstname + ' ' + req[0].lastname;
     const userentry = await sql.query(
-      'INSERT INTO guilds.users(first_name,last_name,email,username,creation_date,number_of_reviews) values($1,$2,$3,$4,$5,$6) RETURNING *',
-      [req[0].firstname, req[0].lastname, req[0].email, username, d,0]
+      'INSERT INTO guilds.users(first_name,last_name,email,username,creation_date,number_of_reviews,rating) values($1,$2,$3,$4,$5,$6,$7) RETURNING *',
+      [req[0].firstname, req[0].lastname, req[0].email, username, d,0,0]
     );
     return userentry.rows;
   } catch (error) {
