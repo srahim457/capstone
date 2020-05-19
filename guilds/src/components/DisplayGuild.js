@@ -49,8 +49,8 @@ class DisplayGuild extends Component {
     console.log('joining guild',e,this.props)
     const response = await axios.put('http://localhost:4000/all-guilds/addtoguild/' +e)
     console.log('joining guild response ', response)
-    
-    if(response.data.constraint == "no_double_joining_guild"){
+
+    if(response.data.constraint === "no_double_joining_guild"){
       console.log('already part of this guild ')
       alert('Already a member of this guild');
       return <AllGuilds />;
@@ -59,7 +59,7 @@ class DisplayGuild extends Component {
   }
 
   async componentDidMount(){
-    let guildmasterinfo;    
+    let guildmasterinfo;
     const response = await axios.get('http://localhost:4000/profile/'+this.props.guildmaster)
     this.setState({ guildmasterinfo: response.data, isLoading: false })
   }
@@ -82,7 +82,7 @@ class DisplayGuild extends Component {
             </button>
           </div>
           <form onSubmit={this.handleSubmit} className='form-fields'>
-            
+
             <div>
               {picture != null ? (
                 <img
