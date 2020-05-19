@@ -17,7 +17,7 @@ class ChatMain extends React.Component {
     console.log('main chat app received these props',props)
     this.state = { messages: [],targetID: '',loggedInUserID:'' };
     this.sendHandler = this.sendHandler.bind(this);
-    
+
     // Connect to the server
     this.socket = io(config.api, { query: `username=${props.username}` }).connect();
 
@@ -65,7 +65,7 @@ class ChatMain extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="chat_container">
         <h3 className="chat-header">{this.props.targetname}</h3>
         <Messages messages={this.state.messages} />
         <Chat onSend={this.sendHandler} />
