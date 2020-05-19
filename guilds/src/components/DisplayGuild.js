@@ -13,7 +13,7 @@ also there is a delete button to delete the listing entirely
 
 function parsePath(orig) {
   let res = orig.substr(9);
-  res = '.' + res;
+  //res = '.' + res;
   return res;
 }
 
@@ -21,7 +21,7 @@ class DisplayGuild extends Component {
   constructor(props) {
     super(props);
 
-    console.log('displayguild props passed \n ',this.props)
+    console.log('displayguild props passed \n ', this.props)
 
     this.state = {
       name: '',
@@ -30,7 +30,7 @@ class DisplayGuild extends Component {
       close: false,
       picture: null,
       guildmasterinfo: [],
-      isLoading:  true,
+      isLoading: true,
       guildid: ''
     };
     this.closeButton = this.closeButton.bind(this);
@@ -45,14 +45,14 @@ class DisplayGuild extends Component {
     e.preventDefault();
   }
 
-  async joinGuild(e){
-    console.log('joining guild',e,this.props)
-    const response = await axios.put('http://localhost:4000/all-guilds/addtoguild/' +e)
+  async joinGuild(e) {
+    console.log('joining guild', e, this.props)
+    const response = await axios.put('http://localhost:4000/all-guilds/addtoguild/' + e)
     console.log('joining guild response ', response)
     alert('You have joined this guild!');
     window.location.reload(false);
 
-    if(response.data.constraint === "no_double_joining_guild"){
+    if (response.data.constraint === "no_double_joining_guild") {
       console.log('already part of this guild ')
       alert('Already a member of this guild');
       return <AllGuilds />;
@@ -60,14 +60,14 @@ class DisplayGuild extends Component {
     //this.setState({ listings: response.data, isLoading: false })
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     let guildmasterinfo;
-    const response = await axios.get('http://localhost:4000/profile/'+this.props.guildmaster)
+    const response = await axios.get('http://localhost:4000/profile/' + this.props.guildmaster)
     this.setState({ guildmasterinfo: response.data, isLoading: false })
   }
 
   render() {
-    var { name, description, guildmaster, picture,guildid } = this.props;
+    var { name, description, guildmaster, picture, guildid } = this.props;
     if (this.state.close === true) {
       return <AllGuilds />;
     }
@@ -115,7 +115,7 @@ class DisplayGuild extends Component {
             </div>
 
           </form>
-          <button className="submit-button" onClick={this.joinGuild.bind(this,guildid)}>Join Guild</button>
+          <button className="submit-button" onClick={this.joinGuild.bind(this, guildid)}>Join Guild</button>
         </div>
       </div>
     );

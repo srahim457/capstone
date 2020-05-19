@@ -108,9 +108,9 @@ router.post('/picture', auth, async (req, res) => {
 
 //Gets a listing matching the passed listing id
 router.get('/:listingid', auth, async (req, res, next) => {
-  console.log(req.params.listingid,parseInt(req.params.listingid,10));
-  if (!Number.isInteger(parseInt(req.params.listingid,10))) {
-    console.log('not a number in /:listingid',typeof req.params.listingid );
+  console.log(req.params.listingid, parseInt(req.params.listingid, 10));
+  if (!Number.isInteger(parseInt(req.params.listingid, 10))) {
+    console.log('not a number in /:listingid', typeof req.params.listingid);
     next();
   } else {
     try {
@@ -127,17 +127,17 @@ router.get('/:listingid', auth, async (req, res, next) => {
   }
 });
 //Gets a listing matching the passed name
-router.get('/search/:query', auth,async (req, res, next) => {
+router.get('/search/:query', auth, async (req, res, next) => {
   console.log(req.params.query);
-    try {
-      console.log('seaching for a listing',req.params.query)
-      const listing = await Listing.searchForListing([req.params.query],res);
-      console.log('listing result', listing);
-      res.status(200).json(listing);
-    } catch (error) {
-      console.error('error searching for a listing \n', error);
-    }
-    console.log('called search for listing', req.params);
+  try {
+    console.log('seaching for a listing', req.params.query)
+    const listing = await Listing.searchForListing([req.params.query], res);
+    console.log('listing result', listing);
+    res.status(200).json(listing);
+  } catch (error) {
+    console.error('error searching for a listing \n', error);
+  }
+  console.log('called search for listing', req.params);
 });
 
 //Borrows a listing
@@ -175,7 +175,7 @@ router.get('/:listingid/reserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
     console.log('reserving listing', req.params.listingid);
-    parameters ={
+    parameters = {
       listingid: req.params.listingid,
       user_id: req.user.id
     }
@@ -191,10 +191,10 @@ router.get('/:listingid/reserve', auth, async (req, res) => {
 router.get('/:listingid/unreserve', auth, async (req, res) => {
   console.log(req.params.listingid);
   try {
-    console.log('unreserving listing',req.params.listingid);
-    parameters ={
+    console.log('unreserving listing', req.params.listingid);
+    parameters = {
       listingid: req.params.listingid,
-      user_id : req.user.id
+      user_id: req.user.id
     }
     const listing = await Listing.unreserveListing([parameters], res);
     res.status(200).json(listing);
@@ -205,11 +205,11 @@ router.get('/:listingid/unreserve', auth, async (req, res) => {
 });
 
 //Gets all active listings
-router.get('/active',auth, async (req, res) => {
+router.get('/active', auth, async (req, res) => {
   try {
     const activelistings = await Listing.getAllActiveListings(req, res);
     res.status(200).json(activelistings);
-    const unreservedlistings = await Listing.freeListings(req,res)
+    const unreservedlistings = await Listing.freeListings(req, res)
   } catch (error) {
     console.error('error getting all active listings \n', error);
   }
@@ -220,11 +220,11 @@ router.get('/active',auth, async (req, res) => {
 router.get('/complete/:id', auth, async (req, res) => {
   try {
     idtouse = 0
-    if(req.params.id == -1){
+    if (req.params.id == -1) {
       console.log('no id detected reverting to current user')
       idtouse = req.user.id
     }
-    else{
+    else {
       idtouse = req.params.id
     }
     const alllistings = await Listing.getAllCompletedListings(idtouse, res);
@@ -260,49 +260,52 @@ router.put('/rate/:id', auth, async (req, res) => {
 //Edits a listing with the item id passed
 router.put('/:id', auth, async (req, res) => {
   try {
-    console.log(' editing the listing ', req.params.id,req.body.toUpdate)
+    console.log(' editing the listing ', req.params.id, req.body.toUpdate)
+    itemId = req.params.id; //added to update picture
     var newItemInfo = req.body.toUpdate.newItem
-    var itemToUpdate={
+    var itemToUpdate = {
       item_id: req.params.id,
       item_name: newItemInfo.name,
       item_desc: newItemInfo.description,
-      image: newItemInfo.image
+      //image: newItemInfo.image
     }
-   const updatedItem = await Listing.updateItem([itemToUpdate],res)
-   if(newItemInfo.option == 'sale'){
-    var listingToUpdate={
-      item_id: req.params.id,
-      price: newItemInfo.price,
-      type: newItemInfo.option,
-      policy: newItemInfo.policy      
-    } 
-    const updatedListings = await Listing.updateSaleListing([listingToUpdate],res);
-    return res.status(200).json(updatedListings); 
-  }else if (newItemInfo.option =='loan'){
-    var listingToUpdate={
-      item_id: req.params.id,
-      price: '',
-      type: newItemInfo.option,
-      return_by: newItemInfo.date,
-      policy: newItemInfo.policy,
-      insurance: newItemInfo.insurance
-    }  
-    const updatedListings = await Listing.updateLoanListing([listingToUpdate],res);
-    return res.status(200).json(updatedListings); 
-  }
-  else {
-    //At this point its a rental
-  var listingToUpdate={
-    item_id: req.params.id,
-    price: newItemInfo.price,
-    type: newItemInfo.option,
-    return_by: newItemInfo.date,
-    policy: newItemInfo.policy,
-    insurance: newItemInfo.insurance
-  }  
-  const updatedListings = await Listing.updateRentalListing([listingToUpdate],res);
-  return res.status(200).json(updatedListings); 
-  }
+
+
+    const updatedItem = await Listing.updateItem([itemToUpdate], res)
+    if (newItemInfo.option == 'sale') {
+      var listingToUpdate = {
+        item_id: req.params.id,
+        price: newItemInfo.price,
+        type: newItemInfo.option,
+        policy: newItemInfo.policy
+      }
+      const updatedListings = await Listing.updateSaleListing([listingToUpdate], res);
+      return res.status(200).json(updatedListings);
+    } else if (newItemInfo.option == 'loan') {
+      var listingToUpdate = {
+        item_id: req.params.id,
+        price: '',
+        type: newItemInfo.option,
+        return_by: newItemInfo.date,
+        policy: newItemInfo.policy,
+        insurance: newItemInfo.insurance
+      }
+      const updatedListings = await Listing.updateLoanListing([listingToUpdate], res);
+      return res.status(200).json(updatedListings);
+    }
+    else {
+      //At this point its a rental
+      var listingToUpdate = {
+        item_id: req.params.id,
+        price: newItemInfo.price,
+        type: newItemInfo.option,
+        return_by: newItemInfo.date,
+        policy: newItemInfo.policy,
+        insurance: newItemInfo.insurance
+      }
+      const updatedListings = await Listing.updateRentalListing([listingToUpdate], res);
+      return res.status(200).json(updatedListings);
+    }
 
   } catch (error) {
     console.error('error getting all listings\n', error);
@@ -312,14 +315,14 @@ router.put('/:id', auth, async (req, res) => {
 
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
-router.get('/borrowed/:id',auth, async (req, res) => {
+router.get('/borrowed/:id', auth, async (req, res) => {
   try {
     idtouse = 0
-    if(req.params.id == -1){
+    if (req.params.id == -1) {
       console.log('no id detected reverting to current user')
       idtouse = req.user.id
     }
-    else{
+    else {
       idtouse = req.params.id
     }
     console.log('getting all borrowed items for  \n', idtouse);
@@ -337,14 +340,14 @@ router.get('/borrowed/:id',auth, async (req, res) => {
 
 //Gets all listing that have the user id as a lender
 //Look for req.user.id as a param
-router.get('/listed/:id',auth, async (req, res) => {
+router.get('/listed/:id', auth, async (req, res) => {
   try {
     idtouse = 0
-    if(req.params.id == -1){
+    if (req.params.id == -1) {
       idtouse = req.user.id
-      console.log('no id detected reverting to current user \n',idtouse)
+      console.log('no id detected reverting to current user \n', idtouse)
     }
-    else{
+    else {
       idtouse = req.params.id
     }
     const alllistings = await Listing.getAllLenderListings(
@@ -360,11 +363,11 @@ router.get('/listed/:id',auth, async (req, res) => {
 });
 
 //"Deletes" a listing
-router.get('/delete/:id',auth, async (req, res) => {
+router.get('/delete/:id', auth, async (req, res) => {
   try {
     console.log('deleting listing with id  \n', req.params.id);
-    const deleted = await Listing.delete([req.params.id],res);
-   // console.log('deleted result \n ', deleted)
+    const deleted = await Listing.delete([req.params.id], res);
+    // console.log('deleted result \n ', deleted)
     res.status(200).json(deleted);
   } catch (error) {
     console.error('error deleting a listing \n ', error);

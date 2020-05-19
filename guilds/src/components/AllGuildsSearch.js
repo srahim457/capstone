@@ -4,9 +4,17 @@ import React, { Component } from 'react';
 import './styles/AllGuilds.css';
 import CreateGuild from './CreateGuild';
 import DisplayGuild from './DisplayGuild';
+import noimage from '../images/noimageavailable.png';
 import axios from 'axios';
 
-class AllGuilds extends Component {
+
+function parsePath(orig) {
+  let res = orig.substr(9);
+  //res = '.' + res;
+  return res;
+}
+
+class AllGuildsSearch extends Component {
   constructor() {
     super();
     this.state = {
@@ -33,7 +41,7 @@ class AllGuilds extends Component {
     this.setState({ guildmaster: item.creator_id });
     this.setState({ open: true });
     this.setState({ picture: item.picture }); //added
-    this.setState({ guildid: item.id})
+    this.setState({ guildid: item.id })
   }
 
   async componentDidMount() {
@@ -73,7 +81,16 @@ class AllGuilds extends Component {
                       className='GuildImageWrapper'
                       onClick={this.openGuild.bind(this, guild)}
                     >
-                      <h1> Image {guild.picture} </h1>
+                      {guild.picture != null ? (
+                        <img
+                          src={parsePath(guild.picture)}
+                          height='200'
+                          width='200'
+                          alt={this.state.name}
+                        ></img>
+                      ) : (
+                          <img src={noimage} height='200' width="200" alt={this.state.name} ></img>
+                        )}
                     </div>
                     <div className='GuildNameWrapper'>
                       <h1>{guild.name} </h1>
@@ -91,4 +108,4 @@ class AllGuilds extends Component {
   }
 }
 
-export default AllGuilds;
+export default AllGuildsSearch;
