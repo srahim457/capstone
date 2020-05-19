@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
+const redis = require('../../middleware/redis');
 let pool = require('../../db').pool;
 const multer = require('multer');
 const path = require('path');
@@ -83,7 +84,7 @@ router.post('/picture', auth, async (req, res) => {
 // @route Get all-guilds
 // @desc Route to fetch all guilds
 // @access private
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, redis,async (req, res) => {
   try {
     console.log('recieved get all guilds request')
     const allguilds = await Guild.getAllGuilds([req.body], res)

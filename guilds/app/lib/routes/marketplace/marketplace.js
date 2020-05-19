@@ -7,6 +7,7 @@ var pool = require('../../db').pool;
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
+const redis = require('../../middleware/redis');
 
 let User = require('../../models/User').User;
 let Login = require('../../models/Login').Login;
@@ -205,10 +206,11 @@ router.get('/:listingid/unreserve', auth, async (req, res) => {
 });
 
 //Gets all active listings
-router.get('/active',auth, async (req, res) => {
+router.get('/active',auth,redis, async (req, res,next) => {
   try {
     const activelistings = await Listing.getAllActiveListings(req, res);
-    res.status(200).json(activelistings);
+    //console.log(activelistings,'\n active listing')
+    return res.json(activelistings)
     const unreservedlistings = await Listing.freeListings(req,res)
   } catch (error) {
     console.error('error getting all active listings \n', error);

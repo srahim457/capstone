@@ -104,8 +104,6 @@ app.use(express.json({ extended: false }));
 
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
-
-
 const socketIo = io(server);
 
 // Start listening
@@ -149,7 +147,7 @@ socketIo.on('connection', socket => {
 require('./lib/forgotPassword.js')(app);
 require('./lib/resetPassword.js')(app);
 
-//Defining routes
+//Defining routes(
 app.use('/market-place', require('./lib/routes/marketplace/marketplace'));
 app.use('/all-guilds', require('./lib/routes/allguilds/allguilds'));
 app.use('/profile', require('./lib/routes/profile/profile'));

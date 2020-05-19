@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
+const redis = require('../../middleware/redis');
 
 let pool = require('../../db').pool;
 
@@ -78,7 +79,7 @@ router.put('/ranking/update/:id', auth, async (req, res) => {
 });
 
 //generic get request for the user
-router.get('/', auth, async (req, res) => {
+router.get('/', auth,redis, async (req, res) => {
   //route profile/me ?
   try{
     clearedlisting = await Listing.freeListings(req,res)
