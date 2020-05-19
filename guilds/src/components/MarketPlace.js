@@ -48,7 +48,8 @@ class MarketPlace extends Component {
       lenderid: '',
       borrowerid: '',
       itemid: '',
-      reserved: false
+      reserved: false,
+      currentuserid: ''
     }
 
     // bind function in constructor instead of render (https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
@@ -92,8 +93,9 @@ class MarketPlace extends Component {
     this.setState({ itemid: item.item_id })
     this.setState({ listingid: item.id })
     this.setState({ reserved: response.data[0].reserved })
-    this.setState({ username: item.username })
-    this.setState({ rating: item.rating })
+    this.setState({ username: item.username})
+    this.setState({ rating: item.rating})
+    this.setState({ lenderid: item.userid})
 
     console.log('this.state after assigned', this.state)
     this.setState({ open: true }); // moved to the end because of a race condition
@@ -116,9 +118,14 @@ class MarketPlace extends Component {
   // }
 
   async componentDidMount() {
-    const active = await axios.get('http://localhost:4000/market-place/active')
-    console.log('listings in marketplace', active.data)
-    this.setState({ listings: active.data, isLoading: false })
+    const[firstResp,secondResp] = await Promise.all([        
+      axios.get('http://localhost:4000/market-place/active'),
+      // Getting the current profile of the user
+      axios.get('http://localhost:4000/profile/' + -1)
+    ]);
+    console.log('listings in marketplace', firstResp.data)
+    this.setState({ listings: firstResp.data, isLoading: false ,currentuserid: secondResp.data.id})
+    console.log(this.state.lenderid, 'current user id')
   }
 
   render() {
@@ -150,6 +157,7 @@ class MarketPlace extends Component {
         listingid={this.state.listingid}
         username={this.state.username}
         rating={this.state.rating}
+        currentuserid={this.state.currentuserid}
       />;
     }
     //{console.log('test listing', listing)}
@@ -209,8 +217,15 @@ class MarketPlace extends Component {
                       </div>
                       <div>
                         <h5 style={styleTitle}>{listing.item_name}</h5>
-                        <h6>Posted By: {listing.username} {Math.round((listing.rating + Number.EPSILON) * 100) / 100}/5</h6>
+                        {this.state.currentuserid == listing.lender_id  &&
+                          <label>View Your listing</label>
+                        }
+                        {this.state.currentuserid != listing.lender_id  &&
+                          <h6>Posted By: {listing.username} {Math.round((listing.rating+ Number.EPSILON) * 100)/100}/5</h6>
+                        }
                       </div>
+
+
                       <div className='paginate'>
                         <Pagination
                           items={this.state.listing}

@@ -124,7 +124,7 @@ Listing.getListingByListingID = async function (req, res) {
 // Shows the newests listings first
 Listing.getAllActiveListings = async function (req, res) {
   try {
-    const listing = await sql.query("Select I.*,L.*,U.username,U.rating FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id LEFT OUTER JOIN guilds.users AS U ON U.id = L.lender_id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND borrower_id IS NULL ORDER by time_posted DESC ,U.rating DESC");
+    const listing = await sql.query("Select I.*,L.*,U.username,U.rating,U.id as userid FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id LEFT OUTER JOIN guilds.users AS U ON U.id = L.lender_id where completed <> 'T' AND expired <> 'T' AND reserved <> 'T' AND borrower_id IS NULL ORDER by time_posted DESC ,U.rating DESC");
     console.log('number of active listings are ', listing.rows.length, '\n')
     return listing.rows
   } catch (error) {
@@ -240,6 +240,55 @@ Listing.freeListings = async function (req, res) {
     console.log('unreserving all listings belonging to this ', req.user.id, '\n')
     const listing = await sql.query("UPDATE guilds.listings SET reserved = 'F',reserved_by = (null) where id = ($1) RETURNING *", [req.user.id]);
     return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);;
+  }
+};
+
+//Updates the listing with new info
+//Takes in a listing object
+Listing.updateSaleListing = async function (req, res) {
+  try {
+    console.log('updating a sale listing with new info ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET total_price = ($1), type = ($2),policy = ($3) where item_id = ($4) RETURNING *", [req[0].price,req[0].type,req[0].policy,req[0].item_id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Updates the listing with new info
+//Takes in a listing object
+Listing.updateLoanListing = async function (req, res) {
+  try {
+    console.log('updating a loan listing with new info ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET total_price = ($1), type = ($2),return_by = ($3), policy = ($4), insurance = ($5) where item_id = ($6) RETURNING *", [req[0].price,req[0].type,req[0].return_by,req[0].policy,req[0].insurance,req[0].item_id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Updates the listing with new info
+//Takes in a listing object
+Listing.updateRentalListing = async function (req, res) {
+  try {
+    console.log('updating a rental listing with new info ', req[0], '\n')
+    const listing = await sql.query("UPDATE guilds.listings SET total_price = ($1), type = ($2),return_by = ($3), policy = ($4), insurance = ($5) where item_id = ($6) RETURNING *", [req[0].price,req[0].type,req[0].return_by,req[0].policy,req[0].insurance,req[0].item_id]);
+    return listing.rows[0]
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
+//Updates the item with new info
+//Takes in an item object
+Listing.updateItem = async function (req, res) {
+  try {
+    console.log('updating an item with new info ', req[0], '\n')
+    const item = await sql.query("UPDATE guilds.item_info SET item_name = ($1),item_desc = ($2),image = ($3) where id = ($4) RETURNING *", [req[0].item_name,req[0].item_desc,req[0].image,req[0].item_id]);
+    return item.rows[0]
   } catch (error) {
     console.log(error)
     res.status(400);;

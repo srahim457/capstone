@@ -3,6 +3,8 @@ import './styles/CreateListing.css';
 import { format, parseISO, fromUnixTime } from 'date-fns';
 import { Redirect } from 'react-router-dom';
 import Payment from './Payment';
+import EditListing from './EditListing';
+import Spinner from './layout/spinner_transparent.gif';
 import noimage from '../images/noimageavailable.png';
 import axios from 'axios';
 
@@ -36,8 +38,12 @@ class DisplayListing extends Component {
       policy: '',
       click: false,
       open: false,
-      images: null
+      images: null,
+      edit: false,
+      item: [],
+      isLoading: false
     };
+    console.log('props passed to display ', props)
 
     this.onClickHandler = this.onClickHandler.bind(this);
   }
@@ -57,6 +63,10 @@ class DisplayListing extends Component {
   onClickListing = (e) => {
     e.preventDefault();
     this.setState({ open: true });
+  }
+  onEditListing (item_passed) {
+    console.log('chose to edit listing',this.props)
+    this.setState({ edit: true, item: this.props });
   }
 
   closeButton = (e) => {
@@ -84,6 +94,12 @@ class DisplayListing extends Component {
       username,
       rating
     } = this.props;
+
+    if(this.state.edit === true){
+      return <EditListing name={this.props.name}item={this.state.item} />
+    }
+
+
     // types are sale, loan, rental
     //console.log('type of listing display', listing_type,this.props)
     //console.log('return date', return_date)
@@ -134,8 +150,11 @@ class DisplayListing extends Component {
       return_date = format(parseISO(return_date), 'MMMM do,yyyy h:mma');
     }
     const { listing } = this.state.listing_type;
+    const {isLoading} = this.state;
     return (
+      <React.Fragment>
       <div className='container-parent'>
+        {!isLoading ? (
         <div className='container'>
           <h1 className='title'>{this.state.name}</h1>
           <form onSubmit={this.handleSubmit} className='form-fields'>
@@ -193,13 +212,30 @@ class DisplayListing extends Component {
               }
               <br />
               <div>
-                <label><strong>Posted By: {username} {Math.round((rating+ Number.EPSILON) * 100)/100}/5 </strong></label>                
+                {this.props.currentuserid == this.props.lenderid &&
+                  <label> This is your listing</label>
+                }
+                {this.props.currentuserid != this.props.lenderid &&                  
+                  <label><strong>Posted By: {username} {Math.round((rating+ Number.EPSILON) * 100)/100}/5 </strong></label>    
+                }            
               </div>
             </div>
           </form>
-          <button className="submit-button" onClick={this.onClickListing}>Checkout</button>
+          {this.props.currentuserid == this.props.lenderid &&
+            <button className="submit-button" onClick={this.onEditListing.bind(this,this.state.item)}>Edit Your Listing</button>
+          }
+          {this.props.currentuserid != this.props.lenderid &&
+            <button className="submit-button" onClick={this.onClickListing}>Checkout</button>
+            }
+
+                </div>
+          ) : (
+              <div className='spinner'>
+                <img src={Spinner} alt="loading..." />
+              </div>
+            )}
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

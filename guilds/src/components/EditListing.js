@@ -20,7 +20,7 @@ also there is a delete button to delete the listing entirely
 class EditListing extends Component {
   constructor(props) {
     super(props);
-    console.log('edit listing props\n', props)
+    //console.log('edit listing props\n', props.item)
 
     this.state = {
       name: '',
@@ -32,6 +32,7 @@ class EditListing extends Component {
       policy: '',
       image: '',
       delete_item: 'false',
+      insurance: ''
     };
     this.delete = this.delete.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -64,6 +65,12 @@ class EditListing extends Component {
     });
   };
 
+  insuranceChangeHandler = (e) => {
+    this.setState({
+      insurance: e.currentTarget.value,
+    });
+  };
+
   policyChangeHandler = (e) => {
     this.setState({
       policy: e.currentTarget.value,
@@ -72,7 +79,13 @@ class EditListing extends Component {
 
   async handleDeletion() {
     //console.log('at delete \n', this.props.item)
-    const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+this.props.item.item_id)
+    var itemidToUse = 0
+    if(this.props.item.item_id == undefined){
+      itemidToUse = this.props.item.itemid
+    }else{
+      itemidToUse = this.props.item.item_id
+    }  
+    const deletingitem = await axios.get('http://localhost:4000/market-place/delete/'+itemidToUse)
     this.setState({ delete_item: true });
     window.location.reload(false);
     console.log('at delete \n', this.props.item)
@@ -93,6 +106,18 @@ class EditListing extends Component {
         },
       ],
     });
+  }
+  handleSubmit = async (e)=> {
+    e.preventDefault();
+    console.log('current state at submit',this.state,'props',this.props.item)
+    var itemidToUse = 0
+    if(this.props.item.item_id == undefined){
+      itemidToUse = this.props.item.itemid
+    }else{
+      itemidToUse = this.props.item.item_id
+    }  
+    var toUpdate={ newItem:this.state, itemID:itemidToUse}
+    await axios.put('http://localhost:4000/market-place/'+itemidToUse,{toUpdate})    
   }
 
   reloadPage() {
@@ -118,20 +143,30 @@ class EditListing extends Component {
     let minimumDate = new Date();
     return (
       <Fragment>
+        <br />
+        <label>Set your insurance amount in case of damage</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.insuranceChangeHandler}
+        ></input>
+        <br />
         <label>
           <strong>
             Input the time and date that you want the item to be returned
           </strong>
         </label>
         <br />
-
         <br />
         <DateTimePicker
           onChange={this.onDateChange}
           value={this.state.date}
           minDate={minimumDate}
         />
-
         <br />
         <br />
         <label>
@@ -184,6 +219,16 @@ class EditListing extends Component {
           onChange={this.priceChangeHandler}
         ></input>
         <br />
+        <label>Set your insurance amount in case of damage</label>
+        <br />$
+        <input
+          className='priceBox'
+          type='number'
+          min='0.01'
+          step='0.01'
+          max='2500'
+          onChange={this.insuranceChangeHandler}
+        ></input>
         <br />
         <label>
           <strong>
@@ -252,7 +297,7 @@ class EditListing extends Component {
                 maxlength='180'
                 rows='5'
                 cols='40'
-                value={this.props.item.item_desc}
+                value={this.state.description}
                 onChange={this.descriptionChangeHandler}
               />
             </div>
@@ -306,7 +351,7 @@ class EditListing extends Component {
               onChange={this.pictureChangeHandler}
             />
           </form>
-          <button className='submit-button'>Submit</button>
+          <button className='submit-button' onClick={this.handleSubmit}>Submit</button>
           <button className='submit-button' onClick={this.delete}>Delete Listing</button>
         </div>
       </div>

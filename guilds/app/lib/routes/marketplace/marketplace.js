@@ -257,6 +257,58 @@ router.put('/rate/:id', auth, async (req, res) => {
   }
   console.log('called get all listings');
 });
+//Edits a listing with the item id passed
+router.put('/:id', auth, async (req, res) => {
+  try {
+    console.log(' editing the listing ', req.params.id,req.body.toUpdate)
+    var newItemInfo = req.body.toUpdate.newItem
+    var itemToUpdate={
+      item_id: req.params.id,
+      item_name: newItemInfo.name,
+      item_desc: newItemInfo.description,
+      image: newItemInfo.image
+    }
+   const updatedItem = await Listing.updateItem([itemToUpdate],res)
+   if(newItemInfo.option == 'sale'){
+    var listingToUpdate={
+      item_id: req.params.id,
+      price: newItemInfo.price,
+      type: newItemInfo.option,
+      policy: newItemInfo.policy      
+    } 
+    const updatedListings = await Listing.updateSaleListing([listingToUpdate],res);
+    return res.status(200).json(updatedListings); 
+  }else if (newItemInfo.option =='loan'){
+    var listingToUpdate={
+      item_id: req.params.id,
+      price: '',
+      type: newItemInfo.option,
+      return_by: newItemInfo.date,
+      policy: newItemInfo.policy,
+      insurance: newItemInfo.insurance
+    }  
+    const updatedListings = await Listing.updateLoanListing([listingToUpdate],res);
+    return res.status(200).json(updatedListings); 
+  }
+  else {
+    //At this point its a rental
+  var listingToUpdate={
+    item_id: req.params.id,
+    price: newItemInfo.price,
+    type: newItemInfo.option,
+    return_by: newItemInfo.date,
+    policy: newItemInfo.policy,
+    insurance: newItemInfo.insurance
+  }  
+  const updatedListings = await Listing.updateRentalListing([listingToUpdate],res);
+  return res.status(200).json(updatedListings); 
+  }
+
+  } catch (error) {
+    console.error('error getting all listings\n', error);
+  }
+  console.log('called get all listings');
+});
 
 //Gets all listings with user id as the borrower
 //Looks for req.user.id as a param
