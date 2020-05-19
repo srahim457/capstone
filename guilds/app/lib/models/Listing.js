@@ -168,6 +168,19 @@ Listing.getAllLenderListings = async function (req, res) {
     res.status(400);
   }
 };
+//Return all listings that are marked completed under a user id
+//Takes in a user id
+Listing.getAllCompletedListings = async function (req, res) {
+  try {
+    console.log('getting all the completed listings of',req)
+    const listing = await sql.query("Select I.*,L.* FROM guilds.listings AS L INNER JOIN guilds.item_info AS I ON L.item_id = I.id where( lender_id = ($1) OR borrower_id = ($1)) AND L.deleted <> 'T' AND completed = 'T' ORDER BY L.borrower_id ASC, L.time_sold_expired DESC", [req]);
+    console.log('number of completed listings under lenderid ', req, ' are ', listing.rows.length, '\n')
+    return listing.rows
+  } catch (error) {
+    console.log(error)
+    res.status(400);
+  }
+};
 //Updates listing to add a borrower
 //Takes in user_id and listing_id
 //Returns listing id
@@ -250,8 +263,9 @@ Listing.markCompletedSale = async function (req, res) {
 //After a user rates the transaction mark the item completed
 Listing.markCompleted = async function (req, res) {
   try {
-    console.log('marking complete after being rated', req)
-    const listing = await sql.query("UPDATE guilds.listings SET completed = 'T' WHERE item_id = ($1) RETURNING *", [req]);
+    var d = new Date();
+    console.log('marking complete after being rated', req,d)
+    const listing = await sql.query("UPDATE guilds.listings SET completed = 'T', time_sold_expired = ($2) WHERE item_id = ($1) RETURNING *", [req,d]);
     console.log('marked listing completed after rating \n', listing.rows[0])
     return listing.rows[0]
   } catch (error) {
