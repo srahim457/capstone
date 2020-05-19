@@ -193,6 +193,7 @@ class DisplayListing extends Component {
               <div>
                 <label><strong>Posted By: </strong></label>
                 {/*name and rating*/}
+              </div>
             </div>
           </form>
           <button className="submit-button" onClick={this.onClickListing}>Checkout</button>
