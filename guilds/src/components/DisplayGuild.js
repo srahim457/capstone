@@ -49,6 +49,8 @@ class DisplayGuild extends Component {
     console.log('joining guild',e,this.props)
     const response = await axios.put('http://localhost:4000/all-guilds/addtoguild/' +e)
     console.log('joining guild response ', response)
+    alert('You have joined this guild!');
+    window.location.reload(false);
 
     if(response.data.constraint === "no_double_joining_guild"){
       console.log('already part of this guild ')
