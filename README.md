@@ -2,7 +2,7 @@
 
 *	git clone https://github.com/srahim457/capstone.git
 
-*	git checkout authbranch (latest up to date branch as of right now)
+*	git checkout master (latest up to date branch as of right now)
 
 *	in guilds directory run npm install  
 
