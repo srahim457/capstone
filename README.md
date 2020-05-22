@@ -22,4 +22,4 @@ USER = imgayjgdlaymzf <br/>
 
 * go to app directory run in terminal <br/>$ nodemon server.js
 
-* Startup another terminal, go guilds directory <br/> run $ npm start
+* Startup another terminal, go guilds directory run <br/> $ npm start
