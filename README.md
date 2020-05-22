@@ -1,6 +1,6 @@
 # capstone
 
-*	git clone https://github.com/srahim457/capstone.git
+git clone https://github.com/srahim457/capstone.git
 
 *	git checkout master (latest up to date branch as of right now)
 
