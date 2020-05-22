@@ -5,7 +5,7 @@ git clone https://github.com/srahim457/capstone.git
 *	git checkout master (latest up to date branch as of right now)
 
 *	in guilds directory run <br/>
-$ npm install  
+`$ npm install` 
 
 * create a .env file place it in app directory 
 
