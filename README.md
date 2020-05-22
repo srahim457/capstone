@@ -9,9 +9,10 @@ Guilds was created as a senior Capstone project.<br/>
 
 ## How to run locally
 
-git clone https://github.com/srahim457/capstone.git
-
 Running this project requires Node.js & Node Package Manager: https://www.npmjs.com/get-npm
+
+Clone this project <br/>
+`git clone https://github.com/srahim457/capstone.git`
 
 *	Switch to master branch (if not already there) <br/>
 ```
