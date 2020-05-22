@@ -13,9 +13,9 @@ $ git pull
 *	in guilds directory run <br/>
 `$ npm install` 
 
-* create a .env file and place it in `/app` directory 
+* create a `.env` file and place it in `/app` directory 
 
-* copy & paste contents below into .env
+* copy & paste contents below into `.env`
 ```
 EMAIL_ADDRESS = guildspsw@gmail.com
 EMAIL_PASSWORD = Guilds123
