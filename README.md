@@ -11,21 +11,21 @@ Guilds was created as a senior Capstone project.<br/>
 
 Running this project requires Node.js & Node Package Manager: https://www.npmjs.com/get-npm
 
-Clone this project <br/>
+1. Clone this project <br/>
 `git clone https://github.com/srahim457/capstone.git`
 
-*	Switch to master branch (if not already there) <br/>
+2.	Switch to master branch (if not already there) <br/>
 ```
 $ git checkout master
 $ git pull
 ```
 
-*	in guilds directory run <br/>
+3.	in guilds directory run <br/>
 `$ npm install` 
 
-* create a `.env` file and place it in `/app` directory 
+4. create a `.env` file and place it in `/app` directory 
 
-* copy & paste contents below into `.env`
+4.1 copy & paste contents below into `.env`
 ```
 EMAIL_ADDRESS = guildspsw@gmail.com
 EMAIL_PASSWORD = Guilds123
@@ -37,7 +37,7 @@ PASSWORD = 37654a11f31d3d6b15640a6c34a8e09268d91bf1ca20b379c8e60f0b4b3f79f4
 USER = imgayjgdlaymzf
 ```
 
-### Open up 2 terminals
+5. Open up 2 terminals
 #### Terminal 1
 go to `/app` directory and run in terminal: <br/>`$ nodemon server.js`
 
