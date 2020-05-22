@@ -1,4 +1,9 @@
 # Guilds
+Guilds is a web application that hosts a community for Marketplace transactions and Chatting. The Marketplace is for lending, borrowing, buying, selling, and renting personal items from other users. Chat is how users can communicate with each other through text chat.
+
+Guilds was created as a senior Capstone project.<br/>
+
+## How to run locally
 
 git clone https://github.com/srahim457/capstone.git
 
@@ -26,9 +31,14 @@ NPM_CONFIG_PRODUCTION = false
 PASSWORD = 37654a11f31d3d6b15640a6c34a8e09268d91bf1ca20b379c8e60f0b4b3f79f4
 USER = imgayjgdlaymzf
 ```
-* go to `/app` directory and run in terminal: <br/>`$ nodemon server.js`
 
-* Startup another terminal, go to `/guilds` directory, and run: <br/> `$ npm start`
+### Open up 2 terminals
+#### Terminal 1
+go to `/app` directory and run in terminal: <br/>`$ nodemon server.js`
 
+#### Terminal 2
+go to `/guilds` directory, and run: <br/> `$ npm start`
+
+### Missing modules?
 * Any missing Node.js module error can be installed by: <br/>
 `$ npm install module_name_1 module_name_2 module_name_3`
