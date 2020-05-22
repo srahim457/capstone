@@ -25,7 +25,7 @@ $ git pull
 
 4. create a `.env` file and place it in `/app` directory 
 
-4.1 copy & paste contents below into `.env`
+   copy & paste contents below into `.env`
 ```
 EMAIL_ADDRESS = guildspsw@gmail.com
 EMAIL_PASSWORD = Guilds123
