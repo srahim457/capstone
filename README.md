@@ -1,5 +1,5 @@
 # Guilds
-Guilds is a web application that hosts a community for Marketplace transactions and Chatting. The Marketplace is for lending, borrowing, buying, selling, and renting personal items from other users. Chat is how users can communicate with each other through text chat.
+Guilds is a web application that hosts a community for Marketplace transactions and Chatting. The Marketplace is for lending, borrowing, buying, selling, and renting personal items from other users. Chat is how users can communicate with each other through text channels.
 
 Guilds was created as a senior Capstone project.<br/>
 
