@@ -4,7 +4,11 @@ git clone https://github.com/srahim457/capstone.git
 
 Running this project requires Node.js & Node Package Manager: https://www.npmjs.com/get-npm
 
-*	Switch to master branch if not already there <br/>`$git checkout master <br>git pull`
+*	Switch to master branch (if not already there) <br/>
+```
+$ git checkout master
+$ git pull
+```
 
 *	in guilds directory run <br/>
 `$ npm install` 
@@ -24,4 +28,4 @@ USER = imgayjgdlaymzf
 ```
 * go to app directory run in terminal <br/>`$ nodemon server.js`
 
-* Startup another terminal, go guilds directory run <br/> `$ npm start`
+* Startup another terminal, go `/guilds` directory run <br/> `$ npm start`
