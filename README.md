@@ -20,10 +20,10 @@ $ git checkout master
 $ git pull
 ```
 
-### 3.	in guilds directory run <br/>
+### 3. In `/guilds` directory run <br/>
 `$ npm install` 
 
-### 4. create a `.env` file and place it in `/app` directory 
+### 4. Create a `.env` file and place it in `/app` directory 
 
    copy & paste contents below into `.env`
 ```
@@ -44,7 +44,7 @@ go to `/app` directory and run in terminal: <br/>`$ nodemon server.js`
 #### Terminal 2
 go to `/guilds` directory, and run: <br/> `$ npm start`
 
-<br/><br/><br/>
+<br/><br/>
 ### Missing modules?
 Any missing Node.js module error can be installed by: <br/>
 `$ npm install module_name_1 module_name_2 module_name_3`
