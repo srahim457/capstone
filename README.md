@@ -3,6 +3,10 @@ Guilds is a web application that hosts a community for Marketplace transactions 
 
 Guilds was created as a senior Capstone project.<br/>
 
+## Preview
+![Guilds Landing](/Guilds_Landing_Page.png)
+
+
 ## How to run locally
 
 git clone https://github.com/srahim457/capstone.git
