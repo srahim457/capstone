@@ -30,5 +30,5 @@ USER = imgayjgdlaymzf
 
 * Startup another terminal, go to `/guilds` directory, and run: <br/> `$ npm start`
 
-* Any missing Node.js module error can be installed by:
+* Any missing Node.js module error can be installed by: <br/>
 `$ npm install module_name_1 module_name_2 module_name_3`
