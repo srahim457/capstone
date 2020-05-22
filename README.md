@@ -1,4 +1,4 @@
-# capstone
+# Guilds
 
 git clone https://github.com/srahim457/capstone.git
 
