@@ -7,7 +7,7 @@ git clone https://github.com/srahim457/capstone.git
 *	in guilds directory run <br/>
 `$ npm install` 
 
-* create a .env file place it in app directory 
+* create a .env file and place it in app directory 
 
 * copy & paste contents below into .env
 
@@ -20,6 +20,6 @@ NPM_CONFIG_PRODUCTION = false <br/>
 PASSWORD = 37654a11f31d3d6b15640a6c34a8e09268d91bf1ca20b379c8e60f0b4b3f79f4 <br/>
 USER = imgayjgdlaymzf <br/>
 
-* go to app directory run in terminal <br/>$ nodemon server.js
+* go to app directory run in terminal <br/>`$ nodemon server.js`
 
-* Startup another terminal, go guilds directory run <br/> $ npm start
+* Startup another terminal, go guilds directory run <br/> `$ npm start`
