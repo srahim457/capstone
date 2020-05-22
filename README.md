@@ -26,6 +26,9 @@ NPM_CONFIG_PRODUCTION = false
 PASSWORD = 37654a11f31d3d6b15640a6c34a8e09268d91bf1ca20b379c8e60f0b4b3f79f4
 USER = imgayjgdlaymzf
 ```
-* go to app directory run in terminal <br/>`$ nodemon server.js`
+* go to `/app` directory and run in terminal: <br/>`$ nodemon server.js`
 
-* Startup another terminal, go `/guilds` directory run <br/> `$ npm start`
+* Startup another terminal, go to `/guilds` directory, and run: <br/> `$ npm start`
+
+* Any missing Node.js module error can be installed by:
+`$ npm install module_name_1 module_name_2 module_name_3`
