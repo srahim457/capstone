@@ -41,12 +41,12 @@ USER = imgayjgdlaymzf
 ##### Terminal 1
 go to `/app` directory and run in terminal: <br/>`$ nodemon server.js` 
 <br/><br/>
-This is hosted on `http://localhost:4000`
+This is hosted on http://localhost:4000
 
 ##### Terminal 2
 go to `/guilds` directory, and run: <br/> `$ npm start`
 <br/><br/>
-If it doesn't automatically open on your browser, this can be viewed on `http://localhost:3000`
+If it doesn't automatically open on your browser, this can be viewed on http://localhost:3000
 
 <br/><br/>
 
