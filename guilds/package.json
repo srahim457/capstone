@@ -11,7 +11,7 @@
     "@testing-library/react": "^10.0.2",
     "@testing-library/user-event": "^10.0.1",
     "axios": "^0.19.2",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "config": "^3.3.1",
